@@ -1,5 +1,4 @@
 title: Next month
-set-bg: img/zandberg.jpg
 is-hand: true
 on-arrival: {!
 if (Q.advisor_action_timer <= 0) {
