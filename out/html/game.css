@@ -1,7 +1,7 @@
 body {
   --bg-color: #7A1C79;
   --border-color: #000;
-  --content-bg-color: #7A1C79;
+  --content-bg-color: white;
   --text-color: #7A1C79;
   --link-color: #900;
   --link-hover-color: rgba(0, 0, 0, 0.05);
