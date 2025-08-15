@@ -1,5 +1,5 @@
 body {
-  background-color: #1d1521;
+  --bg-color: #1d1521;
   --border-color: #1081eb;
   --content-bg-color: #e6f2fc;
   --text-color: black;
@@ -14,6 +14,7 @@ body {
   --card-bg-color: #ddd; 
   font-family: "Minion Pro", Georgia, serif;
   padding: 0;
+  background-color: var(--bg-color);
   line-height: 155%;
   overflow-y: scroll;
 }
