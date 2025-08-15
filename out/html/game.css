@@ -1,7 +1,7 @@
 body {
-  --bg-color: white;
+  --bg-color: "white";
   --border-color: "#000";
-  --content-bg-color: white;
+  --content-bg-color: "gray";
   --text-color: black;
   --link-color: #7a1c79;
   --link-hover-color: rgba(0, 0, 0, 0.05);
@@ -13,7 +13,7 @@ body {
   --card-border-color: #ccc; 
   --card-bg-color: #ddd; 
   font-family: "Minion Pro", Georgia, serif;
-  background-color: white;
+  background-color: "white";
   padding: 0;
   line-height: 155%;
   overflow-y: scroll;
