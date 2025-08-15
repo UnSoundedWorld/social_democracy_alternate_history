@@ -158,21 +158,19 @@ Q.socialism_disp = Math.round(Q.socialism);
 
 (if the election were to be held now):
 
-SPD: [+ spd_votes +]%
+Razem: [+ spd_votes +]%
 
-[? if sapd_formed: SAPD: [+ sapd_votes +]% ?]
+PO: [+ z_votes +]%
 
-Z + BVP: [+ z_votes +]%
+Lewica: [+ kpd_votes +]%
 
-KPD: [+ kpd_votes +]%
+PSL: [+ ddp_votes +]%
 
-[? if not ddp_name: DDP?][? if ddp_name != 0 : [+ ddp_name +]?]: [+ ddp_votes +]%
+Trzecia Droga: [+ dvp_votes +]%
 
-DVP: [+ dvp_votes +]%
+PIS: [+ dnvp_votes +]%
 
-DNVP: [+ dnvp_votes +]%
-
-NSDAP: [+ nsdap_votes +]%
+Konfederacja: [+ nsdap_votes +]%
 
 Others: [+ other_votes +]%
 
