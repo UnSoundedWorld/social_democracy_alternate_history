@@ -271,19 +271,15 @@ blockquote + blockquote.attribution {
 .save_info {
     min-width: 10em;
 }
-.background {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background-color: var(--bg-color);
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-size: cover;
-    overflow: hidden;
+#bg1 {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('img/zandberg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: -1; /* behind content */
+}
 }
 /*
  * This is used for overlaying transparencies
@@ -291,9 +287,6 @@ blockquote + blockquote.attribution {
  * */
 #bg2 {
     z-index: -100;
-}
-#bg1 {
-    z-index: -99;
 }
 .b {
 }
