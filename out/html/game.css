@@ -1,5 +1,5 @@
 body {
-  bg-color: #b3d4f2;
+  bg-color: "#b3d4f2";
   border-color: #1081eb;
   content-bg-color: #e6f2fc;
   text-color: black;
@@ -13,7 +13,6 @@ body {
   card-border-color: #ccc; 
   card-bg-color: #ddd; 
   font-family: "Minion Pro", Georgia, serif;
-  bg-color: var(bg-color);
   padding: 0;
   line-height: 155%;
   overflow-y: scroll;
