@@ -13,7 +13,7 @@ body {
   --card-border-color: #ccc; 
   --card-bg-color: #ddd; 
   font-family: "Minion Pro", Georgia, serif;
-  background-color: var(--bg-color);
+  background-color: "#7a1c79";
   padding: 0;
   line-height: 155%;
   overflow-y: scroll;
