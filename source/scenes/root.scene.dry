@@ -20,7 +20,7 @@ on-arrival: {!
 Q.started = 1;
 // time elapsed (in months)
 Q.time = 1;
-Q.year = 2019;
+Q.year = 1928;
 Q.month = 1;
 // how many actions have been taken this month?
 Q.month_actions = 0;
@@ -621,7 +621,7 @@ audio: shuffle music/_-Adrian-Zandberg-–-Drwal-Prezydent-_-_Adriana_-Na-Na-Na_
 new-page: true
 go-to: main if difficulty >= 0; main.main_easy if difficulty < 0
 
-= 1928
+= 2019
 
 It is a hard time for Polish democracy, right-wing government of Law and Justice (PIS) has subverted the independence of the justice system during it's 4 year term. The wellness of Polish state is endangered, both from the side of more and more authoritarian-leaning PIS and the liberals from Civic Platform (PO) and Polish People's Party (PSL), who seem to be keen to return to power and continue their policy of austerity, known to the Poles from 2007-2015 governments.
 
