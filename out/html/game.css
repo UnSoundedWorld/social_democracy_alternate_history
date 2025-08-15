@@ -272,15 +272,9 @@ blockquote + blockquote.attribution {
     min-width: 10em;
 }
 #bg1 {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('img/zandberg.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  z-index: -1; /* behind content */
+   z-index: -90;
 }
-}
+
 /*
  * This is used for overlaying transparencies
  * only transition on fade-in
