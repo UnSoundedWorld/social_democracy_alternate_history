@@ -1,4 +1,5 @@
 title: Next month
+set-bg: img/zandberg.jpg
 is-hand: true
 on-arrival: {!
 if (Q.advisor_action_timer <= 0) {
@@ -21,7 +22,6 @@ max-cards: 3
 - @shuffle_leadership_pinned
 
 @main_easy
-set-bg: img/map_2.png
 is-hand: true
 on-arrival: {!
 if (Q.advisor_action_timer <= 0) {
