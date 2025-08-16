@@ -271,10 +271,6 @@ blockquote + blockquote.attribution {
 .save_info {
     min-width: 10em;
 }
-#bg1 {
-   z-index: -90;
-}
-
 /*
  * This is used for overlaying transparencies
  * only transition on fade-in
@@ -282,6 +278,10 @@ blockquote + blockquote.attribution {
 #bg2 {
     z-index: -100;
 }
+#bg1 {
+   z-index: -90;
+}
+
 .b {
 }
 .save_button {
