@@ -1,5 +1,4 @@
 title: Root Scene
-set-bg: img/zandberg.jpg
 new-page: true
 go-to: post_event if started = 1; start_menu if started = 0
 
@@ -574,7 +573,7 @@ Q.radbruch_advisor = 0; // Gustav Radbruch
 Q.stampfer_advisor = 0; // Friedrich Stampfer
 !}
 
-set-bg: img/zandberg.jpg
+set-bg: img/map_2.png
 new-page: true
 
 > *" "Solidarity's" failure has occured because, the state government formed out of "Solidarity" itself, instead of forefronting mass transformation movement, worked above the society. Above it's head, etatist-technocratic program was realised, what did force the majority into demanding leftism, the more radical, the more have been the consequences of communism fall were felt."*
