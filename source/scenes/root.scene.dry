@@ -311,7 +311,7 @@ Q.economic_records = [];
 
 // State of the government
 Q.president = "Duda";
-Q.chancellor = "Morawieck";
+Q.chancellor = 'Morawiecki';
 Q.chancellor_party = 'PIS';
 Q.raz_in_government = 0;
 Q.po_in_government = 0;
@@ -557,7 +557,7 @@ Q.stampfer_advisor = 0; // Friedrich Stampfer
 set-bg: img/zandberg.jpg
 new-page: true
 
-> *" "Solidarity's" failure has occured as an effect of the fact that, the state government formed out of "Solidarity" itself, instead of forefronting mass transformation movement, worked above the society. The tatist-technocratic program was realised above society's heads, what did force the majority into demanding leftism, the more radical, the more have been the consequences of downfall of communism were felt."*
+> *" 'Solidarity's' failure has occured as an effect of the fact that, the state government formed out of "Solidarity" itself, instead of forefronting mass transformation movement, worked above the society. The statist-technocratic program was realised above society's heads, what did force the majority into demanding leftism, the more radical, the more have been the consequences of downfall of communnism felt."*
 
  - Jacek Kuroń, *Polish social activist, politician and one of the main figures of democratic opposition during "Solidarity" era*, 2010
 
