@@ -21,7 +21,7 @@ Q.started = 1;
 // time elapsed (in months)
 Q.time = 1;
 Q.year = 2019;
-Q.month = 1;
+Q.month = 6;
 // how many actions have been taken this month?
 Q.month_actions = 0;
 
@@ -286,23 +286,23 @@ Q.catholics_other = 12;
 // note: the Z figures also include the BVP (Bavarian people's party)
 // since they were ideologically similar, but they were separate parties.
 // They did not have a CDU/CSU-style relationship.
-Q.Raz_r = 26;
-Q.Lew_r = 9;
-Q.PO_r = 17;
-Q.PSL_r = 6;
-Q.POL2050_r = 10;
-Q.PIS_r = 20;
-Q.Konf_r = 3;
+Q.raz_r = 26;
+Q.lew_r = 9;
+Q.po_r = 17;
+Q.psl_r = 6;
+Q.pol2050_r = 10;
+Q.pis_r = 20;
+Q.konf_r = 3;
 Q.other_r = 9;
 
 // diff from prev
-Q.old_Raz_r = 26;
-Q.old_Lew_r = 9;
-Q.old_PO_r = 17;
-Q.old_PSL_r = 6;
-Q.old_PL2050_r = 10;
-Q.old_PIS_r = 20;
-Q.old_Konf_r = 3;
+Q.old_raz_r = 26;
+Q.old_lew_r = 9;
+Q.old_po_r = 17;
+Q.old_psl_r = 6;
+Q.old_pl2050_r = 10;
+Q.old_pis_r = 20;
+Q.old_konf_r = 3;
 Q.old_other_r = 9;
 
 // sapd isn't formed yet, but it may be formed
@@ -310,7 +310,7 @@ Q.sapd_r = 0;
 Q.old_sapd_r = 0;
 
 // for changing the DDP's name to the DStP
-Q.ddp_name = "DDP";
+Q.psl_name = "DDP";
 
 // array of objects of the form {date: Date(), spd: 10, kpd: 12, ...} for each election
 Q.election_records = [];
@@ -324,13 +324,13 @@ Q.economic_records = [];
 Q.president = "Duda";
 Q.chancellor = "Morawiecki";
 Q.chancellor_party = 'PIS';
-Q.Raz_in_government = 0;
-Q.PO_in_government = 1;
-Q.PSL_in_government = 0;
-Q.POL2050_in_government = 0;
-Q.PIS_in_government = 0;
-Q.Lew_in_government = 0;
-Q.Konf_in_government = 0;
+Q.raz_in_government = 0;
+Q.po_in_government = 1;
+Q.psl_in_government = 0;
+Q.pol2050_in_government = 0;
+Q.pis_in_government = 0;
+Q.lew_in_government = 0;
+Q.konf_in_government = 0;
 
 Q.in_right_coalition = 0;
 // Socialliberal coalition = SPD + Z + DDP
@@ -356,7 +356,7 @@ Q.coalition_dissent = 0;
 Q.kpd_coalition_dissent = 0;
 
 // does the SPD tolerate the government even if it is not a participant?
-Q.spd_toleration = 0;
+Q.raz_toleration = 0;
 
 // is the current government a presidential minority government?
 Q.minority_government = 0;
