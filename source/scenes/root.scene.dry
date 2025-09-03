@@ -218,30 +218,28 @@ Q.old_middle_qol = 100;
 Q.new_middle_qol = 100;
 
 Q.classes = ['workers', 'old_middle', 'new_middle', 'rural', 'unemployed', 'catholics'];
-Q.parties = ['raz', 'lew', 'po', 'psl', 'pol', 'pis', 'konf', 'other'];
+Q.parties = ['raz', 'lew', 'po', 'psl', 'pol', 'pis', 'konf'];
 
 // TODO: add 'sapd' later on
 Q.sapd_formed = 0;
 
 // Support for party by social group
 // they don't have to sum to 100 since the electoral calculations will be normalized.
-Q.workers_raz = 60;
-Q.workers_lew = 20;
-Q.workers_po = 5;
-Q.workers_psl = 0;
+Q.workers_raz = 3;
+Q.workers_lew = 4;
+Q.workers_po = 10;
+Q.workers_psl = 12;
 Q.workers_pol = 0;
-Q.workers_pis = 5;
-Q.workers_konf = 0;
-Q.workers_other = 10;
+Q.workers_pis = 40;
+Q.workers_konf = 10;
 
-Q.old_middle_raz = 5;
-Q.old_middle_lew = 0;
-Q.old_middle_po = 5;
-Q.old_middle_psl = 10;
-Q.old_middle_pol = 25;
+Q.old_middle_raz = 4;
+Q.old_middle_lew = 10;
+Q.old_middle_po = 40;
+Q.old_middle_psl = 4;
+Q.old_middle_pol = 0;
 Q.old_middle_pis = 25;
-Q.old_middle_konf = 10;
-Q.old_middle_other = 10;
+Q.old_middle_konf = 15;
 
 Q.new_middle_raz = 5;
 Q.new_middle_lew = 1;
@@ -250,34 +248,30 @@ Q.new_middle_psl= 25;
 Q.new_middle_pol = 25;
 Q.new_middle_pis = 10;
 Q.new_middle_konf = 5;
-Q.new_middle_other = 15;
 
-Q.rural_raz = 10;
-Q.rural_lew = 0;
-Q.rural_po = 5;
-Q.rural_psl= 5;
-Q.rural_pol = 15;
+Q.rural_raz = 3;
+Q.rural_lew = 3;
+Q.rural_po = 15;
+Q.rural_psl= 20;
+Q.rural_pol = 0;
 Q.rural_pis = 45;
 Q.rural_konf = 5;
-Q.rural_other = 10;
 
-Q.unemployed_raz = 25;
-Q.unemployed_lew = 55;
-Q.unemployed_po = 1;
-Q.unemployed_psl = 0;
+Q.unemployed_raz = 3;
+Q.unemployed_lew = 5;
+Q.unemployed_po = 20;
+Q.unemployed_psl = 5;
 Q.unemployed_pol = 0;
-Q.unemployed_pis = 5;
-Q.unemployed_konf = 15;
-Q.unemployed_other = 9;
+Q.unemployed_pis = 30;
+Q.unemployed_konf = 5;
 
-Q.catholics_raz = 15;
-Q.catholics_lew = 2;
-Q.catholics_po = 50;
-Q.catholics_psl = 0;
-Q.catholics_pol = 5;
+Q.catholics_raz = 20;
+Q.catholics_lew = 25;
+Q.catholics_po = 15;
+Q.catholics_psl = 5;
+Q.catholics_pol = 0;
 Q.catholics_pis = 5;
-Q.catholics_konf = 0;
-Q.catholics_other = 12;
+Q.catholics_konf = 10;
 
 
 // Current Reichstag composition
@@ -293,7 +287,6 @@ Q.psl_r = 6;
 Q.pol_r = 10;
 Q.pis_r = 20;
 Q.konf_r = 3;
-Q.other_r = 9;
 
 // diff from prev
 Q.old_raz_r = 26;
@@ -303,14 +296,10 @@ Q.old_psl_r = 6;
 Q.old_pl_r = 10;
 Q.old_pis_r = 20;
 Q.old_konf_r = 3;
-Q.old_other_r = 9;
 
 // sapd isn't formed yet, but it may be formed
 Q.sapd_r = 0;
 Q.old_sapd_r = 0;
-
-// for changing the DDP's name to the DStP
-Q.psl_name = "DDP";
 
 // array of objects of the form {date: Date(), spd: 10, kpd: 12, ...} for each election
 Q.election_records = [];
@@ -325,10 +314,10 @@ Q.president = "Duda";
 Q.chancellor = "Morawiecki";
 Q.chancellor_party = 'PIS';
 Q.raz_in_government = 0;
-Q.po_in_government = 1;
+Q.po_in_government = 0;
 Q.psl_in_government = 0;
 Q.pol2050_in_government = 0;
-Q.pis_in_government = 0;
+Q.pis_in_government = 1;
 Q.lew_in_government = 0;
 Q.konf_in_government = 0;
 
