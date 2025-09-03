@@ -322,14 +322,13 @@ Q.economic_records = [];
 
 // State of the government
 Q.president = "Duda";
-// starting chancellor: Wilhelm Marx
 Q.chancellor = "Morawiecki";
 Q.chancellor_party = 'PIS';
 Q.Raz_in_government = 0;
-Q.PO_in_government = 0;
+Q.PO_in_government = 1;
 Q.PSL_in_government = 0;
 Q.POL2050_in_government = 0;
-Q.PIS_in_government = 1;
+Q.PIS_in_government = 0;
 Q.Lew_in_government = 0;
 Q.Konf_in_government = 0;
 
