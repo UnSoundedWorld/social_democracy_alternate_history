@@ -38,24 +38,24 @@ Prime Minister: [+ primeminister +] ([+ chancellor_party +])
 Reichstag composition:
 
 # 1928: 30, 1930: 25, 1932: 22
-{!<span class="tooltip-text" title="Social Democratic Party of Germany">Razem</span>!}: [+ spd_r +]%
+{!<span class="tooltip-text" title="Razem Party">Razem</span>!}: [+ raz_r +]%
 [? if sapd_formed and sapd_r > 0: SAPD: [+ sapd_r +]% ?]
 # 1928: 15, 1930: 15, 1932: 
-{!<span class="tooltip-text" title="Center Party + Bavarian People's Party">PO</span>!}: [+ z_r +]%
+{!<span class="tooltip-text" title="Civic Platform">PO</span>!}: [+ po_r +]%
 # 1928: 10, 1930: 13
-{!<span class="tooltip-text" title="Communist Party of Germany">Lewica</span>!}: [+ kpd_r +]%
+{!<span class="tooltip-text" title="New Left">Lewica</span>!}: [+ lew_r +]%
 # 1928: 5, 1930: 4 (as DstP)
-{!<span class="tooltip-text" title="German Democratic Party">!}[? if not ddp_name: PSL?][? if ddp_name != 0 : [+ ddp_name +]?]{!PSL</span>!}: [+ ddp_r +]%
+{!<span class="tooltip-text" title="Polish People's Party">!}[? if not ddp_name: PSL?][? if ddp_name != 0 : [+ ddp_name +]?]{!PSL</span>!}: [+ ddp_r +]%
 # 1928: 9, 1930: 5
-{!<span class="tooltip-text" title="German People's Party">Trzecia Droga</span>!}: [+ dvp_r +]%
+{!<span class="tooltip-text" title="Poland 2050 of Szymon Hołownia">Polska 2050</span>!}: [+ pol_r +]%
 # 1928: 14, 1930: 7
-{!<span class="tooltip-text" title="German National People's Party">PIS</span>!}: [+ dnvp_r +]%
+{!<span class="tooltip-text" title="Prawo i Sprawiedliwość">PIS</span>!}: [+ pis_r +]%
 # 1928: 3, 1930: 18
-{!<span class="tooltip-text" title="National-Socialist German Worker's Party (Nazis)">Konfederacja</span>!}: [+ nsdap_r +]%
+{!<span class="tooltip-text" title="Confederation - Freedom and Independence">Konfederacja</span>!}: [+ konf_r +]%
 # 1928: 9, 1930: 10
 Others: [+ other_r +]%
 
-[? if spd_in_government = 1 : Budget: [+ budget +] ?]
+[? if raz_in_government = 1 : Budget: [+ budget +] ?]
 
 Next election: [+ next_election_month : month +] [+ next_election_year +]
 
@@ -76,29 +76,29 @@ Economic growth: [+ economic_growth_2 +]%
 = Inter-party Relations
 
 
-{!<span class="tooltip-text" title="Center Party">Z</span>!}: [+ z_relation : relationships +]
+{!<span class="tooltip-text" title="PO">Z</span>!}: [+ po_relation : relationships +]
 
-{!<span class="tooltip-text" title="German Democratic Party">!}[? if not ddp_name: DDP?][? if ddp_name != 0 : [+ ddp_name +]?]{!</span>!}: [+ ddp_relation : relationships +]
+{!<span class="tooltip-text" title="PSL">!}[? if not psl_name: DDP?][? if psl_name != 0 : [+ psl_name +]?]{!</span>!}: [+ psl_relation : relationships +]
 
-{!<span class="tooltip-text" title="German People's Party">DVP</span>!}: [+ dvp_relation : relationships +]
+{!<span class="tooltip-text" title="Poland 2050">PL2050</span>!}: [+ pol_relation : relationships +]
 
-{!<span class="tooltip-text" title="Communist Party of Germany">KPD</span>!}: [+ kpd_relation : relationships +]
+{!<span class="tooltip-text" title="New Left">New Left</span>!}: [+ lew_relation : relationships +]
 
-{!<span class="tooltip-text" title="German National People's Party">DNVP</span>!}: [+ dnvp_relation : relationships +]
+{!<span class="tooltip-text" title="Prawo i Sprawiedliwość">PIS</span>!}: [+ pis_relation : relationships +]
 
-{!<span class="tooltip-text" title="National-Socialist German Worker's Party (Nazis)">NSDAP</span>!}: [+ nsdap_relation : relationships +]
+{!<span class="tooltip-text" title="Confederation - Freedom and Independence">Konfederacja</span>!}: [+ konf_relation : relationships +]
 
 = Internal Factions of the SPD
 
-{!<span class="tooltip-text" title="The Left is interested in radical, transformative policies and cooperation with the KPD.">Left</span>!} strength: [+ left_strength : strength +], dissent: [+ left_dissent : dissent +]
+{!<span class="tooltip-text" title="The Left is interested in radical, transformative policies and cooperation with the KPD.">Left</span>!} strength: [+ socialist_strength : strength +], dissent: [+ socialist_dissent : dissent +]
 
-{!<span class="tooltip-text" title="The Center is a faction of Center Marxists, between reform and revolution.">Center</span>!} strength: [+ center_strength : strength +], dissent: [+ center_dissent : dissent +]
+{!<span class="tooltip-text" title="The Center is a faction of Center Marxists, between reform and revolution.">Center</span>!} strength: [+ zandbergist_strength : strength +], dissent: [+ zandbergist_dissent : dissent +]
 
-{!<span class="tooltip-text" title="Labor's goal is economic reform and benefits for organized workers.">Labor</span>!} strength: [+ labor_strength : strength +], dissent: [+ labor_dissent : dissent +]
+{!<span class="tooltip-text" title="Labor's goal is economic reform and benefits for organized workers.">Labor</span>!} strength: [+ socdem_strength : strength +], dissent: [+ socdem_dissent : dissent +]
 
-{!<span class="tooltip-text" title="Reformists are pragmatic participants in government, and seek to expand the welfare state and defend democracy.">Reformist</span>!} strength: [+ reformist_strength : strength +], dissent: [+ reformist_dissent : dissent +]
+{!<span class="tooltip-text" title="Reformists are pragmatic participants in government, and seek to expand the welfare state and defend democracy.">Reformist</span>!} strength: [+ soclib_strength : strength +], dissent: [+ soclib_dissent : dissent +]
 
-[? if neorevisionism > 0 : Neorevisionist strength: [+ neorevisionist_strength : strength +], dissent: [+ neorevisionist_dissent : dissent +] ?]
+[? if neorevisionism > 0 : Neorevisionist strength: [+ solidaritarian_strength : strength +], dissent: [+ solidaritarian_dissent : dissent +] ?]
 
 
 @paramilitaries
@@ -158,27 +158,27 @@ Q.socialism_disp = Math.round(Q.socialism);
 
 (if the election were to be held now):
 
-Razem: [+ spd_votes +]%
+Razem: [+ raz_votes +]%
 
-PO: [+ z_votes +]%
+PO: [+ po_votes +]%
 
-Lewica: [+ kpd_votes +]%
+Lewica: [+ lew_votes +]%
 
-PSL: [+ ddp_votes +]%
+PSL: [+ psl_votes +]%
 
-Trzecia Droga: [+ dvp_votes +]%
+Trzecia Droga: [+ pol_votes +]%
 
-PIS: [+ dnvp_votes +]%
+PIS: [+ pis_votes +]%
 
-Konfederacja: [+ nsdap_votes +]%
+Konfederacja: [+ konf_votes +]%
 
 Others: [+ other_votes +]%
 
 **Detailed results for each demographic**
 
-Workers: SPD: [+ workers_spd_display +]%, Z: [+ workers_z_display +]%, KPD: [+ workers_kpd_display +]%, [? if not ddp_name: DDP?][? if ddp_name != 0 : [+ ddp_name +]?]: [+ workers_ddp_display +]%, DVP: [+ workers_dvp_display +]%; DNVP: [+ workers_dnvp_display +]%, NSDAP: [+ workers_nsdap_display +]%, Others: [+ workers_other_display +]% [? if sapd_formed: SAPD: [+ workers_sapd_display +]% ?]
+Workers: SPD: [+ workers_raz_display +]%, Z: [+ workers_po_display +]%, KPD: [+ workers_lew_display +]%, [? if not psl_name: DDP?][? if psl_name != 0 : [+ psl_name +]?]: [+ workers_psl_display +]%, DVP: [+ workers_pol_display +]%; DNVP: [+ workers_pis_display +]%, NSDAP: [+ workers_konf_display +]%, Others: [+ workers_other_display +]% [? if sapd_formed: SAPD: [+ workers_sapd_display +]% ?]
 
-New Middle Class: SPD: [+ new_middle_spd_display +]%, Z: [+ new_middle_z_display +]%, KPD: [+ new_middle_kpd_display +]%, [? if not ddp_name: DDP?][? if ddp_name != 0 : [+ ddp_name +]?]: [+ new_middle_ddp_display +]%, DVP: [+ new_middle_dvp_display +]%; DNVP: [+ new_middle_dnvp_display +]%, NSDAP: [+ new_middle_nsdap_display +]%, Others: [+ new_middle_other_display +]% [? if sapd_formed: SAPD: [+ new_middle_sapd_display +]% ?]
+New Middle Class: SPD: [+ new_middle_raz_display +]%, Z: [+ new_middle_z_display +]%, KPD: [+ new_middle_kpd_display +]%, [? if not ddp_name: DDP?][? if ddp_name != 0 : [+ ddp_name +]?]: [+ new_middle_ddp_display +]%, DVP: [+ new_middle_dvp_display +]%; DNVP: [+ new_middle_dnvp_display +]%, NSDAP: [+ new_middle_nsdap_display +]%, Others: [+ new_middle_other_display +]% [? if sapd_formed: SAPD: [+ new_middle_sapd_display +]% ?]
 
 Old Middle Class: SPD: [+ old_middle_spd_display +]%, Z: [+ old_middle_z_display +]%, KPD: [+ old_middle_kpd_display +]%, [? if not ddp_name: DDP?][? if ddp_name != 0 : [+ ddp_name +]?]: [+ old_middle_ddp_display +]%, DVP: [+ old_middle_dvp_display +]%; DNVP: [+ old_middle_dnvp_display +]%, NSDAP: [+ old_middle_nsdap_display +]%, Others: [+ old_middle_other_display +]% [? if sapd_formed: SAPD: [+ old_middle_sapd_display +]% ?]
 
