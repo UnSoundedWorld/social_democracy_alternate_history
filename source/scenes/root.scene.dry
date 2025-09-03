@@ -296,13 +296,13 @@ Q.Konf_r = 3;
 Q.other_r = 9;
 
 // diff from prev
-Q.old_spd_r = 26;
-Q.old_kpd_r = 9;
-Q.old_z_r = 17;
-Q.old_ddp_r = 6;
-Q.old_dvp_r = 10;
-Q.old_dnvp_r = 20;
-Q.old_nsdap_r = 3;
+Q.old_Raz_r = 26;
+Q.old_Lew_r = 9;
+Q.old_PO_r = 17;
+Q.old_PSL_r = 6;
+Q.old_PL2050_r = 10;
+Q.old_PIS_r = 20;
+Q.old_Konf_r = 3;
 Q.old_other_r = 9;
 
 // sapd isn't formed yet, but it may be formed
