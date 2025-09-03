@@ -311,7 +311,7 @@ Q.economic_records = [];
 
 // State of the government
 Q.president = "Duda";
-Q.chancellor = "Morawiecki";
+Q.chancellor = "Morawieck";
 Q.chancellor_party = 'PIS';
 Q.raz_in_government = 0;
 Q.po_in_government = 0;
@@ -424,7 +424,7 @@ Q.lower_tax_rates = 0;
 Q.upper_tax_rates = 0;
 Q.tariffs = 0;
 
-Q.electoral_threshold = 0;
+Q.electoral_threshold = 5;
 
 // our conduct in the government, and the conduct of our coalition opponents.
 // did the SPD vote against the previous government in a vote of no confidence?
