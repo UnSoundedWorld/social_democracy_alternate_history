@@ -100,20 +100,20 @@ Q.moderate_plan_adopted = 0;
 // organizations
 
 // inter-party relations
-Q.PO_relation = 40;
-Q.Lew_relation = 70;
-Q.PSL_relation = 20;
-Q.TD_relation = 40;
-Q.PIS_relation = 20;
-Q.Konfederacja_relation = 0;
+Q.po_relation = 40;
+Q.lew_relation = 70;
+Q.psl_relation = 20;
+Q.pl2050_relation = 40;
+Q.pis_relation = 20;
+Q.konf_relation = 0;
 
-Q.kpd_leader = "Thälmann";
+Q.lew_leader = "Czarzasty";
 // alternative is the Conciliators as party leader
-Q.kpd_party_leader = "Thälmann";
-Q.z_leader = "Brüning";
+Q.Lew_party_leader = "Czarzasty";
+Q.po_leader = "Budka";
 // party leader - can be Ludwig Kaas, Joseph Joos, or Adam Stegerwald after the 1928 December conference. Joos will be most friendly to the SPD.
-Q.z_party_leader = "Marx";
-Q.nsdap_leader = "Hitler";
+Q.po_party_leader = "Tusk";
+Q.konf_leader = "The Council of Leaders";
 
 // hmm... maybe we can play nice with Hindenburg???
 Q.hindenburg_relation = 25;
@@ -218,65 +218,65 @@ Q.old_middle_qol = 100;
 Q.new_middle_qol = 100;
 
 Q.classes = ['workers', 'old_middle', 'new_middle', 'rural', 'unemployed', 'catholics'];
-Q.parties = ['Raz', 'Lew', 'PO', 'PSL', 'POL2050', 'PIS', 'Konf', 'other'];
+Q.parties = ['raz', 'lew', 'po', 'psl', 'pol2050', 'pis', 'konf', 'other'];
 
 // TODO: add 'sapd' later on
 Q.sapd_formed = 0;
 
 // Support for party by social group
 // they don't have to sum to 100 since the electoral calculations will be normalized.
-Q.workers_Raz = 60;
-Q.workers_Lew = 20;
-Q.workers_PO = 5;
-Q.workers_PSL = 0;
-Q.workers_POL2050 = 0;
-Q.workers_PIS = 5;
-Q.workers_Konf = 0;
+Q.workers_raz = 60;
+Q.workers_lew = 20;
+Q.workers_po = 5;
+Q.workers_psl = 0;
+Q.workers_pol2050 = 0;
+Q.workers_pis = 5;
+Q.workers_konf = 0;
 Q.workers_other = 10;
 
-Q.old_middle_Raz = 5;
-Q.old_middle_Lew = 0;
-Q.old_middle_PO = 5;
-Q.old_middle_PSL= 10;
-Q.old_middle_POL2050 = 25;
-Q.old_middle_PIS = 25;
-Q.old_middle_Konf = 10;
+Q.old_middle_raz = 5;
+Q.old_middle_lew = 0;
+Q.old_middle_po = 5;
+Q.old_middle_psl= 10;
+Q.old_middle_pol2050 = 25;
+Q.old_middle_pis = 25;
+Q.old_middle_konf = 10;
 Q.old_middle_other = 10;
 
-Q.new_middle_Raz = 5;
-Q.new_middle_Lew= 1;
-Q.new_middle_PO = 10;
-Q.new_middle_PSL= 25;
-Q.new_middle_POL2050 = 25;
-Q.new_middle_PIS = 10;
-Q.new_middle_Konf = 5;
+Q.new_middle_raz = 5;
+Q.new_middle_lew = 1;
+Q.new_middle_po = 10;
+Q.new_middle_psl= 25;
+Q.new_middle_pol2050 = 25;
+Q.new_middle_pis = 10;
+Q.new_middle_konf = 5;
 Q.new_middle_other = 15;
 
-Q.rural_Raz = 10;
-Q.rural_Lew = 0;
-Q.rural_PO = 5;
-Q.rural_PSL= 5;
-Q.rural_POL2050 = 15;
-Q.rural_PIS = 45;
-Q.rural_Konf = 5;
+Q.rural_raz = 10;
+Q.rural_lew = 0;
+Q.rural_po = 5;
+Q.rural_psl= 5;
+Q.rural_pol2050 = 15;
+Q.rural_pis = 45;
+Q.rural_konf = 5;
 Q.rural_other = 10;
 
-Q.unemployed_Raz = 25;
-Q.unemployed_Lew = 55;
-Q.unemployed_PO = 1;
-Q.unemployed_PSL = 0;
-Q.unemployed_POL2050 = 0;
-Q.unemployed_PIS = 5;
-Q.unemployed_Konf = 15;
+Q.unemployed_raz = 25;
+Q.unemployed_lew = 55;
+Q.unemployed_po = 1;
+Q.unemployed_psl = 0;
+Q.unemployed_pol2050 = 0;
+Q.unemployed_pis = 5;
+Q.unemployed_konf = 15;
 Q.unemployed_other = 9;
 
-Q.catholics_Raz = 15;
-Q.catholics_Lew = 2;
-Q.catholics_PO = 50;
-Q.catholics_PSL = 0;
-Q.catholics_POL2050 = 5;
-Q.catholics_PIS = 5;
-Q.catholics_Konf = 0;
+Q.catholics_raz = 15;
+Q.catholics_lew = 2;
+Q.catholics_po = 50;
+Q.catholics_psl = 0;
+Q.catholics_pol2050 = 5;
+Q.catholics_pis = 5;
+Q.catholics_konf = 0;
 Q.catholics_other = 12;
 
 
