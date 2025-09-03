@@ -20,7 +20,7 @@ on-arrival: {!
 Q.started = 1;
 // time elapsed (in months)
 Q.time = 1;
-Q.year = 1928;
+Q.year = 2019;
 Q.month = 1;
 // how many actions have been taken this month?
 Q.month_actions = 0;
@@ -47,15 +47,15 @@ Q.dissent_percent = 5;
 // factions
 Q.factions = ['socialists', 'demsoc', 'zandbergist', 'soclib', 'solidaritarian'];
 // should this be normalized to 100%?
-Q.socialist_strength = 10;
-Q.socialist_dissent = 15;
+Q.socialist_strength = 5;
+Q.socialist_dissent = 10;
 Q.zandbergist_strength = 30;
 Q.zandbergist_dissent = 0;
 Q.demsoc_strength = 25;
 Q.demsoc_dissent = 5;
 Q.soclib_strength = 25;
 Q.soclib_dissent = 5;
-Q.solidaritarian_strength = 5;
+Q.solidaritarian_strength = 10;
 Q.solidaritarian_dissent = 10;
 
 // secret events...
@@ -493,7 +493,7 @@ Q.n_elections = 0;
 Q.no_majority_elections = 0;
 // elections are not on a timer, but rather there is an indicator for whether you're in an electoral cycle.
 Q.in_election = 1;
-Q.next_election_year = 1928;
+Q.next_election_year = 2019;
 Q.next_election_month = 5;
 Q.next_election_time = 5;
 // government affairs timers
@@ -576,20 +576,19 @@ This is a game of alternate history. While historical accuracy is a major concer
 
 For more information on the politics and government of the Poland, see the "Library" page on the top left. If this is your first time playing the game, it is strongly recommended that you read at least some of this information.
 
-- @1928_easy: Begin (easy difficulty)
-- @1928_main: Begin (normal difficulty)
-- @1928_hard: Begin (hard difficulty)
-- @1928_historical: Begin (historical mode)
+- @2019_easy: Begin (easy difficulty)
+- @2019_main: Begin (normal difficulty)
+- @2019_hard: Begin (hard difficulty)
 
-@1928_easy
+@2019_easy
 on-arrival: difficulty = -1; resources = 4; dues = 3; rb_strength = 2500; kpd_relation = 29; z_relation = 54; dvp_relation = 49; budget = 5;
-go-to: 1928_main
+go-to: 2019_main
 
-@1928_hard
+@2019_hard
 on-arrival: difficulty = 1; resources = 0; dues = 1; rb_strength = 1000; reformist_dissent = 25; left_dissent = 30; labor_dissent = 25; center_dissent = 25; z_relation = 41; kpd_relation = 16; dvp_relation = 31; budget = 3;
-go-to: 1928_main
+go-to: 2019_main
 
-@1928_historical
+@2019_historical
 subtitle: Saving, loading, and polls will be disabled. [? if not achievement_game_completed: Not recommended for a first playthrough. ?]
 on-arrival: {!
 Q.difficulty = 2;
@@ -607,9 +606,9 @@ Q.dvp_relation = 31;
 Q.budget = 2;
 this.state.disableSaves = true;
 !}
-go-to: 1928_main
+go-to: 2019_main
 
-@1928_main
+@2019_main
 audio: music/_-Adrian-Zandberg-–-Drwal-Prezydent-_-_Adriana_-Na-Na-Na_-Na-Na-Na_.mp3
 new-page: true
 go-to: main if difficulty >= 0; main.main_easy if difficulty < 0
