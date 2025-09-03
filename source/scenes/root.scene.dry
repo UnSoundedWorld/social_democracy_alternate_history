@@ -103,7 +103,7 @@ Q.moderate_plan_adopted = 0;
 Q.po_relation = 40;
 Q.lew_relation = 70;
 Q.psl_relation = 20;
-Q.pl2050_relation = 40;
+Q.pol_relation = 40;
 Q.pis_relation = 20;
 Q.konf_relation = 0;
 
