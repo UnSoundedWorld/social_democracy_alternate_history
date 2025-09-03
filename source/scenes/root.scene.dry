@@ -311,7 +311,7 @@ Q.economic_records = [];
 
 // State of the government
 Q.president = "Duda";
-Q.chancellor = 'Morawiecki';
+Q.chancellor = "Morawiecki";
 Q.chancellor_party = 'PIS';
 Q.raz_in_government = 0;
 Q.po_in_government = 0;
