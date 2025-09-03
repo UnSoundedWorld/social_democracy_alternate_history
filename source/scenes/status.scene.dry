@@ -76,7 +76,7 @@ Economic growth: [+ economic_growth_2 +]%
 = Inter-party Relations
 
 
-{!<span class="tooltip-text" title="PO">Z</span>!}: [+ po_relation : relationships +]
+{!<span class="tooltip-text" title="PO">PO</span>!}: [+ po_relation : relationships +]
 
 {!<span class="tooltip-text" title="PSL">!}[? if not psl_name: DDP?][? if psl_name != 0 : [+ psl_name +]?]{!</span>!}: [+ psl_relation : relationships +]
 
