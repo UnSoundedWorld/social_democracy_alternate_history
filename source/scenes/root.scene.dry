@@ -217,7 +217,7 @@ Q.unemployed_qol = 100;
 Q.old_middle_qol = 100;
 Q.new_middle_qol = 100;
 
-Q.classes = ['workers', 'old_middle', 'new_middle', 'rural', 'unemployed', 'catholics'];
+Q.classes = ['workers', 'middle', 'smallcities', 'rural', 'unemployed', 'lgbt'];
 Q.parties = ['raz', 'lew', 'po', 'psl', 'pol', 'pis', 'konf'];
 
 // TODO: add 'sapd' later on
