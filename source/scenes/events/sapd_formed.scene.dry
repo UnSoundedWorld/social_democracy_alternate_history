@@ -14,7 +14,7 @@ Q.catholics_pol = 0;
 Q.workers_other -= 5;
 
 if (Q.unions_independent) {
-    Q.workers_sapd += 8;
+    Q.workers_pol += 8;
 }
 
 // update all records
