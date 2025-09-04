@@ -173,9 +173,9 @@ Konfederacja: [+ konf_votes +]%
 
 Workers: Razem: [+ workers_raz_display +]%, PO: [+ workers_po_display +]%, Nowa Lewica: [+ workers_lew_display +]%, PSL: [+ workers_psl_display +]%, PIS: [+ workers_pis_display +]%, Konfederacja: [+ workers_konf_display +]%, [? if pol_formed: Polska 2050: [+ workers_pol_display +]% ?]
 
-New Middle Class: Razem: [+ new_middle_raz_display +]%, PO: [+ new_middle_po_display +]%, Nowa Lewica: [+ new_middle_lew_display +]%, PSL: [+ new_middle_psl_display +]%, PIS: [+ new_middle_pis_display +]%, Konfederacja: [+ new_middle_konf_display +]%, [? if pol_formed: Polska 2050: [+ new_middle_pol_display +]% ?]
+Middle Class: Razem: [+ middle_raz_display +]%, PO: [+ middle_po_display +]%, Nowa Lewica: [+ middle_lew_display +]%, PSL: [+ middle_psl_display +]%, PIS: [+ middle_pis_display +]%, Konfederacja: [+ middle_konf_display +]%, [? if pol_formed: Polska 2050: [+ middle_pol_display +]% ?]
 
-Old Middle Class: Razem: [+ old_middle_raz_display +]%, PO: [+ old_middle_po_display +]%, Nowa Lewica: [+ old_middle_lew_display +]%, PSL: [+ old_middle_psl_display +]%, PIS: [+ old_middle_pis_display +]%, Konfederacja: [+ old_middle_konf_display +]%, [? if pol_formed: Polska 2050: [+ old_middle_pol_display +]% ?]
+Small Cities: Razem: [+ smallcities_raz_display +]%, PO: [+ smallcities_po_display +]%, Nowa Lewica: [+ smallcities_lew_display +]%, PSL: [+ smallcities_psl_display +]%, PIS: [+ smallcities_pis_display +]%, Konfederacja: [+ smallcities_konf_display +]%, [? if pol_formed: Polska 2050: [+ smallcities_pol_display +]% ?]
 
 Rural: Razem: [+ rural_raz_display +]%, PO: [+ rural_po_display +]%, Nowa Lewica: [+ rural_lew_display +]%, PSL: [+ rural_psl_display +]%, PIS: [+ rural_pis_display +]%, Konfederacja: [+ rural_konf_display +]%, [? if pol_formed: Polska 2050: [+ rural_pol_display +]% ?]
 
