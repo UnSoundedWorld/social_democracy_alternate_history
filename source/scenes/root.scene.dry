@@ -233,21 +233,21 @@ Q.workers_pol = 0;
 Q.workers_pis = 40;
 Q.workers_konf = 10;
 
-Q.old_middle_raz = 4;
-Q.old_middle_lew = 10;
-Q.old_middle_po = 40;
-Q.old_middle_psl = 4;
-Q.old_middle_pol = 0;
-Q.old_middle_pis = 25;
-Q.old_middle_konf = 15;
+Q.middle_raz = 4;
+Q.middle_lew = 10;
+Q.middle_po = 40;
+Q.middle_psl = 4;
+Q.middle_pol = 0;
+Q.middle_pis = 25;
+Q.middle_konf = 15;
 
-Q.new_middle_raz = 5;
-Q.new_middle_lew = 1;
-Q.new_middle_po = 10;
-Q.new_middle_psl= 25;
-Q.new_middle_pol = 25;
-Q.new_middle_pis = 10;
-Q.new_middle_konf = 5;
+Q.smallcities_raz = 5;
+Q.smallcities_lew = 1;
+Q.smallcities_po = 10;
+Q.smallcities_psl= 25;
+Q.smallcities_pol = 25;
+Q.smallcities_pis = 10;
+Q.smallcities_konf = 5;
 
 Q.rural_raz = 3;
 Q.rural_lew = 3;
@@ -265,13 +265,13 @@ Q.unemployed_pol = 0;
 Q.unemployed_pis = 30;
 Q.unemployed_konf = 5;
 
-Q.catholics_raz = 20;
-Q.catholics_lew = 25;
-Q.catholics_po = 15;
-Q.catholics_psl = 5;
-Q.catholics_pol = 0;
-Q.catholics_pis = 5;
-Q.catholics_konf = 10;
+Q.lgbt_raz = 20;
+Q.lgbt_lew = 25;
+Q.lgbt_po = 15;
+Q.lgbt_psl = 5;
+Q.lgbt_pol = 0;
+Q.lgbt_pis = 5;
+Q.lgbt_konf = 10;
 
 
 // Current Reichstag composition
