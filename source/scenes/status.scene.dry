@@ -174,16 +174,16 @@ Others: [+ other_votes +]%
 
 **Detailed results for each demographic**
 
-Workers: SPD: [+ workers_raz_display +]%, Z: [+ workers_po_display +]%, KPD: [+ workers_lew_display +]%, PSL: [+ workers_psl_display +]%, DVP: [+ workers_pol_display +]%; DNVP: [+ workers_pis_display +]%, NSDAP: [+ workers_konf_display +]%, [? if sapd_formed: SAPD: [+ workers_sapd_display +]% ?]
+Workers: Razem: [+ workers_raz_display +]%, PO: [+ workers_po_display +]%, Nowa Lewica: [+ workers_lew_display +]%, PSL: [+ workers_psl_display +]%, PIS: [+ workers_pis_display +]%, Konfederacja: [+ workers_konf_display +]%, [? if pol_formed: Polska 2050: [+ workers_pol_display +]% ?]
 
-New Middle Class: SPD: [+ new_middle_raz_display +]%, Z: [+ new_middle_po_display +]%, KPD: [+ new_middle_lew_display +]%, PSL: [+ new_middle_psl_display +]%, DVP: [+ new_middle_pol_display +]%; DNVP: [+ new_middle_pis_display +]%, NSDAP: [+ new_middle_konf_display +]%, [? if sapd_formed: SAPD: [+ new_middle_sapd_display +]% ?]
+New Middle Class: Razem: [+ new_middle_raz_display +]%, PO: [+ new_middle_po_display +]%, Nowa Lewica: [+ new_middle_lew_display +]%, PSL: [+ new_middle_psl_display +]%, PIS: [+ new_middle_pis_display +]%, Konfederacja: [+ new_middle_konf_display +]%, [? if pol_formed: Polska 2050: [+ new_middle_pol_display +]% ?]
 
-Old Middle Class: SPD: [+ old_middle_raz_display +]%, Z: [+ old_middle_po_display +]%, KPD: [+ old_middle_lew_display +]%, PSL: [+ old_middle_psl_display +]%, DVP: [+ old_middle_pol_display +]%; DNVP: [+ old_middle_pis_display +]%, NSDAP: [+ old_middle_konf_display +]%, [? if sapd_formed: SAPD: [+ old_middle_sapd_display +]% ?]
+Old Middle Class: Razem: [+ old_middle_raz_display +]%, PO: [+ old_middle_po_display +]%, Nowa Lewica: [+ old_middle_lew_display +]%, PSL: [+ old_middle_psl_display +]%, PIS: [+ old_middle_pis_display +]%, Konfederacja: [+ old_middle_konf_display +]%, [? if pol_formed: Polska 2050: [+ old_middle_pol_display +]% ?]
 
-Rural: SPD: [+ rural_raz_display +]%, Z: [+ rural_po_display +]%, KPD: [+ rural_lew_display +]%, PSL: [+ rural_psl_display +]%, DVP: [+ rural_pol_display +]%; DNVP: [+ rural_pis_display +]%, NSDAP: [+ rural_konf_display +]%, [? if sapd_formed: SAPD: [+ rural_sapd_display +]% ?]
+Rural: Razem: [+ rural_raz_display +]%, PO: [+ rural_po_display +]%, Nowa Lewica: [+ rural_lew_display +]%, PSL: [+ rural_psl_display +]%, PIS: [+ rural_pis_display +]%, Konfederacja: [+ rural_konf_display +]%, [? if pol_formed: Polska 2050: [+ rural_pol_display +]% ?]
 
-Unemployed: SPD: [+ unemployed_raz_display +]%, Z: [+ unemployed_po_display +]%, KPD: [+ unemployed_lew_display +]%, PSL: [+ unemployed_psl_display +]%, DVP: [+ unemployed_pol_display +]%; DNVP: [+ unemployed_pis_display +]%, NSDAP: [+ unemployed_konf_display +]%, [? if sapd_formed: SAPD: [+ unemployed_sapd_display +]% ?]
+Unemployed: Razem: [+ unemployed_raz_display +]%, PO: [+ unemployed_po_display +]%, Nowa Lewica: [+ unemployed_lew_display +]%, PSL: [+ unemployed_psl_display +]%, PIS: [+ unemployed_pis_display +]%, Konfederacja: [+ unemployed_konf_display +]%, [? if pol_formed: Polska 2050: [+ unemployed_pol_display +]% ?]
 
-Catholics: SPD: [+ catholics_raz_display +]%, Z: [+ catholics_po_display +]%, KPD: [+ catholics_lew_display +]%, PSL: [+ catholics_psl_display +]%, DVP: [+ catholics_pol_display +]%; DNVP: [+ catholics_pis_display +]%, NSDAP: [+ catholics_konf_display +]%, [? if sapd_formed: SAPD: [+ catholics_sapd_display +]% ?]
+Catholics: Razem: [+ catholics_raz_display +]%, PO: [+ catholics_po_display +]%, Nowa Lewica: [+ catholics_lew_display +]%, PSL: [+ catholics_psl_display +]%, PIS: [+ catholics_pis_display +]%, Konfederacja: [+ catholics_konf_display +]%, [? if pol_formed: Polska 2050: [+ catholics_pol_display +]% ?]
 
 Support for the Republic: [+ pro_republic_disp +]%
