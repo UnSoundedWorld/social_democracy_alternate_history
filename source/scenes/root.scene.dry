@@ -221,7 +221,7 @@ Q.classes = ['workers', 'old_middle', 'new_middle', 'rural', 'unemployed', 'cath
 Q.parties = ['raz', 'lew', 'po', 'psl', 'pol', 'pis', 'konf'];
 
 // TODO: add 'sapd' later on
-Q.sapd_formed = 0;
+Q.pol_formed = 0;
 
 // Support for party by social group
 // they don't have to sum to 100 since the electoral calculations will be normalized.
