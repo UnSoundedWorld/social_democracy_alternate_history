@@ -1,18 +1,78 @@
 title: Election
 on-arrival: {!
 // calculate normalized class voting amounts (0 to 100)
-for (var c of Q.classes) {
-    var class_votes = 0;
-    for (var party of Q.parties) {
-        if (Q[c+'_'+party] < 0) {
-            Q[c+'_'+party] = 0;
+var total_support = 0;
+for (var party of Q.parties) {
+    var party_support = 0;
+    for (var c of Q.classes) {
+        if (Q.old_demographics) {
+            party_support += Q[c] * Q[c + '_' + party];
+        } else {
+            party_support += Q[c] * Q[c + '_' + party + '_normalized'];
         }
-        class_votes += Q[c+'_'+party];
     }
-    for (var party of Q.parties) {
-        Q[c + '_' + party + '_normalized'] = 100*Q[c+'_'+party]/class_votes;
-        Q[c + '_' + party + '_display'] = Math.round(100*Q[c+'_'+party]/class_votes);
-    }
+    Q[party + '_support'] = party_support;
+    total_support += party_support;
+}
+
+// 2. Normalize votes so they sum to exactly 100% (rounded integers)
+var raw_votes = {};
+var total_votes = 0;
+
+// Calculate raw votes as percentages
+for (var party of Q.parties) {
+    raw_votes[party] = (Q[party + '_support'] / total_support) * 100;
+    Q[party + '_votes_int'] = Math.floor(raw_votes[party]); // initial floor
+    total_votes += Q[party + '_votes_int'];
+}
+
+// Distribute leftover votes due to rounding to sum 100%
+var leftover = 100 - total_votes;
+
+// Sort parties by largest fractional remainder
+var remainders = Q.parties.map(party => ({
+    party: party,
+    remainder: raw_votes[party] - Math.floor(raw_votes[party])
+}));
+
+remainders.sort((a, b) => b.remainder - a.remainder);
+
+// Allocate leftover points
+for (var i = 0; i < leftover; i++) {
+    Q[remainders[i].party + '_votes_int'] += 1;
+}
+
+// 3. Store final vote percentage display (optional)
+for (var party of Q.parties) {
+    Q[party + '_votes_disp'] = Q[party + '_votes_int'] + '%';
+}
+
+// 4. D'Hondt seat allocation
+
+var totalSeats = 100; // Change this to the number of seats to allocate
+
+// Initialize seat counts
+for (var party of Q.parties) {
+    Q[party + '_r'] = 0;
+}
+
+// Allocate seats using D'Hondt method
+for (var seat = 0; seat < totalSeats; seat++) {
+    var quotients = Q.parties.map(function(party) {
+        var seatsAlready = Q[party + '_r'];
+        var votes = Q[party + '_support']; // Use raw support, not rounded votes
+        return {
+            party: party,
+            quotient: votes / (seatsAlready + 1)
+        };
+    });
+
+    quotients.sort(function(a, b) {
+        return b.quotient - a.quotient;
+    });
+
+    var winner = quotients[0].party;
+    Q[winner + '_r'] += 1;
 }
 
 // 1. calculate support for each of the parties
