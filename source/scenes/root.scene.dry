@@ -298,8 +298,8 @@ Q.old_pis_r = 20;
 Q.old_konf_r = 3;
 
 // sapd isn't formed yet, but it may be formed
-Q.sapd_r = 0;
-Q.old_sapd_r = 0;
+Q.pol_r = 0;
+Q.old_pol_r = 0;
 
 // array of objects of the form {date: Date(), spd: 10, kpd: 12, ...} for each election
 Q.election_records = [];
