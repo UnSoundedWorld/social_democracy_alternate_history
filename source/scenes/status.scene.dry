@@ -76,7 +76,7 @@ Economic growth: [+ economic_growth_2 +]%
 
 {!<span class="tooltip-text" title="PSL">PSL</span>!}: [+ psl_relation : relationships +]
 
-[? if pol_formed: !<span class="tooltip-text" title="Poland 2050">PL2050</span>!: [+ pol_relation : relationships +] ?]
+[? if pol_formed: {!<span class="tooltip-text" title="Poland 2050">PL2050</span>!}: [+ pol_relation : relationships +] ?]
 
 {!<span class="tooltip-text" title="New Left">New Left</span>!}: [+ lew_relation : relationships +]
 
@@ -86,13 +86,13 @@ Economic growth: [+ economic_growth_2 +]%
 
 = Internal Factions of the SPD
 
-{!<span class="tooltip-text" title="The Left is interested in radical, transformative policies and cooperation with the KPD.">Left</span>!} strength: [+ socialist_strength : strength +], dissent: [+ socialist_dissent : dissent +]
+{!<span class="tooltip-text" title="The socialist withing the party are usually loyal to pre-WW2 Polish Socialist Party traditions. They are opposed to cooperation with Civic Platform and New Left seeing them as corrupted.">Socialist</span>!} strength: [+ socialist_strength : strength +], dissent: [+ socialist_dissent : dissent +]
 
-{!<span class="tooltip-text" title="The Center is a faction of Center Marxists, between reform and revolution.">Center</span>!} strength: [+ zandbergist_strength : strength +], dissent: [+ zandbergist_dissent : dissent +]
+{!<span class="tooltip-text" title="The group focused around Adrian Zandberg - our most renown politician. They are a matter glueing all of the party's fractions together.">Zandbergist</span>!} strength: [+ zandbergist_strength : strength +], dissent: [+ zandbergist_dissent : dissent +]
 
-{!<span class="tooltip-text" title="Labor's goal is economic reform and benefits for organized workers.">Labor</span>!} strength: [+ socdem_strength : strength +], dissent: [+ socdem_dissent : dissent +]
+{!<span class="tooltip-text" title="Social democrats in the party focus on implementation of welfare programs and support the cooperation with the liberal parties.">Social Democrats</span>!} strength: [+ socdem_strength : strength +], dissent: [+ socdem_dissent : dissent +]
 
-{!<span class="tooltip-text" title="Reformists are pragmatic participants in government, and seek to expand the welfare state and defend democracy.">Reformist</span>!} strength: [+ soclib_strength : strength +], dissent: [+ soclib_dissent : dissent +]
+{!<span class="tooltip-text" title="Social liberals in the party seek to implement liberal reforms towards the reproductive rights and LGBT rights, as well as to participate in the government.">Social liberals</span>!} strength: [+ soclib_strength : strength +], dissent: [+ soclib_dissent : dissent +]
 
 [? if neorevisionism > 0 : Neorevisionist strength: [+ solidaritarian_strength : strength +], dissent: [+ solidaritarian_dissent : dissent +] ?]
 
@@ -162,7 +162,7 @@ Lewica: [+ lew_votes +]%
 
 PSL: [+ psl_votes +]%
 
-Trzecia Droga: [+ pol_votes +]%
+[? if pol_formed: Polska 2050: [+ pol_votes +]% ?]
 
 PIS: [+ pis_votes +]%
 
