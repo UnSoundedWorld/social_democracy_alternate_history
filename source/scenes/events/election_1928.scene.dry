@@ -1,4 +1,4 @@
-title: Reichstag Elections
+title: Sejm Elections
 new-page: true
 tags: event
 priority: -1
@@ -89,25 +89,41 @@ if (Q.electoral_threshold && Q.electoral_threshold > 0) {
 
 
 // The largest party can only be the NSDAP or the SPD.
-Q.largest_party = 'SPD';
-if (Q.nsdap_r >= Q.spd_r && Q.nsdap_r >= Q.kpd_r) {
-    Q.largest_party = 'NSDAP';
+Q.largest_party = 'PIS';
+if (Q.po_r >= Q.pis_r && Q.po_r >= Q.raz_r && Q.po_r >= Q.konf_r) {
+    Q.largest_party = 'Civic Platform';
 }
 
-if (Q.kpd_r >= Q.spd_r && Q.kpd_r >= Q.nsdap_r) {
-    Q.largest_party = 'KPD';
+if (Q.raz_r >= Q.po_r && Q.raz_r >= Q.pis_r && Q.raz_r >= Q.konf_r && Q.po_r >= Q.lew_r) {
+    Q.largest_party = 'Razem';
+}
+
+if (Q.pis_r >= Q.po_r && Q.pis_r >= Q.raz_r && Q.pis_r >= Q.konf_r && Q.pis_r >= Q.lew_r) {
+    Q.largest_party = 'Prawo i Sprawiedliwość';
+}
+
+if (Q.konf_r >= Q.po_r && Q.konf_r >= Q.pis_r && Q.konf_r >= Q.raz_r && Q.konf_r >= Q.lew_r) {
+    Q.largest_party = 'Konfederacja';
+}
+
+if (Q.lew_r >= Q.po_r && Q.lew_r >= Q.pis_r && Q.lew_r >= Q.raz_r && Q.lew_r >= Q.konf_r) {
+    Q.largest_party = 'Lewica';
 }
 
 // coalitions
-Q.weimar_coalition = Q.spd_r + Q.ddp_r + Q.z_r - 3;
-Q.grand_coalition = Q.spd_r + Q.ddp_r + Q.z_r + Q.dvp_r;
-Q.bourgeois_coalition = Q.ddp_r + Q.z_r + Q.dvp_r + Q.other_r;
-Q.center_right_coalition = Q.z_r + Q.ddp_r + Q.dvp_r + Q.other_r + Q.dnvp_r;
-Q.right_coalition = Q.z_r + Q.dvp_r + Q.other_r + Q.dnvp_r;
-Q.far_right_coalition = Q.dnvp_r + Q.nsdap_r;
-Q.left_coalition = Q.spd_r + Q.kpd_r + Q.sapd_r;
+Q.centreleft_coalition = Q.raz_r + Q.lew_r + Q.po_r;
+Q.centre_coalition = Q.lew_r + Q.po_r + Q.raz_r + Q.psl_r;
+Q.october_coalition = Q.lew_r + Q.po_r + Q.pol_r + Q.psl_r;
+Q.bigoctober_coalition = Q.lew_r + Q.po_r + Q.raz_r + Q.pol_r + q.psl_r;
+Q.centre_right_coalition = Q.po_r + Q.pol_r + Q.psl_r;
+Q.right_coalition = Q.pis_r + Q.psl_r + Q.pol_r + Q._r;
+Q.far_right_coalition = Q.pis_r + Q.konf_r;
+Q.pis_coalition = Q.pis_r;
+Q.po_coalition = Q.po_r;
+Q.konf_coalition = Q.konf_r;
+Q.raz_coalition = Q.raz_r;
+Q.left_coalition = Q.raz_r + Q.lew_r;
 // this is an absurd concept lol
-Q.popular_front_coalition = Q.spd_r + Q.kpd_r + Q.z_r + Q.ddp_r - 3 + Q.sapd_r;
 Q.anti_democratic_coalition = Q.kpd_r + Q.nsdap_r + Q.dnvp_r;
 // aka everyone except nazi, kpd, dnvp
 Q.neo_weimar_coalition = Q.spd_r + Q.ddp_r + Q.z_r + Q.dvp_r + Q.other_r;
