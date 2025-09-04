@@ -1,6 +1,6 @@
 title: Election
 on-arrival: {!
-// calculate normalized class voting amounts (0 to 100)
+// 1. Calculate total support for each party based on class demographics
 var total_support = 0;
 for (var party of Q.parties) {
     var party_support = 0;
@@ -15,40 +15,45 @@ for (var party of Q.parties) {
     total_support += party_support;
 }
 
-// 2. Normalize votes so they sum to exactly 100% (rounded integers)
+// 2. Normalize votes so they sum exactly to 100% (rounded integers)
+// Calculate raw vote percentages
 var raw_votes = {};
-var total_votes = 0;
-
-// Calculate raw votes as percentages
 for (var party of Q.parties) {
     raw_votes[party] = (Q[party + '_support'] / total_support) * 100;
-    Q[party + '_votes_int'] = Math.floor(raw_votes[party]); // initial floor
+}
+
+// Initial rounding to integers
+var total_votes = 0;
+for (var party of Q.parties) {
+    Q[party + '_votes_int'] = Math.round(raw_votes[party]);
     total_votes += Q[party + '_votes_int'];
 }
 
-// Distribute leftover votes due to rounding to sum 100%
+// Adjust leftover to make total exactly 100
 var leftover = 100 - total_votes;
+if (leftover !== 0) {
+    // Calculate fractional remainders
+    var remainders = Q.parties.map(party => ({
+        party: party,
+        remainder: raw_votes[party] - Q[party + '_votes_int']
+    }));
 
-// Sort parties by largest fractional remainder
-var remainders = Q.parties.map(party => ({
-    party: party,
-    remainder: raw_votes[party] - Math.floor(raw_votes[party])
-}));
+    // Sort by remainder depending on leftover sign
+    remainders.sort((a, b) => leftover > 0 ? b.remainder - a.remainder : a.remainder - b.remainder);
 
-remainders.sort((a, b) => b.remainder - a.remainder);
-
-// Allocate leftover points
-for (var i = 0; i < leftover; i++) {
-    Q[remainders[i].party + '_votes_int'] += 1;
+    for (var i = 0; i < Math.abs(leftover); i++) {
+        var party = remainders[i % remainders.length].party;
+        Q[party + '_votes_int'] += leftover > 0 ? 1 : -1;
+    }
 }
 
-// 3. Store final vote percentage display (optional)
+// 3. Store final vote percentage display and normalized fractions
 for (var party of Q.parties) {
     Q[party + '_votes_disp'] = Q[party + '_votes_int'] + '%';
+    Q[party + '_normalized'] = Q[party + '_votes_int'] / 100;
 }
 
 // 4. D'Hondt seat allocation
-
 var totalSeats = 100; // Change this to the number of seats to allocate
 
 // Initialize seat counts
@@ -74,24 +79,5 @@ for (var seat = 0; seat < totalSeats; seat++) {
     var winner = quotients[0].party;
     Q[winner + '_r'] += 1;
 }
-// 2. normalize support (fraction)
-// 3. Round to integers
-// TODO: round to 1 decimal instead of rounding to integers
-// to do that, we multiply party_normalized*1000 and divide the rounded number by 10.
-for (var party of Q.parties) {
-    Q[party+'_normalized'] = Q[party + '_support']/total_support;
-    Q[party+'_votes_dec'] = Math.round(Q[party+'_normalized']*1000)/10;
-    if (Q.use_decimals) {
-        Q[party+'_votes'] = Q[party+'_votes_dec'];
-        Q[party + '_votes_disp'] = Q[party+'_votes'];
-    } else {
-        Q[party+'_votes'] = Math.round(Q[party+'_normalized']*100);
-        Q[party + '_votes_disp'] = Q[party+'_votes_dec'].toFixed(1);
-    }
-    //Q[party+'_votes'] = Q[party+'_votes_dec'];
-    // display
-}
 !}
 go-to: jumpScene
-
-# note: this is a helpful utility to deal with elections and so on.
