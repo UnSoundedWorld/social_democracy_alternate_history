@@ -46,7 +46,6 @@ Reichstag composition:
 {!<span class="tooltip-text" title="New Left">Lewica</span>!}: [+ lew_r +]%
 # 1928: 5, 1930: 4 (as DstP)
 {!<span class="tooltip-text" title="Polish People's Party">!}[? if not ddp_name: PSL?][? if ddp_name != 0 : [+ ddp_name +]?]{!PSL</span>!}: [+ ddp_r +]%
-# 1928: 9, 1930: 5
 # 1928: 14, 1930: 7
 {!<span class="tooltip-text" title="Prawo i Sprawiedliwość">PIS</span>!}: [+ pis_r +]%
 # 1928: 3, 1930: 18
