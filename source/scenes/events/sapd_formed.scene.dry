@@ -1,15 +1,15 @@
 on-arrival: {!
 // set up the infrastructure
-Q.sapd_formed = 1;
-Q.parties.push('sapd');
+Q.pol_formed = 1;
+Q.parties.push('pol');
 
-Q.workers_sapd = 10;
-Q.workers_spd -= 3;
-Q.new_middle_sapd = 1;
-Q.old_middle_sapd = 0;
-Q.rural_sapd = 0;
-Q.unemployed_sapd = 2;
-Q.catholics_sapd = 0;
+Q.workers_pol = 10;
+Q.workers_po -= 3;
+Q.new_middle_pol = 1;
+Q.old_middle_pol = 0;
+Q.rural_pol = 0;
+Q.unemployed_pol = 2;
+Q.catholics_pol = 0;
 
 Q.workers_other -= 5;
 
@@ -18,12 +18,12 @@ if (Q.unions_independent) {
 }
 
 // update all records
-Q.sapd_r = 0;
-Q.old_sapd_r = 0;
+Q.pol_r = 0;
+Q.old_pol_r = 0;
 for (var record of Q.election_records) {
-    record['sapd'] = 0;
+    record['pol'] = 0;
 }
 for (var record of Q.party_support_records) {
-    record['sapd'] = 0;
+    record['pol'] = 0;
 }
 !}
