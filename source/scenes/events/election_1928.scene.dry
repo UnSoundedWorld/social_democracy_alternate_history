@@ -13,7 +13,7 @@ face-image: img/Rothe_Wahlen_1903.jpg
 
 = Elections, [+ month : month +] [+ year +]
 
-The Reichstag elections are to be held now.
+The Sejm elections are to be held now.
 
 - @election_algorithm: May we do our best...
 - @cancel_elections
@@ -118,25 +118,23 @@ Q.bigoctober_coalition = Q.lew_r + Q.po_r + Q.raz_r + Q.pol_r + q.psl_r;
 Q.centre_right_coalition = Q.po_r + Q.pol_r + Q.psl_r;
 Q.right_coalition = Q.pis_r + Q.psl_r + Q.pol_r + Q._r;
 Q.far_right_coalition = Q.pis_r + Q.konf_r;
-Q.pis_coalition = Q.pis_r;
-Q.po_coalition = Q.po_r;
-Q.konf_coalition = Q.konf_r;
-Q.raz_coalition = Q.raz_r;
+Q.pis_majority = Q.pis_r;
+Q.po_majority = Q.po_r;
+Q.konf_majority = Q.konf_r;
+Q.raz_majority = Q.raz_r;
 Q.left_coalition = Q.raz_r + Q.lew_r;
 // this is an absurd concept lol
-Q.anti_democratic_coalition = Q.kpd_r + Q.nsdap_r + Q.dnvp_r;
-// aka everyone except nazi, kpd, dnvp
-Q.neo_weimar_coalition = Q.spd_r + Q.ddp_r + Q.z_r + Q.dvp_r + Q.other_r;
+Q.querfront_coalition = Q.kpd_r + Q.nsdap_r + Q.dnvp_r;
 // Hitler + Right-wing parties (only comes into effect if you've alienated Z too badly)
-Q.hitler_right_coalition = Q.z_r + Q.dnvp_r + Q.nsdap_r;
+Q.po_right_coalition = Q.po_r + Q.konf_r;
 // Progressive coalition isn't going to be implemented as a distinct coalition but it's the coalition that lets you pass improved women's rights/gay rights
-Q.progressive_coalition = Q.spd_r + Q.kpd_r + Q.ddp_r + Q.sapd_r;
+Q.progressive_coalition = Q.raz_r + Q.lew_r + Q.po_r;
 
 if (Q.kpd_relation >= 30) {
     Q.weimar_coalition += Q.sapd_r;
 }
 
-Q.leverage = Q.spd_r;
+Q.leverage = Q.raz_r;
 
 Q.grand_coalition_failed = 0;
 // Reset government and ministers... Based on Brüning's 1930 govt
@@ -184,8 +182,6 @@ Q.reichswehr_goal_completed = 0;
 
 Q.strike_term_seen = 0;
 
-Q.z_minus_bvp_r = Q.z_r - 3;
-
 // understanding the enemy
 if (Q.nsdap_r >= 15) {
     Q.understanding_enemy_timer = 2;
@@ -201,10 +197,10 @@ on-departure: nazi_urgency = 1 if (nazi_urgency == 0 and nsdap_r >= 15)
 on-display: {!
 data = [
     {
-        "id": "kpd",
-        "legend": "KPD",
-        "name": "KPD",
-        "seats": Math.round(Q.kpd_r*5),
+        "id": "lew",
+        "legend": "New Left",
+        "name": "New Left",
+        "seats": Math.round(Q.lew_r*5),
     }
 ];
 if (Q.sapd_formed && Q.sapd_r) {
@@ -273,7 +269,7 @@ go-to: coalition_menu
 
 {!<table>!} 
 {!<tr><td>Party</td><td>Vote share</td><td>% Change</td></tr>!}
-{!<tr><td><div class="box" style='background-color:#E3000F; outline: 2px; outline-style: solid;'> </div> !} **Raze :** {!</td><td>!} **[+ raz_r +]%** {!</td><td>!} **[+ str_change_raz +]** {!</td></tr>!}
+{!<tr><td><div class="box" style='background-color:#E3000F; outline: 2px; outline-style: solid;'> </div> !} **Razem:** {!</td><td>!} **[+ raz_r +]%** {!</td><td>!} **[+ str_change_raz +]** {!</td></tr>!}
 
 [? if pol_formed : {!<tr><td><div class="box" style='background-color:#C40000'> </div> !}Polska 2050: {!</td><td>!} [+ pol_r +]% {!</td><td>!} [+ str_change_pol +] {!</td></tr>!} ?]
 
