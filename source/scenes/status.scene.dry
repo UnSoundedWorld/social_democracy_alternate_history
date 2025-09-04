@@ -39,7 +39,7 @@ Reichstag composition:
 
 # 1928: 30, 1930: 25, 1932: 22
 {!<span class="tooltip-text" title="Razem Party">Razem</span>!}: [+ raz_r +]%
-[? if sapd_formed and sapd_r > 0: SAPD: [+ sapd_r +]% ?]
+[? if pol_formed and pol_r > 0: Polska 2050: [+ sapd_r +]% ?]
 # 1928: 15, 1930: 15, 1932: 
 {!<span class="tooltip-text" title="Civic Platform">PO</span>!}: [+ po_r +]%
 # 1928: 10, 1930: 13
@@ -78,7 +78,7 @@ Economic growth: [+ economic_growth_2 +]%
 
 {!<span class="tooltip-text" title="PSL">!}[? if not psl_name: DDP?][? if psl_name != 0 : [+ psl_name +]?]{!</span>!}: [+ psl_relation : relationships +]
 
-{!<span class="tooltip-text" title="Poland 2050">PL2050</span>!}: [+ pol_relation : relationships +]
+{? if pol_formed and pol_r > 0: !<span class="tooltip-text" title="Poland 2050">PL2050</span>!}: [+ pol_relation : relationships +]
 
 {!<span class="tooltip-text" title="New Left">New Left</span>!}: [+ lew_relation : relationships +]
 
