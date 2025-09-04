@@ -39,7 +39,7 @@ Reichstag composition:
 
 # 1928: 30, 1930: 25, 1932: 22
 {!<span class="tooltip-text" title="Razem Party">Razem</span>!}: [+ raz_r +]%
-[? if pol_formed and pol_r > 0: Polska 2050: [+ sapd_r +]% ?]
+[? if pol_formed and pol_r > 0: Polska 2050: [+ pol_r +]% ?]
 # 1928: 15, 1930: 15, 1932: 
 {!<span class="tooltip-text" title="Civic Platform">PO</span>!}: [+ po_r +]%
 # 1928: 10, 1930: 13
@@ -47,7 +47,6 @@ Reichstag composition:
 # 1928: 5, 1930: 4 (as DstP)
 {!<span class="tooltip-text" title="Polish People's Party">!}[? if not ddp_name: PSL?][? if ddp_name != 0 : [+ ddp_name +]?]{!PSL</span>!}: [+ ddp_r +]%
 # 1928: 9, 1930: 5
-{!<span class="tooltip-text" title="Poland 2050 of Szymon Hołownia">Polska 2050</span>!}: [+ pol_r +]%
 # 1928: 14, 1930: 7
 {!<span class="tooltip-text" title="Prawo i Sprawiedliwość">PIS</span>!}: [+ pis_r +]%
 # 1928: 3, 1930: 18
