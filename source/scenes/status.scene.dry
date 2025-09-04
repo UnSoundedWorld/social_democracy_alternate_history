@@ -181,6 +181,6 @@ Rural: Razem: [+ rural_raz_display +]%, PO: [+ rural_po_display +]%, Nowa Lewica
 
 Unemployed: Razem: [+ unemployed_raz_display +]%, PO: [+ unemployed_po_display +]%, Nowa Lewica: [+ unemployed_lew_display +]%, PSL: [+ unemployed_psl_display +]%, PIS: [+ unemployed_pis_display +]%, Konfederacja: [+ unemployed_konf_display +]%, [? if pol_formed: Polska 2050: [+ unemployed_pol_display +]% ?]
 
-Catholics: Razem: [+ catholics_raz_display +]%, PO: [+ catholics_po_display +]%, Nowa Lewica: [+ catholics_lew_display +]%, PSL: [+ catholics_psl_display +]%, PIS: [+ catholics_pis_display +]%, Konfederacja: [+ catholics_konf_display +]%, [? if pol_formed: Polska 2050: [+ catholics_pol_display +]% ?]
+LGBT: Razem: [+ lgbt_raz_display +]%, PO: [+ lgbt_po_display +]%, Nowa Lewica: [+ lgbt_lew_display +]%, PSL: [+ lgbt_psl_display +]%, PIS: [+ lgbt_pis_display +]%, Konfederacja: [+ lgbt_konf_display +]%, [? if pol_formed: Polska 2050: [+ lgbt_pol_display +]% ?]
 
 Support for the Republic: [+ pro_republic_disp +]%
