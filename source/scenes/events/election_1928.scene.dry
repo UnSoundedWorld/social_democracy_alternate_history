@@ -114,7 +114,7 @@ if (Q.lew_r >= Q.po_r && Q.lew_r >= Q.pis_r && Q.lew_r >= Q.raz_r && Q.lew_r >= 
 Q.centreleft_coalition = Q.raz_r + Q.lew_r + Q.po_r;
 Q.centre_coalition = Q.lew_r + Q.po_r + Q.raz_r + Q.psl_r;
 Q.october_coalition = Q.lew_r + Q.po_r + Q.pol_r + Q.psl_r;
-Q.bigoctober_coalition = Q.lew_r + Q.po_r + Q.raz_r + Q.pol_r + q.psl_r;
+Q.bigoctober_coalition = Q.lew_r + Q.po_r + Q.raz_r + Q.pol_r + Q.psl_r;
 Q.centre_right_coalition = Q.po_r + Q.pol_r + Q.psl_r;
 Q.right_coalition = Q.pis_r + Q.psl_r + Q.pol_r + Q._r;
 Q.far_right_coalition = Q.pis_r + Q.konf_r;
