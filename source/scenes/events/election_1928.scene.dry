@@ -47,17 +47,14 @@ for (var party of Q.parties) {
     if (Q.constitutional_reform > 0) {
         if (Q[party + '_votes'] < Q.electoral_threshold || (Q.electoral_threshold > 1) || Q[party + '_banned']) {
             Q[party + '_r'] = 0;
-            console.log("Assigned 0 to " + party + "_r due to threshold");
         } else {
             Q[party + '_r'] = Q[party + '_votes'];
-            console.log(Assigned votes to " + party + "_r:" + Q[party + '_votes']);
         }
         new_party_sum += Q[party + '_r'];
-        console.log("New party sum is now: " + new_party_sum);
     } else {
         Q[party + '_r'] = Q[party + '_votes'];
-        console.log(No constitutional reform; assigned votes to " + party + "_r:" + Q[party + 'votes']);
     }
+    console.log("party:" + party_r)
     // if we use decimals, then we might want to truncate the numbers
     if (Q.use_decimals) {
         Q[party + '_r_disp'] = Q[party+'_r'].toFixed(1);
@@ -197,7 +194,7 @@ for (var party of Q.parties) {
     election_result[party] = Q[party + '_r'];
 }
 Q.election_records.push(election_result);
-!})
+!}
 on-departure: nazi_urgency = 1 if (nazi_urgency == 0 and nsdap_r >= 15)
 on-display: {!
 data = [
