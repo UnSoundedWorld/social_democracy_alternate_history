@@ -173,68 +173,77 @@ Q.reichswehr_goal_completed = 0;
 
 Q.strike_term_seen = 0;
 
-// understanding the enemy
-if (Q.nsdap_r >= 15) {
-    Q.understanding_enemy_timer = 2;
-}
-
-var election_result = {'date': new Date(Q.year, Q.month - 1)};
+var election_result = { 'date': new Date(Q.year, Q.month - 1) };
 for (var party of Q.parties) {
     election_result[party] = Q[party + '_r'];
 }
 Q.election_records.push(election_result);
+
 !}
-on-departure: nazi_urgency = 1 if (nazi_urgency == 0 and nsdap_r >= 15)
+on-departure: nazi_urgency = 1 if (nazi_urgency == 0 && nsdap_r >= 15)
 on-display: {!
-data = [
+
+// -------------------------
+// Allocate seats for Sejm (460 seats total)
+// -------------------------
+function allocateSeats(ratio) {
+    return Math.round(ratio * 460);
+}
+
+var data = [
     {
         "id": "lew",
         "legend": "New Left",
         "name": "New Left",
-        "seats": Math.round(Q.lew_r*5),
+        "seats": allocateSeats(Q.lew_r),
     }
 ];
+
 if (Q.sapd_formed && Q.sapd_r) {
     data.push({
-            "id": "pol",
-            "legend": "PL2050",
-            "name": "PL2050",
-            "seats": Math.round(Q.pol_r*5),
-            });
+        "id": "pol",
+        "legend": "PL2050",
+        "name": "PL2050",
+        "seats": allocateSeats(Q.pol_r),
+    });
 }
+
 data = data.concat([
     {
         "id": "raz",
         "legend": "Razem",
         "name": "Razem",
-        "seats": Math.round(Q.raz_r*5),
+        "seats": allocateSeats(Q.raz_r),
     },
     {
         "id": "psl",
         "legend": Q.PSL,
         "name": Q.PSL,
-        "seats": Math.round(Q.psl_r*5),
+        "seats": allocateSeats(Q.psl_r),
     },
     {
         "id": "po",
         "legend": "PO",
         "name": "PO",
-        "seats": Math.round(Q.po_r*5),
+        "seats": allocateSeats(Q.po_r),
     },
     {
         "id": "pis",
         "legend": "PIS",
         "name": "PIS",
-        "seats": Math.round(Q.pis_r*5),
+        "seats": allocateSeats(Q.pis_r),
     },
     {
         "id": "konf",
         "legend": "Konfederacja",
         "name": "Konfederacja",
-        "seats": Math.round(Q.konf_r*5),
+        "seats": allocateSeats(Q.konf_r),
     },
 ]);
 
+// -------------------------
+// Visualization for Sejm (460 seats)
+// -------------------------
 if (window && d3) {
     var width = 500; 
     var height = 500;
@@ -242,21 +251,27 @@ if (window && d3) {
     if (screenWidth < width - 50) {
         width = screenWidth - 50; 
         height = width;
-        document.getElementById("reichstag").style.height = screenWidth/2 + "px";
+        document.getElementById("sejm").style.height = screenWidth / 2 + "px";
     } 
 
-    var parliament = d3.parliament();
-    parliament.width(width).height(height).innerRadiusCoef(0.4);
+    var parliament = d3.parliament()
+        .width(width)
+        .height(height)
+        .innerRadiusCoef(0.4)
+        .seats(460);  // Sejm has 460 seats
+
     parliament.enter.fromCenter(true).smallToBig(true);
     parliament.exit.toCenter(false).bigToSmall(true);
-    d3.select("#reichstag").datum(data).call(parliament);
+
+    d3.select("#sejm").datum(data).call(parliament);
 }
 !}
 go-to: coalition_menu
 
 = Election results
 
-{!<svg id="reichstag" style="width: 500px; height: 250px;"> </svg>!}
+<!-- Parliament visualization -->
+{!<svg id="sejm" style="width: 500px; height: 250px;"> </svg>!}
 
 {!<table>!} 
 {!<tr><td>Party</td><td>Vote share</td><td>% Change</td></tr>!}
