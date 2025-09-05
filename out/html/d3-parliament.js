@@ -62,18 +62,27 @@ d3.parliament = function() {
             // -----------------------------
             // Assign party data to seats proportionally
             // -----------------------------
-            var partyIndex=0, seatIndex=0;
-            seatsArr.forEach(function(s, i){
-                var party=d[partyIndex];
-                var partySeats=typeof party.seats==="number"?party.seats:party.seats.length;
+           /* fill the seat objects with data of its party and of itself if existing */
+            (function() {
+                var partyIndex = 0;
+                var seatIndex = 0;
+                seats.forEach(function(s) {
+                    /* get current party and go to the next one if it has all its seats filled */
+                    var party = d[partyIndex];
+                    var nSeatsInParty = typeof party.seats === 'number' ? party.seats : party.seats.length;
+                    if (seatIndex >= nSeatsInParty) {
+                        partyIndex++;
+                        seatIndex = 0;
+                        party = d[partyIndex];
+                    }
 
-                if(seatIndex >= partySeats){
-                    partyIndex++; seatIndex=0; party=d[partyIndex];
-                }
-                s.party = party;
-                s.data = typeof party.seats==="number"?null:party.seats[seatIndex];
-                seatIndex++;
+                    /* set party data */
+                    s.party = party;
+                    s.data = typeof party.seats === 'number' ? null : party.seats[seatIndex];
 
+                    seatIndex++;
+                });
+            })();
                 // DEBUG LOG: show which seat belongs to which party and its color
                 console.log(`Seat ${i}: Party=${party.id || party.name}, Seats=${party.seats}, Color=${party.color}`);
             });
