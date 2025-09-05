@@ -4,7 +4,10 @@
  */
 
 d3.parliament = function() {
-    var width, height, innerRadiusCoef = 0.4;
+    var width = 500,
+        height = 250,
+        innerRadiusCoef = 0.4;
+
     var enter = { smallToBig: true, fromCenter: true },
         update = { animate: true },
         exit = { bigToSmall: true, toCenter: true };
@@ -17,20 +20,17 @@ d3.parliament = function() {
 
     function parliamentFunc(data) {
         data.each(function(d) {
-            width = width || this.getBoundingClientRect().width;
-            height = width ? width/2 : this.getBoundingClientRect().width/2;
-
+            // Calculate outer and inner radius based on width/height
+            var svg = d3.select(this);
             var outerR = Math.min(width/2, height);
             var innerR = outerR * innerRadiusCoef;
 
-            var svg = d3.select(this);
-
             // -----------------------------
-            // Compute rows and positions for 460 seats
+            // Compute rows and total seats
             // -----------------------------
             var totalSeats = 460;
             var nRows = 0, maxSeats = 0, b = 0.5;
-            while(maxSeats < totalSeats) {
+            while(maxSeats < totalSeats){
                 nRows++;
                 b += innerRadiusCoef/(1-innerRadiusCoef);
                 maxSeats = 0;
@@ -39,114 +39,72 @@ d3.parliament = function() {
             var rowWidth = (outerR - innerR)/nRows;
 
             // -----------------------------
-            // Normalize party seats to totalSeats
+            // Normalize party seats
             // -----------------------------
             let totalRequested = d.reduce((sum,p)=>sum+p.seats,0);
             let scaled = d.map(p=>({...p, _scaledSeats: Math.floor(p.seats*totalSeats/totalRequested)}));
             let assigned = scaled.reduce((sum,p)=>sum+p._scaledSeats,0);
             let leftover = totalSeats - assigned;
-            let i = 0;
-            while(leftover>0){ scaled[i % scaled.length]._scaledSeats++; leftover--; i++; }
+            for(let i=0;i<leftover;i++) scaled[i%scaled.length]._scaledSeats++;
 
             // -----------------------------
-            // Generate all seat positions row by row
+            // Generate seat positions
             // -----------------------------
             let seatPositions = [];
-            for(let row=0; row<nRows; row++){
+            for(let row=0;row<nRows;row++){
                 let rowRadius = innerR + rowWidth*(row+0.5);
-                let seatsInRow = Math.floor(Math.PI*(b+row)) - Math.floor((maxSeats-totalSeats)/nRows) - ((maxSeats-totalSeats)%nRows > row ? 1 : 0);
+                let seatsInRow = Math.floor(Math.PI*(b+row)) - Math.floor((maxSeats-totalSeats)/nRows) - ((maxSeats-totalSeats)%nRows > row ? 1:0);
                 let angleStep = Math.PI/seatsInRow;
-                for(let col=0; col<seatsInRow; col++){
+                for(let col=0;col<seatsInRow;col++){
                     seatPositions.push({
-                        polar: { r: rowRadius, teta: -Math.PI + angleStep*(col+0.5) },
-                        cartesian: { x: rowRadius*Math.cos(-Math.PI + angleStep*(col+0.5)),
-                                     y: rowRadius*Math.sin(-Math.PI + angleStep*(col+0.5)) }
+                        x: rowRadius*Math.cos(-Math.PI + angleStep*(col+0.5)),
+                        y: rowRadius*Math.sin(-Math.PI + angleStep*(col+0.5))
                     });
                 }
             }
 
             // -----------------------------
-            // Assign parties to seats in order (left-to-right)
+            // Assign parties left-to-right
             // -----------------------------
             const partyOrder = ["raz","lew","po","pol","psl","pis","konf"];
             let flatSeats = [];
             partyOrder.forEach(pid=>{
                 let party = scaled.find(p=>p.id===pid);
                 if(!party) return;
-                for(let s=0;s<party._scaledSeats;s++) flatSeats.push(party);
+                for(let i=0;i<party._scaledSeats;i++) flatSeats.push(party);
             });
-
-            seatPositions.forEach((pos,i)=>{
-                pos.party = flatSeats[i];
-            });
-
-            let seatsArr = seatPositions;
+            seatPositions.forEach((seat,i)=>seat.party = flatSeats[i]);
 
             // -----------------------------
             // Draw seats
             // -----------------------------
-            var container = svg.select(".parliament");
-            if(container.empty()) container = svg.append("g").classed("parliament",true);
+            let container = svg.select(".parliament");
+            if(container.empty()) container = svg.append("g").classed("parliament", true);
             container.attr("transform","translate("+width/2+","+outerR+")");
 
-            var circles = container.selectAll(".seat").data(seatsArr);
-            circles.attr("class","seat");
+            let circles = container.selectAll(".seat").data(seatPositions);
+            circles.exit().remove();
 
-            var circlesEnter = circles.enter().append("circle")
+            let circlesEnter = circles.enter().append("circle")
                 .attr("class","seat")
-                .attr("cx", enter.fromCenter ? 0 : d=>d.cartesian.x)
-                .attr("cy", enter.fromCenter ? 0 : d=>d.cartesian.y)
-                .attr("r", enter.smallToBig ? 0 : rowWidth*0.4)
+                .attr("cx", d=>d.x)
+                .attr("cy", d=>d.y)
+                .attr("r", rowWidth*0.4)
                 .attr("fill", d=>d.party.color||"#999")
                 .attr("stroke","#333");
 
-            if(enter.fromCenter || enter.smallToBig){
-                var t = circlesEnter.transition().duration(1000);
-                if(enter.fromCenter) t.attr("cx", d=>d.cartesian.x).attr("cy", d=>d.cartesian.y);
-                if(enter.smallToBig) t.attr("r", rowWidth*0.4);
-            }
-
-            // Attach events
-            for(var evt in dispatch._){
-                (function(evt){ circlesEnter.on(evt,function(e){ dispatch.call(evt,this,e); }); })(evt);
-            }
-
-            // Update
-            if(update.animate){
-                circles.transition().duration(1000)
-                    .attr("cx", d=>d.cartesian.x)
-                    .attr("cy", d=>d.cartesian.y)
-                    .attr("r", rowWidth*0.4)
-                    .attr("fill", d=>d.party.color||"#999");
-            } else {
-                circles.attr("cx", d=>d.cartesian.x)
-                       .attr("cy", d=>d.cartesian.y)
-                       .attr("r", rowWidth*0.4)
-                       .attr("fill", d=>d.party.color||"#999");
-            }
-
-            // Exit
-            if(exit.toCenter || exit.bigToSmall){
-                circles.exit().transition().duration(1000)
-                    .attr("cx",0).attr("cy",0)
-                    .attr("r",0)
-                    .remove();
-            } else circles.exit().remove();
+            circles.merge(circlesEnter)
+                .transition().duration(500)
+                .attr("cx", d=>d.x)
+                .attr("cy", d=>d.y)
+                .attr("r", rowWidth*0.4)
+                .attr("fill", d=>d.party.color||"#999");
         });
     }
 
     parliamentFunc.width = function(v){ if(!arguments.length) return width; width=v; return parliamentFunc; };
-    parliamentFunc.height = function(v){ if(!arguments.length) return height; return parliamentFunc; };
+    parliamentFunc.height = function(v){ if(!arguments.length) return height; height=v; return parliamentFunc; };
     parliamentFunc.innerRadiusCoef = function(v){ if(!arguments.length) return innerRadiusCoef; innerRadiusCoef=v; return parliamentFunc; };
-    parliamentFunc.enter = { 
-        smallToBig(v){ if(!arguments.length) return enter.smallToBig; enter.smallToBig=v; return parliamentFunc.enter; },
-        fromCenter(v){ if(!arguments.length) return enter.fromCenter; enter.fromCenter=v; return parliamentFunc.enter; }
-    };
-    parliamentFunc.update = { animate(v){ if(!arguments.length) return update.animate; update.animate=v; return parliamentFunc.update; } };
-    parliamentFunc.exit = { 
-        bigToSmall(v){ if(!arguments.length) return exit.bigToSmall; exit.bigToSmall=v; return parliamentFunc.exit; },
-        toCenter(v){ if(!arguments.length) return exit.toCenter; exit.toCenter=v; return parliamentFunc.exit; }
-    };
     parliamentFunc.on = function(type,callback){ dispatch.on(type,callback); };
 
     return parliamentFunc;
