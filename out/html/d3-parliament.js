@@ -62,17 +62,23 @@ d3.parliament = function() {
             // -----------------------------
             // Assign party data to seats proportionally
             // -----------------------------
-            var partyIndex=0, seatIndex=0, seatCountSoFar=0;
-            seatsArr.forEach(function(s){
+            var partyIndex=0, seatIndex=0;
+            seatsArr.forEach(function(s, i){
                 var party=d[partyIndex];
                 var partySeats=typeof party.seats==="number"?party.seats:party.seats.length;
+
                 if(seatIndex >= partySeats){
                     partyIndex++; seatIndex=0; party=d[partyIndex];
                 }
                 s.party = party;
                 s.data = typeof party.seats==="number"?null:party.seats[seatIndex];
                 seatIndex++;
+
+                // DEBUG LOG: show which seat belongs to which party and its color
+                console.log(`Seat ${i}: Party=${party.id || party.name}, Seats=${party.seats}, Color=${party.color}`);
             });
+
+            console.log("Final seats assignment:", seatsArr);
 
             // -----------------------------
             // Draw seats
@@ -89,7 +95,13 @@ d3.parliament = function() {
                 .attr("cx", enter.fromCenter?0:d=>d.cartesian.x)
                 .attr("cy", enter.fromCenter?0:d=>d.cartesian.y)
                 .attr("r", enter.smallToBig?0:rowWidth*0.4)
-                .attr("fill", d=>d.party.color || "#999")
+                .attr("fill", d=>{
+                    if(!d.party || !d.party.color){
+                        console.warn("Missing color for seat:", d);
+                        return "#999"; // fallback
+                    }
+                    return d.party.color;
+                })
                 .attr("stroke", "#333");
 
             if(enter.fromCenter || enter.smallToBig){
@@ -109,12 +121,24 @@ d3.parliament = function() {
                     .attr("cx", d=>d.cartesian.x)
                     .attr("cy", d=>d.cartesian.y)
                     .attr("r", rowWidth*0.4)
-                    .attr("fill", d=>d.party.color||"#999");
+                    .attr("fill", d=>{
+                        if(!d.party || !d.party.color){
+                            console.warn("Missing color (update) for seat:", d);
+                            return "#999";
+                        }
+                        return d.party.color;
+                    });
             } else {
                 circles.attr("cx", d=>d.cartesian.x)
                        .attr("cy", d=>d.cartesian.y)
                        .attr("r", rowWidth*0.4)
-                       .attr("fill", d=>d.party.color||"#999");
+                       .attr("fill", d=>{
+                           if(!d.party || !d.party.color){
+                               console.warn("Missing color (update) for seat:", d);
+                               return "#999";
+                           }
+                           return d.party.color;
+                       });
             }
 
             // Exit
