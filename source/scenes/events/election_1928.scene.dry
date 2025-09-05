@@ -181,59 +181,25 @@ Q.election_records.push(election_result);
 
 !}
 on-display: {!
+
 function allocateSeats(ratio) {
     return Math.round(ratio * 460);
 }
 
 var data = [
-    {
-        "id": "lew",
-        "legend": "New Left",
-        "name": "New Left",
-        "seats": allocateSeats(Q.lew_r),
-    }
+    { id: "lew", legend: "New Left", name: "New Left", seats: allocateSeats(Q.lew_r) }
 ];
 
 if (Q.pol_formed && Q.pol_r) {
-    data.push({
-        "id": "pol",
-        "legend": "PL2050",
-        "name": "PL2050",
-        "seats": allocateSeats(Q.pol_r),
-    });
+    data.push({ id: "pol", legend: "PL2050", name: "PL2050", seats: allocateSeats(Q.pol_r) });
 }
 
 data = data.concat([
-    {
-        "id": "raz",
-        "legend": "Razem",
-        "name": "Razem",
-        "seats": allocateSeats(Q.raz_r),
-    },
-    {
-        "id": "psl",
-        "legend": Q.PSL,
-        "name": Q.PSL,
-        "seats": allocateSeats(Q.psl_r),
-    },
-    {
-        "id": "po",
-        "legend": "PO",
-        "name": "PO",
-        "seats": allocateSeats(Q.po_r),
-    },
-    {
-        "id": "pis",
-        "legend": "PIS",
-        "name": "PIS",
-        "seats": allocateSeats(Q.pis_r),
-    },
-    {
-        "id": "konf",
-        "legend": "Konfederacja",
-        "name": "Konfederacja",
-        "seats": allocateSeats(Q.konf_r),
-    },
+    { id: "raz", legend: "Razem", name: "Razem", seats: allocateSeats(Q.raz_r) },
+    { id: "psl", legend: "PSL", name: "PSL", seats: allocateSeats(Q.psl_r) },  // fixed
+    { id: "po", legend: "PO", name: "PO", seats: allocateSeats(Q.po_r) },
+    { id: "pis", legend: "PIS", name: "PIS", seats: allocateSeats(Q.pis_r) },
+    { id: "konf", legend: "Konfederacja", name: "Konfederacja", seats: allocateSeats(Q.konf_r) }
 ]);
 
 // -------------------------
@@ -247,7 +213,8 @@ if (window && d3) {
         width = screenWidth - 50; 
         height = width;
         document.getElementById("sejm").style.height = screenWidth / 2 + "px";
-    } 
+    }
+
     console.log("d3 version:", d3.version);
     console.log("parliament plugin:", typeof d3.parliament);
     console.log("svg exists?", document.getElementById("sejm"));
@@ -262,15 +229,14 @@ if (window && d3) {
     parliament.enter.fromCenter(true).smallToBig(true);
     parliament.exit.toCenter(false).bigToSmall(true);
 
-    d3.select("reichstag").datum(data).call(parliament);
+    d3.select("#sejm").datum(data).call(parliament);
 }
 !}
 go-to: coalition_menu
 
 = Election results
 
-<!-- Parliament visualization -->
-{!<svg id="reichstag" style="width: 500px; height: 250px;"> </svg>!}
+{!<svg id="sejm" style="width: 500px; height: 250px;"> </svg>!}
 
 {!<table>!} 
 {!<tr><td>Party</td><td>Vote share</td><td>% Change</td></tr>!}
