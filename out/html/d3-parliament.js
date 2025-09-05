@@ -5,108 +5,100 @@
 
 d3.parliament = function() {
     var width, height, innerRadiusCoef = 0.4;
-
     var enter = { smallToBig: true, fromCenter: true },
         update = { animate: true },
         exit = { bigToSmall: true, toCenter: true };
 
     var dispatch = d3.dispatch(
-        "click", "dblclick", "mousedown", "mouseenter",
-        "mouseleave", "mousemove", "mouseout", "mouseover",
-        "mouseup", "touchcancel", "touchend", "touchmove", "touchstart"
+        "click","dblclick","mousedown","mouseenter",
+        "mouseleave","mousemove","mouseout","mouseover",
+        "mouseup","touchcancel","touchend","touchmove","touchstart"
     );
 
     function parliamentFunc(data) {
         data.each(function(d) {
             width = width || this.getBoundingClientRect().width;
-            height = width ? width / 2 : this.getBoundingClientRect().width / 2;
+            height = width ? width/2 : this.getBoundingClientRect().width/2;
 
-            var outerR = Math.min(width / 2, height);
+            var outerR = Math.min(width/2, height);
             var innerR = outerR * innerRadiusCoef;
 
             var svg = d3.select(this);
 
             // -----------------------------
-            // Normalize seats to 460
+            // Compute rows and positions for 460 seats
             // -----------------------------
-            const totalSeats = 460;
-            let totalRequested = d.reduce((sum, p) => sum + p.seats, 0);
-            let scaled = d.map(p => ({
-                ...p,
-                _scaledSeats: Math.floor(p.seats * totalSeats / totalRequested)
-            }));
-
-            // Distribute leftover
-            let assigned = scaled.reduce((sum, p) => sum + p._scaledSeats, 0);
-            let leftover = totalSeats - assigned;
-            let i = 0;
-            while (leftover > 0) {
-                scaled[i % scaled.length]._scaledSeats++;
-                leftover--;
-                i++;
-            }
-
-            // -----------------------------
-            // Compute rows
-            // -----------------------------
+            var totalSeats = 460;
             var nRows = 0, maxSeats = 0, b = 0.5;
             while(maxSeats < totalSeats) {
                 nRows++;
-                b += innerRadiusCoef / (1 - innerRadiusCoef);
+                b += innerRadiusCoef/(1-innerRadiusCoef);
                 maxSeats = 0;
-                for(var r=0;r<nRows;r++) maxSeats += Math.floor(Math.PI*(b+r));
+                for(var i=0;i<nRows;i++) maxSeats += Math.floor(Math.PI*(b+i));
             }
             var rowWidth = (outerR - innerR)/nRows;
 
             // -----------------------------
-            // Flatten seats in desired order
+            // Normalize party seats to totalSeats
+            // -----------------------------
+            let totalRequested = d.reduce((sum,p)=>sum+p.seats,0);
+            let scaled = d.map(p=>({...p, _scaledSeats: Math.floor(p.seats*totalSeats/totalRequested)}));
+            let assigned = scaled.reduce((sum,p)=>sum+p._scaledSeats,0);
+            let leftover = totalSeats - assigned;
+            let i = 0;
+            while(leftover>0){ scaled[i % scaled.length]._scaledSeats++; leftover--; i++; }
+
+            // -----------------------------
+            // Generate all seat positions row by row
+            // -----------------------------
+            let seatPositions = [];
+            for(let row=0; row<nRows; row++){
+                let rowRadius = innerR + rowWidth*(row+0.5);
+                let seatsInRow = Math.floor(Math.PI*(b+row)) - Math.floor((maxSeats-totalSeats)/nRows) - ((maxSeats-totalSeats)%nRows > row ? 1 : 0);
+                let angleStep = Math.PI/seatsInRow;
+                for(let col=0; col<seatsInRow; col++){
+                    seatPositions.push({
+                        polar: { r: rowRadius, teta: -Math.PI + angleStep*(col+0.5) },
+                        cartesian: { x: rowRadius*Math.cos(-Math.PI + angleStep*(col+0.5)),
+                                     y: rowRadius*Math.sin(-Math.PI + angleStep*(col+0.5)) }
+                    });
+                }
+            }
+
+            // -----------------------------
+            // Assign parties to seats in order (left-to-right)
             // -----------------------------
             const partyOrder = ["raz","lew","po","pol","psl","pis","konf"];
             let flatSeats = [];
-            partyOrder.forEach(pid => {
+            partyOrder.forEach(pid=>{
                 let party = scaled.find(p=>p.id===pid);
-                if (!party) return;
-                for (let s=0; s<party._scaledSeats; s++) flatSeats.push(party);
+                if(!party) return;
+                for(let s=0;s<party._scaledSeats;s++) flatSeats.push(party);
             });
 
-            // -----------------------------
-            // Assign seats along semicircle
-            // -----------------------------
-            let seatsArr = [];
-            let seatIndex = 0;
-            for (let row=0; row<nRows; row++) {
-                let rowRadius = innerR + rowWidth*(row+0.5);
-                let seatsInRow = Math.floor(Math.PI*(b+row)) - Math.floor((maxSeats - totalSeats)/nRows) - ((maxSeats - totalSeats) % nRows > row ? 1:0);
-                let angleStep = Math.PI / seatsInRow;
-                for (let col=0; col<seatsInRow; col++) {
-                    if (seatIndex >= flatSeats.length) break;
-                    let theta = -Math.PI + angleStep*(col+0.5);
-                    seatsArr.push({
-                        polar: { r: rowRadius, teta: theta },
-                        cartesian: { x: rowRadius*Math.cos(theta), y: rowRadius*Math.sin(theta) },
-                        party: flatSeats[seatIndex]
-                    });
-                    seatIndex++;
-                }
-            }
+            seatPositions.forEach((pos,i)=>{
+                pos.party = flatSeats[i];
+            });
+
+            let seatsArr = seatPositions;
 
             // -----------------------------
             // Draw seats
             // -----------------------------
             var container = svg.select(".parliament");
-            if(container.empty()) container = svg.append("g").classed("parliament", true);
-            container.attr("transform", "translate(" + width/2 + "," + outerR + ")");
+            if(container.empty()) container = svg.append("g").classed("parliament",true);
+            container.attr("transform","translate("+width/2+","+outerR+")");
 
             var circles = container.selectAll(".seat").data(seatsArr);
-            circles.exit().remove();
+            circles.attr("class","seat");
 
             var circlesEnter = circles.enter().append("circle")
                 .attr("class","seat")
                 .attr("cx", enter.fromCenter ? 0 : d=>d.cartesian.x)
                 .attr("cy", enter.fromCenter ? 0 : d=>d.cartesian.y)
                 .attr("r", enter.smallToBig ? 0 : rowWidth*0.4)
-                .attr("fill", d => d.party.color || "#999")
-                .attr("stroke", "#333");
+                .attr("fill", d=>d.party.color||"#999")
+                .attr("stroke","#333");
 
             if(enter.fromCenter || enter.smallToBig){
                 var t = circlesEnter.transition().duration(1000);
@@ -114,16 +106,32 @@ d3.parliament = function() {
                 if(enter.smallToBig) t.attr("r", rowWidth*0.4);
             }
 
+            // Attach events
             for(var evt in dispatch._){
                 (function(evt){ circlesEnter.on(evt,function(e){ dispatch.call(evt,this,e); }); })(evt);
             }
 
-            // Update existing
-            circles.transition().duration(1000)
-                .attr("cx", d=>d.cartesian.x)
-                .attr("cy", d=>d.cartesian.y)
-                .attr("r", rowWidth*0.4)
-                .attr("fill", d=>d.party.color || "#999");
+            // Update
+            if(update.animate){
+                circles.transition().duration(1000)
+                    .attr("cx", d=>d.cartesian.x)
+                    .attr("cy", d=>d.cartesian.y)
+                    .attr("r", rowWidth*0.4)
+                    .attr("fill", d=>d.party.color||"#999");
+            } else {
+                circles.attr("cx", d=>d.cartesian.x)
+                       .attr("cy", d=>d.cartesian.y)
+                       .attr("r", rowWidth*0.4)
+                       .attr("fill", d=>d.party.color||"#999");
+            }
+
+            // Exit
+            if(exit.toCenter || exit.bigToSmall){
+                circles.exit().transition().duration(1000)
+                    .attr("cx",0).attr("cy",0)
+                    .attr("r",0)
+                    .remove();
+            } else circles.exit().remove();
         });
     }
 
@@ -143,4 +151,3 @@ d3.parliament = function() {
 
     return parliamentFunc;
 };
-
