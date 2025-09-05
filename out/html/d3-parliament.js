@@ -2,6 +2,7 @@
  * MIT License
  * © Copyright 2016 - Geoffrey Brossard (me@geoffreybrossard.fr)
  */
+
 d3.parliament = function() {
     var width, height, innerRadiusCoef = 0.4;
     var enter = { smallToBig: true, fromCenter: true },
@@ -9,23 +10,21 @@ d3.parliament = function() {
         exit = { bigToSmall: true, toCenter: true };
 
     var dispatch = d3.dispatch(
-        "click", "dblclick", "mousedown", "mouseenter",
-        "mouseleave", "mousemove", "mouseout", "mouseover",
-        "mouseup", "touchcancel", "touchend", "touchmove", "touchstart"
+        "click","dblclick","mousedown","mouseenter",
+        "mouseleave","mousemove","mouseout","mouseover",
+        "mouseup","touchcancel","touchend","touchmove","touchstart"
     );
 
-    function parliamentFunc(data) {
-        data.each(function(d) {
-            width = width || this.getBoundingClientRect().width;
-            height = width ? width / 2 : this.getBoundingClientRect().width / 2;
-
+    function parliamentFunc(selection) {
+        selection.each(function(d) {
+            var svg = d3.select(this);
+            width = width || svg.node().getBoundingClientRect().width;
+            height = width / 2;
             var outerR = Math.min(width/2, height);
             var innerR = outerR * innerRadiusCoef;
 
-            var svg = d3.select(this);
-
             // -----------------------------
-            // Compute rows and seats
+            // Compute semicircle rows and seats
             // -----------------------------
             var totalSeats = 460;
             var nRows = 0, maxSeats = 0, b = 0.5;
@@ -42,7 +41,7 @@ d3.parliament = function() {
 
             for(var i=0;i<nRows;i++){
                 var rowRadius = innerR + rowWidth*(i+0.5);
-                var seatsInRow = Math.floor(Math.PI*(b+i)) - Math.floor(seatsToRemove/nRows) - (seatsToRemove%nRows > i ? 1:0);
+                var seatsInRow = Math.floor(Math.PI*(b+i)) - Math.floor(seatsToRemove/nRows) - (seatsToRemove%nRows>i?1:0);
                 var angleStep = Math.PI / seatsInRow;
                 var tetaStart = -Math.PI;
                 for(var j=0;j<seatsInRow;j++){
@@ -55,51 +54,40 @@ d3.parliament = function() {
             }
 
             // -----------------------------
-            // Assign party seats outer-to-inner
+            // Scale party seats to exactly 460
             // -----------------------------
-            console.log("Raw party data:", d);
-
-            // Ensure total seats is exactly 460
-            let totalRequested = d.reduce((sum,p)=>sum+p.seats,0);
-            let scaledSeats = d.map(p => ({
+            var totalRequested = d.reduce((sum,p)=>sum+p.seats,0);
+            var scaledSeats = d.map(p => ({
                 ...p,
                 _scaledSeats: Math.floor(p.seats * 460 / totalRequested)
             }));
-
-            let assigned = scaledSeats.reduce((sum,p)=>sum+p._scaledSeats,0);
-            let leftover = 460 - assigned;
-            let iLeft = 0;
-            while(leftover>0) {
-                scaledSeats[iLeft % scaledSeats.length]._scaledSeats++;
-                leftover--;
-                iLeft++;
+            var assigned = scaledSeats.reduce((sum,p)=>sum+p._scaledSeats,0);
+            var leftover = 460 - assigned;
+            for(var i=0;i<leftover;i++){
+                scaledSeats[i % scaledSeats.length]._scaledSeats++;
             }
 
             // -----------------------------
-            // Assign seats in order along semicircle
-            // Outermost row first, then inward
+            // Assign seats along semicircle left-to-right
+            // Outermost seats on edges, inner seats in between
             // -----------------------------
-            let rowMap = [];
-            let idx = 0;
-            for(let row = nRows-1; row>=0; row--){  // outermost row first
-                let rowSeats = seatsArr.filter(s => Math.round((s.polar.r - innerR)/rowWidth) === row);
+            var rowMap = [];
+            for(var row=nRows-1; row>=0; row--){
+                var rowSeats = seatsArr.filter(s => Math.round((s.polar.r - innerR)/rowWidth) === row);
                 rowMap.push(rowSeats);
             }
 
-            let partyOrder = ["raz","lew","po","pol","psl","pis","konf"];
-            let partySeatsMap = {};
+            var partyOrder = ["raz","lew","po","pol","psl","pis","konf"];
+            var partySeatsMap = {};
             partyOrder.forEach(p => {
-                let party = scaledSeats.find(x=>x.id===p);
-                if(party) partySeatsMap[p]=party._scaledSeats;
+                var party = scaledSeats.find(x=>x.id===p);
+                if(party) partySeatsMap[p] = party._scaledSeats;
             });
 
-            let seatCounter = 0;
             rowMap.forEach(rowSeats=>{
-                let totalRowSeats = rowSeats.length;
-                let rowAssigned = [];
-                let partyIndex = 0;
-                let remainingSeats = totalRowSeats;
-                let partyKeys = partyOrder.filter(k=>partySeatsMap[k]>0);
+                var totalRowSeats = rowSeats.length;
+                var rowAssigned = [];
+                var partyKeys = partyOrder.filter(k=>partySeatsMap[k]>0);
                 while(rowAssigned.length < totalRowSeats){
                     partyKeys.forEach(pk=>{
                         if(partySeatsMap[pk]>0 && rowAssigned.length < totalRowSeats){
@@ -107,17 +95,17 @@ d3.parliament = function() {
                             partySeatsMap[pk]--;
                         }
                     });
+                    partyKeys = partyOrder.filter(k=>partySeatsMap[k]>0);
                 }
-                // assign parties to seats in row left to right
-                for(let s=0;s<rowSeats.length;s++){
-                    let seat = rowSeats[s];
-                    let pk = rowAssigned[s];
-                    let party = scaledSeats.find(x=>x.id===pk);
+
+                // Assign parties left to right along semicircle
+                for(var s=0;s<rowSeats.length;s++){
+                    var seat = rowSeats[s];
+                    var pk = rowAssigned[s];
+                    var party = scaledSeats.find(x=>x.id===pk);
                     seat.party = party;
                 }
             });
-
-            console.log("Seats assigned:", seatsArr);
 
             // -----------------------------
             // Draw seats
@@ -131,10 +119,10 @@ d3.parliament = function() {
 
             var circlesEnter = circles.enter().append("circle")
                 .attr("class","seat")
-                .attr("cx",enter.fromCenter?0:d=>d.cartesian.x)
-                .attr("cy",enter.fromCenter?0:d=>d.cartesian.y)
-                .attr("r",enter.smallToBig?0:rowWidth*0.4)
-                .attr("fill",d=>d.party.color||"#999")
+                .attr("cx", enter.fromCenter?0:d=>d.cartesian.x)
+                .attr("cy", enter.fromCenter?0:d=>d.cartesian.y)
+                .attr("r", enter.smallToBig?0:rowWidth*0.4)
+                .attr("fill", d=>d.party?.color||"#999")
                 .attr("stroke","#333");
 
             if(enter.fromCenter || enter.smallToBig){
@@ -152,12 +140,12 @@ d3.parliament = function() {
                     .attr("cx",d=>d.cartesian.x)
                     .attr("cy",d=>d.cartesian.y)
                     .attr("r",rowWidth*0.4)
-                    .attr("fill",d=>d.party.color||"#999");
+                    .attr("fill",d=>d.party?.color||"#999");
             } else {
                 circles.attr("cx",d=>d.cartesian.x)
                        .attr("cy",d=>d.cartesian.y)
                        .attr("r",rowWidth*0.4)
-                       .attr("fill",d=>d.party.color||"#999");
+                       .attr("fill",d=>d.party?.color||"#999");
             }
 
             if(exit.toCenter || exit.bigToSmall){
