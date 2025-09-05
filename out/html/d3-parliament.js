@@ -61,7 +61,7 @@ d3.parliament = function() {
             var seatsToRemove = maxSeats - totalSeats;
 
             // -----------------------------
-            // Generate seats in semicircle
+            // Generate seats in semicircle (inner -> outer)
             // -----------------------------
             for(var i=0;i<nRows;i++){
                 var rowRadius = innerR + rowWidth*(i+0.5);
@@ -77,105 +77,49 @@ d3.parliament = function() {
             }
 
             // -----------------------------
-            // Assign parties left-to-right
+            // Assign parties left-to-right as contiguous blocks per row
+            // Outer rows first, then inward (so blocks wrap nicely)
             // -----------------------------
-            // Outer rows first, then inward
-            let seatCounter = 0;
+            // Build mutable map of remaining seats per party
             let partySeatsMap = {};
             scaledSeats.forEach(p => { partySeatsMap[p.id] = p._scaledSeats; });
 
-            for(let row = nRows-1; row>=0; row--){
-                let rowSeats = seatsArr.filter(s => Math.round((s.polar.r - innerR)/rowWidth) === row);
-                let totalRowSeats = rowSeats.length;
-
-                // Assign party seats proportionally along the row left-to-right
-                let assignedRow = [];
-                let remainingSeats = totalRowSeats;
-                let activeParties = partyOrder.filter(pid => partySeatsMap[pid] > 0);
-                let idx = 0;
-                while(assignedRow.length < totalRowSeats){
-                    activeParties.forEach(pid => {
-                        if(partySeatsMap[pid] > 0 && assignedRow.length < totalRowSeats){
-                            assignedRow.push(pid);
-                            partySeatsMap[pid]--;
-                        }
-                    });
-                    activeParties = partyOrder.filter(pid => partySeatsMap[pid] > 0);
-                    idx++;
-                    if(activeParties.length === 0) break;
+            // helper: allocate contiguous seats for a row using proportional shares + fractional remainder
+            function allocateRowSeats(remainingMap, totalRowSeats, order) {
+                const remainingTotal = Object.keys(remainingMap).reduce((s,k)=> s + Math.max(0, remainingMap[k]), 0);
+                let desired = {};
+                if (remainingTotal <= 0) {
+                    // no more seats anywhere
+                    order.forEach(pid => desired[pid] = 0);
+                    return desired;
                 }
+                // initial floor allocation based on share
+                let sumAllocated = 0;
+                order.forEach(pid => {
+                    if (remainingMap[pid] > 0) {
+                        let share = remainingMap[pid] / remainingTotal;
+                        let alloc = Math.floor(share * totalRowSeats);
+                        alloc = Math.min(alloc, remainingMap[pid]); // can't allocate more than remaining for that party
+                        desired[pid] = alloc;
+                        sumAllocated += alloc;
+                    } else {
+                        desired[pid] = 0;
+                    }
+                });
+                let leftoverSeats = totalRowSeats - sumAllocated;
 
-                // Assign to actual seat objects
-                for(let s=0;s<rowSeats.length;s++){
-                    let seat = rowSeats[s];
-                    let pid = assignedRow[s];
-                    seat.party = scaledSeats.find(p=>p.id===pid);
-                }
-            }
+                // compute fractional remainders to fairly assign leftover seats
+                let remainders = order.map(pid => {
+                    if (remainingMap[pid] > 0) {
+                        let share = remainingMap[pid] / remainingTotal;
+                        let exact = share * totalRowSeats;
+                        let frac = exact - Math.floor(exact);
+                        return { pid: pid, frac: frac };
+                    } else return { pid: pid, frac: -1 };
+                }).sort((a,b) => b.frac - a.frac); // biggest fractional remainder first
 
-            // -----------------------------
-            // Draw seats
-            // -----------------------------
-            var container = svg.select(".parliament");
-            if(container.empty()) container = svg.append("g").classed("parliament", true);
-            container.attr("transform","translate("+width/2+","+outerR+")");
+                // assign leftovers to highest fractional remainder parties (but never exceed that party's remaining seats)
+                for(let k=0; k<remainders.length && leftoverSeats>0; k++){
+                    const pid = remainders[k].pid;
 
-            var circles = container.selectAll(".seat").data(seatsArr);
-            circles.attr("class","seat");
-
-            var circlesEnter = circles.enter().append("circle")
-                .attr("class","seat")
-                .attr("cx", enter.fromCenter ? 0 : d=>d.cartesian.x)
-                .attr("cy", enter.fromCenter ? 0 : d=>d.cartesian.y)
-                .attr("r", enter.smallToBig ? 0 : rowWidth*0.4)
-                .attr("fill", d => d.party && d.party.color ? d.party.color : "#999")
-                .attr("stroke","#333");
-
-            if(enter.fromCenter || enter.smallToBig){
-                var t = circlesEnter.transition().duration(1000);
-                if(enter.fromCenter) t.attr("cx", d=>d.cartesian.x).attr("cy", d=>d.cartesian.y);
-                if(enter.smallToBig) t.attr("r", rowWidth*0.4);
-            }
-
-            for(var evt in dispatch._){
-                (function(evt){ circlesEnter.on(evt, function(e){ dispatch.call(evt,this,e); }); })(evt);
-            }
-
-            if(update.animate){
-                circles.transition().duration(1000)
-                    .attr("cx", d=>d.cartesian.x)
-                    .attr("cy", d=>d.cartesian.y)
-                    .attr("r", rowWidth*0.4)
-                    .attr("fill", d => d.party && d.party.color ? d.party.color : "#999");
-            } else {
-                circles.attr("cx", d=>d.cartesian.x)
-                       .attr("cy", d=>d.cartesian.y)
-                       .attr("r", rowWidth*0.4)
-                       .attr("fill", d => d.party && d.party.color ? d.party.color : "#999");
-            }
-
-            if(exit.toCenter || exit.bigToSmall){
-                circles.exit().transition().duration(1000)
-                    .attr("cx",0).attr("cy",0)
-                    .attr("r",0).remove();
-            } else circles.exit().remove();
-        });
-    }
-
-    parliamentFunc.width = function(v){ if(!arguments.length) return width; width=v; return parliamentFunc; };
-    parliamentFunc.height = function(v){ if(!arguments.length) return height; return parliamentFunc; };
-    parliamentFunc.innerRadiusCoef = function(v){ if(!arguments.length) return innerRadiusCoef; innerRadiusCoef=v; return parliamentFunc; };
-    parliamentFunc.enter = {
-        smallToBig(v){ if(!arguments.length) return enter.smallToBig; enter.smallToBig=v; return parliamentFunc.enter; },
-        fromCenter(v){ if(!arguments.length) return enter.fromCenter; enter.fromCenter=v; return parliamentFunc.enter; }
-    };
-    parliamentFunc.update = { animate(v){ if(!arguments.length) return update.animate; update.animate=v; return parliamentFunc.update; } };
-    parliamentFunc.exit = {
-        bigToSmall(v){ if(!arguments.length) return exit.bigToSmall; exit.bigToSmall=v; return parliamentFunc.exit; },
-        toCenter(v){ if(!arguments.length) return exit.toCenter; exit.toCenter=v; return parliamentFunc.exit; }
-    };
-    parliamentFunc.on = function(type, callback){ dispatch.on(type, callback); };
-
-    return parliamentFunc;
-};
 
