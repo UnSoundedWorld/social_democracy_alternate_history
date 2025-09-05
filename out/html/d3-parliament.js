@@ -2,12 +2,8 @@
  * MIT License
  * © Copyright 2016 - Geoffrey Brossard (me@geoffreybrossard.fr)
  */
-
 d3.parliament = function() {
-    var width,
-        height,
-        innerRadiusCoef = 0.4;
-
+    var width, height, innerRadiusCoef = 0.4;
     var enter = { smallToBig: true, fromCenter: true },
         update = { animate: true },
         exit = { bigToSmall: true, toCenter: true };
@@ -23,7 +19,7 @@ d3.parliament = function() {
             width = width || this.getBoundingClientRect().width;
             height = width ? width / 2 : this.getBoundingClientRect().width / 2;
 
-            var outerR = Math.min(width / 2, height);
+            var outerR = Math.min(width/2, height);
             var innerR = outerR * innerRadiusCoef;
 
             var svg = d3.select(this);
@@ -71,7 +67,7 @@ d3.parliament = function() {
                 var rowRadius = innerR + rowWidth*(i+0.5);
                 var seatsInRow = Math.floor(Math.PI*(b+i)) - Math.floor(seatsToRemove/nRows) - (seatsToRemove%nRows > i ? 1:0);
                 for(var j=0;j<seatsInRow;j++){
-                    // Map j to theta linearly so that party positions are left-to-right along outermost arc
+                    // Map j to theta linearly so that party positions are left-to-right along the row
                     var teta = -Math.PI + Math.PI * (j + 0.5)/seatsInRow;
                     seatsArr.push({
                         polar: { r: rowRadius, teta: teta },
@@ -83,21 +79,46 @@ d3.parliament = function() {
             // -----------------------------
             // Assign parties left-to-right
             // -----------------------------
+            // Outer rows first, then inward
             let seatCounter = 0;
-            scaledSeats.forEach(party => {
-                for(let s=0; s<party._scaledSeats; s++){
-                    if(seatCounter >= seatsArr.length) break;
-                    seatsArr[seatCounter].party = party;
-                    seatCounter++;
+            let partySeatsMap = {};
+            scaledSeats.forEach(p => { partySeatsMap[p.id] = p._scaledSeats; });
+
+            for(let row = nRows-1; row>=0; row--){
+                let rowSeats = seatsArr.filter(s => Math.round((s.polar.r - innerR)/rowWidth) === row);
+                let totalRowSeats = rowSeats.length;
+
+                // Assign party seats proportionally along the row left-to-right
+                let assignedRow = [];
+                let remainingSeats = totalRowSeats;
+                let activeParties = partyOrder.filter(pid => partySeatsMap[pid] > 0);
+                let idx = 0;
+                while(assignedRow.length < totalRowSeats){
+                    activeParties.forEach(pid => {
+                        if(partySeatsMap[pid] > 0 && assignedRow.length < totalRowSeats){
+                            assignedRow.push(pid);
+                            partySeatsMap[pid]--;
+                        }
+                    });
+                    activeParties = partyOrder.filter(pid => partySeatsMap[pid] > 0);
+                    idx++;
+                    if(activeParties.length === 0) break;
                 }
-            });
+
+                // Assign to actual seat objects
+                for(let s=0;s<rowSeats.length;s++){
+                    let seat = rowSeats[s];
+                    let pid = assignedRow[s];
+                    seat.party = scaledSeats.find(p=>p.id===pid);
+                }
+            }
 
             // -----------------------------
             // Draw seats
             // -----------------------------
             var container = svg.select(".parliament");
             if(container.empty()) container = svg.append("g").classed("parliament", true);
-            container.attr("transform","translate(" + width/2 + "," + outerR + ")");
+            container.attr("transform","translate("+width/2+","+outerR+")");
 
             var circles = container.selectAll(".seat").data(seatsArr);
             circles.attr("class","seat");
@@ -116,12 +137,10 @@ d3.parliament = function() {
                 if(enter.smallToBig) t.attr("r", rowWidth*0.4);
             }
 
-            // Attach events
             for(var evt in dispatch._){
                 (function(evt){ circlesEnter.on(evt, function(e){ dispatch.call(evt,this,e); }); })(evt);
             }
 
-            // Update
             if(update.animate){
                 circles.transition().duration(1000)
                     .attr("cx", d=>d.cartesian.x)
@@ -135,12 +154,10 @@ d3.parliament = function() {
                        .attr("fill", d => d.party && d.party.color ? d.party.color : "#999");
             }
 
-            // Exit
             if(exit.toCenter || exit.bigToSmall){
                 circles.exit().transition().duration(1000)
                     .attr("cx",0).attr("cy",0)
-                    .attr("r",0)
-                    .remove();
+                    .attr("r",0).remove();
             } else circles.exit().remove();
         });
     }
@@ -160,6 +177,5 @@ d3.parliament = function() {
     parliamentFunc.on = function(type, callback){ dispatch.on(type, callback); };
 
     return parliamentFunc;
-
-    function series(s,n){ var r=0; for(var i=0;i<=n;i++) r+=s(i); return r; }
 };
+
