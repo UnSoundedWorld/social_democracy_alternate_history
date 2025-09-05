@@ -229,32 +229,32 @@ Q.pol_psl_list_formed = 0;
 
 // Support for party by social group
 // they don't have to sum to 100 since the electoral calculations will be normalized.
-Q.workers_raz = 5;
-Q.workers_lew = 6;
+Q.workers_raz = 3;
+Q.workers_lew = 3;
 Q.workers_po = 16;
 Q.workers_psl = 17;
 Q.workers_pol = 0;
 Q.workers_pis = 45;
 Q.workers_konf = 10;
 
-Q.middle_raz = 6;
-Q.middle_lew = 7;
+Q.middle_raz = 4;
+Q.middle_lew = 4;
 Q.middle_po = 45;
 Q.middle_psl = 6
 Q.middle_pol = 0;
 Q.middle_pis = 30;
 Q.middle_konf = 6;
 
-Q.smallcities_raz = 4;
-Q.smallcities_lew = 4;
+Q.smallcities_raz = 3;
+Q.smallcities_lew = 3;
 Q.smallcities_po = 39;
 Q.smallcities_psl= 8;
 Q.smallcities_pol = 0;
 Q.smallcities_pis = 39;
 Q.smallcities_konf = 7;
 
-Q.rural_raz = 4;
-Q.rural_lew = 4;
+Q.rural_raz = 3;
+Q.rural_lew = 3;
 Q.rural_po = 16;
 Q.rural_psl= 12;
 Q.rural_pol = 0;
@@ -269,8 +269,8 @@ Q.unemployed_pol = 0;
 Q.unemployed_pis = 50;
 Q.unemployed_konf = 7;
 
-Q.lgbt_raz = 20;
-Q.lgbt_lew = 10;
+Q.lgbt_raz = 6;
+Q.lgbt_lew = 3;
 Q.lgbt_po = 20;
 Q.lgbt_psl = 5;
 Q.lgbt_pol = 0;
