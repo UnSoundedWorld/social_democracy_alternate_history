@@ -269,8 +269,8 @@ Q.unemployed_pol = 0;
 Q.unemployed_pis = 50;
 Q.unemployed_konf = 7;
 
-Q.lgbt_raz = 30;
-Q.lgbt_lew = 35;
+Q.lgbt_raz = 20;
+Q.lgbt_lew = 10;
 Q.lgbt_po = 20;
 Q.lgbt_psl = 5;
 Q.lgbt_pol = 0;
