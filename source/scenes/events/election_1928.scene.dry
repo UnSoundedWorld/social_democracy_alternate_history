@@ -45,8 +45,8 @@ for (var party of Q.parties) {
 
 // 2. Update Q[party + '_r'] based on votes, thresholds, and bans
 for (var party of Q.parties) {
-    if (Q.constitutional_reform > 0) {
-        if (Q[party + '_votes'] < Q.electoral_threshold || Q.electoral_threshold > 1 || Q[party + '_banned']) {
+    if (Q.constitutional_reform = 0) {
+        if (Q[party + '_votes'] < Q.electoral_threshold || Q.electoral_threshold) {
             Q[party + '_r'] = 0;
         } else {
             Q[party + '_r'] = Q[party + '_votes'];
