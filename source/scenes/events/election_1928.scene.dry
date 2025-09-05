@@ -194,7 +194,7 @@ var data = [
     }
 ];
 
-if (Q.sapd_formed && Q.sapd_r) {
+if (Q.pol_formed && Q.pol_r) {
     data.push({
         "id": "pol",
         "legend": "PL2050",
