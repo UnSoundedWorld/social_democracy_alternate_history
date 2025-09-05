@@ -19,7 +19,7 @@ d3.parliament = function() {
             width = width || this.getBoundingClientRect().width;
             height = width ? width / 2 : this.getBoundingClientRect().width / 2;
 
-            var outerR = Math.min(width / 2, height);
+            var outerR = Math.min(width/2, height);
             var innerR = outerR * innerRadiusCoef;
 
             var svg = d3.select(this);
@@ -55,8 +55,11 @@ d3.parliament = function() {
             }
 
             // -----------------------------
-            // Scale party seats to 460
+            // Assign party seats outer-to-inner
             // -----------------------------
+            console.log("Raw party data:", d);
+
+            // Ensure total seats is exactly 460
             let totalRequested = d.reduce((sum,p)=>sum+p.seats,0);
             let scaledSeats = d.map(p => ({
                 ...p,
@@ -73,58 +76,48 @@ d3.parliament = function() {
             }
 
             // -----------------------------
-            // Assign seats left-to-right on outermost row first
+            // Assign seats in order along semicircle
+            // Outermost row first, then inward
             // -----------------------------
-            let outerRowSeats = seatsArr.filter(s => Math.round((s.polar.r - innerR)/rowWidth) === nRows-1);
-            let seatCounter = 0;
+            let rowMap = [];
+            let idx = 0;
+            for(let row = nRows-1; row>=0; row--){  // outermost row first
+                let rowSeats = seatsArr.filter(s => Math.round((s.polar.r - innerR)/rowWidth) === row);
+                rowMap.push(rowSeats);
+            }
 
-            // Repeat party order according to seat counts
             let partyOrder = ["raz","lew","po","pol","psl","pis","konf"];
             let partySeatsMap = {};
             partyOrder.forEach(p => {
                 let party = scaledSeats.find(x=>x.id===p);
-                if(party) partySeatsMap[p] = party._scaledSeats;
+                if(party) partySeatsMap[p]=party._scaledSeats;
             });
 
-            let rowAssigned = [];
-            let totalOuterSeats = outerRowSeats.length;
-            let partiesAvailable = partyOrder.filter(k=>partySeatsMap[k]>0);
-
-            while(rowAssigned.length < totalOuterSeats){
-                partiesAvailable.forEach(pk=>{
-                    if(partySeatsMap[pk]>0 && rowAssigned.length < totalOuterSeats){
-                        rowAssigned.push(pk);
-                        partySeatsMap[pk]--;
-                    }
-                });
-                partiesAvailable = partyOrder.filter(k=>partySeatsMap[k]>0);
-                if(partiesAvailable.length===0) break;
-            }
-
-            // Assign to seats in outermost row left to right
-            for(let i=0;i<outerRowSeats.length;i++){
-                let seat = outerRowSeats[i];
-                let pk = rowAssigned[i];
-                let party = scaledSeats.find(x=>x.id===pk);
-                seat.party = party;
-            }
-
-            // Assign remaining seats (inner rows) proportionally left-to-right
-            let innerSeats = seatsArr.filter(s => Math.round((s.polar.r - innerR)/rowWidth) < nRows-1);
-            let remainingPartySeats = [];
-            scaledSeats.forEach(p=>{
-                for(let s=0;s<p._scaledSeats;s++){
-                    remainingPartySeats.push(p.id);
+            let seatCounter = 0;
+            rowMap.forEach(rowSeats=>{
+                let totalRowSeats = rowSeats.length;
+                let rowAssigned = [];
+                let partyIndex = 0;
+                let remainingSeats = totalRowSeats;
+                let partyKeys = partyOrder.filter(k=>partySeatsMap[k]>0);
+                while(rowAssigned.length < totalRowSeats){
+                    partyKeys.forEach(pk=>{
+                        if(partySeatsMap[pk]>0 && rowAssigned.length < totalRowSeats){
+                            rowAssigned.push(pk);
+                            partySeatsMap[pk]--;
+                        }
+                    });
+                }
+                // assign parties to seats in row left to right
+                for(let s=0;s<rowSeats.length;s++){
+                    let seat = rowSeats[s];
+                    let pk = rowAssigned[s];
+                    let party = scaledSeats.find(x=>x.id===pk);
+                    seat.party = party;
                 }
             });
-            remainingPartySeats = remainingPartySeats.filter(pid=>!rowAssigned.includes(pid));
 
-            for(let i=0;i<innerSeats.length;i++){
-                let seat = innerSeats[i];
-                let pk = remainingPartySeats[i];
-                let party = scaledSeats.find(x=>x.id===pk);
-                seat.party = party;
-            }
+            console.log("Seats assigned:", seatsArr);
 
             // -----------------------------
             // Draw seats
