@@ -18,10 +18,8 @@ d3.parliament = function() {
         "mouseup", "touchcancel", "touchend", "touchmove", "touchstart"
     );
 
-    function parliamentFunc(selection) {
-        selection.each(function(d) {
-            // d is the array of party objects passed by caller
-            var parties = d || [];
+    function parliamentFunc(data) {
+        data.each(function(d) {
             width = width || this.getBoundingClientRect().width;
             height = width ? width / 2 : this.getBoundingClientRect().width / 2;
 
@@ -31,249 +29,143 @@ d3.parliament = function() {
             var svg = d3.select(this);
 
             // -----------------------------
-            // Compute layout rows for 460 seats
+            // Force party order left → right
             // -----------------------------
-            var TOTAL_SEATS = 460;
+            const partyOrder = ["raz", "lew", "po", "pol", "psl", "pis", "konf"];
+            d.sort((a, b) => partyOrder.indexOf(a.id) - partyOrder.indexOf(b.id));
+
+            // -----------------------------
+            // Compute seats and rows for 460-seat Sejm
+            // -----------------------------
+            var totalSeats = 460;
             var nRows = 0, maxSeats = 0, b = 0.5;
-            while (maxSeats < TOTAL_SEATS) {
+            while (maxSeats < totalSeats) {
                 nRows++;
                 b += innerRadiusCoef / (1 - innerRadiusCoef);
                 maxSeats = 0;
-                for (var i = 0; i < nRows; i++) maxSeats += Math.floor(Math.PI * (b + i));
+                for (var i=0; i<nRows; i++) maxSeats += Math.floor(Math.PI * (b + i));
             }
 
             var rowWidth = (outerR - innerR) / nRows;
             var seatsArr = [];
-            var seatsToRemove = maxSeats - TOTAL_SEATS;
+            var seatsToRemove = maxSeats - totalSeats;
 
             // -----------------------------
-            // Create seats with semicircle layout (positions)
+            // Create seats with semicircle layout
             // -----------------------------
-            for (var row = 0; row < nRows; row++) {
-                var rowRadius = innerR + rowWidth * (row + 0.5);
-                var seatsInRow = Math.floor(Math.PI * (b + row))
-                    - Math.floor(seatsToRemove / nRows)
-                    - (seatsToRemove % nRows > row ? 1 : 0);
+            for (var i=0; i<nRows; i++) {
+                var rowRadius = innerR + rowWidth*(i+0.5);
+                var seatsInRow = Math.floor(Math.PI*(b+i)) - Math.floor(seatsToRemove/nRows) - (seatsToRemove%nRows > i ? 1:0);
                 var angleStep = Math.PI / seatsInRow;
-                for (var j = 0; j < seatsInRow; j++) {
-                    var theta = -Math.PI + angleStep * (j + 0.5);
+                for (var j=0; j<seatsInRow; j++) {
                     seatsArr.push({
-                        polar: { r: rowRadius, teta: theta },
-                        cartesian: { x: rowRadius * Math.cos(theta), y: rowRadius * Math.sin(theta) }
+                        polar: { r: rowRadius, teta: -Math.PI + angleStep*(j+0.5) },
+                        cartesian: { 
+                            x: rowRadius*Math.cos(-Math.PI + angleStep*(j+0.5)), 
+                            y: rowRadius*Math.sin(-Math.PI + angleStep*(j+0.5)) 
+                        }
                     });
                 }
             }
 
-            // seatsArr length should equal TOTAL_SEATS
-            if (seatsArr.length !== TOTAL_SEATS) {
-                console.warn("parliament: generated seatsArr length", seatsArr.length, "expected", TOTAL_SEATS);
-            }
-
             // -----------------------------
-            // Prepare party requested seats
+            // Normalize party seats to exactly 460
             // -----------------------------
-            console.log("parliament: incoming party objects:", parties);
-
-            var requestedList = parties.map(function(p) {
-                var req = 0;
-                if (typeof p.seats === "number") req = Math.max(0, Math.floor(p.seats));
-                else if (Array.isArray(p.seats)) req = p.seats.length;
-                else req = 0;
-                return {
-                    party: p,
-                    requested: req,
-                    color: p && p.color ? p.color : null
-                };
-            });
-
-            var totalRequested = requestedList.reduce(function(sum, item) { return sum + item.requested; }, 0);
-            console.log("parliament: totalRequested seats (before scaling):", totalRequested);
-
-            // -----------------------------
-            // Scale to exactly TOTAL_SEATS using largest remainder (Hamilton)
-            // -----------------------------
-            if (totalRequested > 0) {
-                // Compute quotas
-                requestedList.forEach(function(item) {
-                    item.quota = (item.requested * TOTAL_SEATS) / totalRequested;
-                    item.floor = Math.floor(item.quota);
-                    item.remainder = item.quota - item.floor;
-                    item.assigned = item.floor;
-                });
-
-                var assignedSoFar = requestedList.reduce(function(s, it) { return s + it.assigned; }, 0);
-                var leftover = TOTAL_SEATS - assignedSoFar;
-
-                // Sort by remainder desc and break ties by requested desc then index
-                requestedList.sort(function(a, b) {
-                    if (b.remainder !== a.remainder) return b.remainder - a.remainder;
-                    if (b.requested !== a.requested) return b.requested - a.requested;
-                    return 0;
-                });
-
-                for (var k = 0; k < leftover; k++) {
-                    requestedList[k % requestedList.length].assigned++;
-                }
-
-                // restore original ordering (so assignment goes party-by-party as input)
-                requestedList.sort(function(a, b) {
-                    return parties.indexOf(a.party) - parties.indexOf(b.party);
-                });
-            } else {
-                // Nothing requested — assign no seats to parties; seats will remain unassigned (grey)
-                console.warn("parliament: totalRequested is 0 — no party seat requests. All seats will be unassigned (grey).");
-                requestedList.forEach(function(item) { item.quota = 0; item.floor = 0; item.remainder = 0; item.assigned = 0; });
-            }
-
-            console.log("parliament: final scaled seat counts:", requestedList.map(function(it) {
-                return { id: it.party && (it.party.id || it.party.name), requested: it.requested, assigned: it.assigned, color: it.color };
+            let totalSeatsRequested = d.reduce((sum, p) => sum + p.seats, 0);
+            let scaledSeats = d.map(p => ({
+                ...p,
+                _scaledSeats: Math.floor(p.seats * 460 / totalSeatsRequested)
             }));
 
-            // -----------------------------
-            // Assign party objects to seat positions
-            // -----------------------------
-            var seatPosIndex = 0;
-            // Fill seatsArr with party references (if assigned), otherwise leave party null
-            requestedList.forEach(function(item) {
-                var p = item.party;
-                var a = item.assigned;
-                for (var s = 0; s < a && seatPosIndex < seatsArr.length; s++) {
-                    seatsArr[seatPosIndex].party = p;
-                    seatsArr[seatPosIndex].data = null;
-                    seatPosIndex++;
-                }
-            });
-            // Any remaining seats are left unassigned (party = null)
-            var unassigned = seatsArr.length - seatPosIndex;
-            if (unassigned > 0) {
-                console.log("parliament: unassigned seats remaining:", unassigned, "they will be rendered with fallback color.");
-                for (; seatPosIndex < seatsArr.length; seatPosIndex++) {
-                    seatsArr[seatPosIndex].party = null;
-                    seatsArr[seatPosIndex].data = null;
-                }
+            let assigned = scaledSeats.reduce((sum, p) => sum + p._scaledSeats, 0);
+            let leftover = 460 - assigned;
+
+            let idx = 0;
+            while (leftover > 0) {
+                scaledSeats[idx % scaledSeats.length]._scaledSeats++;
+                leftover--;
+                idx++;
             }
 
-            // Debug summary: count seats by party id/name
-            var countByParty = {};
-            seatsArr.forEach(function(s) {
-                var key = s.party ? (s.party.id || s.party.name || "unknown") : "__unassigned";
-                countByParty[key] = (countByParty[key] || 0) + 1;
+            // -----------------------------
+            // Assign parties to seats
+            // -----------------------------
+            let seatCounter = 0;
+            scaledSeats.forEach(party => {
+                for (let s = 0; s < party._scaledSeats; s++) {
+                    seatsArr[seatCounter].party = party;
+                    seatCounter++;
+                }
             });
-            console.log("parliament: seats by party after assignment:", countByParty);
+
+            // DEBUG LOG
+            console.log("Seats assigned to parties:", seatsArr);
 
             // -----------------------------
             // Draw seats
             // -----------------------------
             var container = svg.select(".parliament");
             if (container.empty()) container = svg.append("g").classed("parliament", true);
-            container.attr("transform", "translate(" + (width / 2) + "," + outerR + ")");
 
-            // DATA JOIN
+            // FIX: rotate whole chamber so order is left → right
+            container.attr("transform", "translate(" + width/2 + "," + outerR + ") rotate(-90)");
+
             var circles = container.selectAll(".seat").data(seatsArr);
-            // update existing
             circles.attr("class", "seat");
 
-            // enter
             var circlesEnter = circles.enter().append("circle")
-                .attr("class", "seat")
-                .attr("cx", enter.fromCenter ? 0 : function(d) { return d.cartesian.x; })
-                .attr("cy", enter.fromCenter ? 0 : function(d) { return d.cartesian.y; })
-                .attr("r", enter.smallToBig ? 0 : rowWidth * 0.4)
-                .attr("fill", function(d) {
-                    if (!d.party) return "#999";
-                    if (!d.party.color) {
-                        console.warn("parliament: party missing .color:", d.party);
-                        return "#999";
-                    }
-                    return d.party.color;
-                })
+                .attr("class","seat")
+                .attr("cx", enter.fromCenter ? 0 : d=>d.cartesian.x)
+                .attr("cy", enter.fromCenter ? 0 : d=>d.cartesian.y)
+                .attr("r", enter.smallToBig ? 0 : rowWidth*0.4)
+                .attr("fill", d => d.party.color || "#999")
                 .attr("stroke", "#333");
 
             if (enter.fromCenter || enter.smallToBig) {
                 var t = circlesEnter.transition().duration(1000);
-                if (enter.fromCenter) t.attr("cx", function(d) { return d.cartesian.x; }).attr("cy", function(d) { return d.cartesian.y; });
-                if (enter.smallToBig) t.attr("r", rowWidth * 0.4);
+                if (enter.fromCenter) t.attr("cx", d=>d.cartesian.x).attr("cy", d=>d.cartesian.y);
+                if (enter.smallToBig) t.attr("r", rowWidth*0.4);
             }
 
-            // attach events on enter selection
             for (var evt in dispatch._) {
-                (function(evt) {
-                    circlesEnter.on(evt, function(e) { dispatch.call(evt, this, e); });
-                })(evt);
+                (function(evt){ circlesEnter.on(evt, function(e){ dispatch.call(evt,this,e); }); })(evt);
             }
 
-            // update + animate
             if (update.animate) {
                 circles.transition().duration(1000)
-                    .attr("cx", function(d) { return d.cartesian.x; })
-                    .attr("cy", function(d) { return d.cartesian.y; })
-                    .attr("r", rowWidth * 0.4)
-                    .attr("fill", function(d) {
-                        if (!d.party) return "#999";
-                        return d.party.color || "#999";
-                    });
+                    .attr("cx", d=>d.cartesian.x)
+                    .attr("cy", d=>d.cartesian.y)
+                    .attr("r", rowWidth*0.4)
+                    .attr("fill", d=>d.party.color || "#999");
             } else {
-                circles.attr("cx", function(d) { return d.cartesian.x; })
-                    .attr("cy", function(d) { return d.cartesian.y; })
-                    .attr("r", rowWidth * 0.4)
-                    .attr("fill", function(d) { return d.party ? (d.party.color || "#999") : "#999"; });
+                circles.attr("cx", d=>d.cartesian.x)
+                       .attr("cy", d=>d.cartesian.y)
+                       .attr("r", rowWidth*0.4)
+                       .attr("fill", d=>d.party.color || "#999");
             }
 
-            // exit
             if (exit.toCenter || exit.bigToSmall) {
                 circles.exit().transition().duration(1000)
-                    .attr("cx", 0).attr("cy", 0)
-                    .attr("r", 0)
+                    .attr("cx",0).attr("cy",0)
+                    .attr("r",0)
                     .remove();
-            } else {
-                circles.exit().remove();
-            }
+            } else circles.exit().remove();
         });
     }
 
     parliamentFunc.width = function(v){ if(!arguments.length) return width; width=v; return parliamentFunc; };
     parliamentFunc.height = function(v){ if(!arguments.length) return height; return parliamentFunc; };
     parliamentFunc.innerRadiusCoef = function(v){ if(!arguments.length) return innerRadiusCoef; innerRadiusCoef=v; return parliamentFunc; };
-
-    parliamentFunc.enter = {
-        smallToBig: function (value) {
-            if (!arguments.length) return enter.smallToBig;
-            enter.smallToBig = value;
-            return parliamentFunc.enter;
-        },
-        fromCenter: function (value) {
-            if (!arguments.length) return enter.fromCenter;
-            enter.fromCenter = value;
-            return parliamentFunc.enter;
-        }
+    parliamentFunc.enter = { 
+        smallToBig(v){ if(!arguments.length) return enter.smallToBig; enter.smallToBig=v; return parliamentFunc.enter; },
+        fromCenter(v){ if(!arguments.length) return enter.fromCenter; enter.fromCenter=v; return parliamentFunc.enter; }
     };
-
-    parliamentFunc.update = {
-      animate: function(value) {
-        if (!arguments.length) return update.animate;
-        update.animate = value;
-        return parliamentFunc.update;
-      }
+    parliamentFunc.update = { animate(v){ if(!arguments.length) return update.animate; update.animate=v; return parliamentFunc.update; } };
+    parliamentFunc.exit = { 
+        bigToSmall(v){ if(!arguments.length) return exit.bigToSmall; exit.bigToSmall=v; return parliamentFunc.exit; },
+        toCenter(v){ if(!arguments.length) return exit.toCenter; exit.toCenter=v; return parliamentFunc.exit; }
     };
-
-    parliamentFunc.exit = {
-        bigToSmall: function (value) {
-            if (!arguments.length) return exit.bigToSmall;
-            exit.bigToSmall = value;
-            return parliamentFunc.exit;
-        },
-        toCenter: function (value) {
-            if (!arguments.length) return exit.toCenter;
-            exit.toCenter = value;
-            return parliamentFunc.exit;
-        }
-    };
-
-    parliamentFunc.on = function(type, callback) {
-        dispatch.on(type, callback);
-    };
+    parliamentFunc.on = function(type,callback){ dispatch.on(type,callback); };
 
     return parliamentFunc;
-
-    function series(s,n){ var r=0; for (var i=0;i<=n;i++) r+=s(i); return r; }
 };
