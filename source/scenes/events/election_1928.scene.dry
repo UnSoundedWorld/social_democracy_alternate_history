@@ -173,26 +173,23 @@ Q.reichswehr_goal_completed = 0;
 
 Q.strike_term_seen = 0;
 
-var election_result = { 'date': new Date(Q.year, Q.month - 1) };
+var election_result = {'date': new Date(Q.year, Q.month - 1)};
 for (var party of Q.parties) {
     election_result[party] = Q[party + '_r'];
 }
 Q.election_records.push(election_result);
 !}
 
-on-display: {! 
-
-// -------------------------
-// Allocate seats for 460-seat Sejm
-// -------------------------
-function allocateSeats(ratio) {
-    return Math.round(ratio * 460);
-}
-
-// Build party data
-var data = [];
-
-if (Q.sapd_formed && Q.sapd_r) {
+on-display: {!
+data = [
+    {
+        "id": "lew,
+        "legend": "New Left",
+        "name": "New Left",
+        "seats": Math.round(Q.lew_r*5),
+    }
+];
+if (Q.lew_formed && Q.sapd_r) {
     data.push({
         id: "pol",
         legend: "PL2050",
@@ -209,13 +206,6 @@ data = data.concat([
         name: "Razem",
         seats: allocateSeats(Q.raz_r),
         color: "#888888"
-    },
-    {
-        id: "lew",
-        legend: "New Left",
-        name: "New Left",
-        seats: allocateSeats(Q.lew_r),
-        color: "#ff6666"
     },
     {
         id: "psl",
@@ -247,39 +237,28 @@ data = data.concat([
     },
 ]);
 
-// -------------------------
-// Draw Sejm using d3.parliament
-// -------------------------
 if (window && d3) {
-    var width = 500;
+    var width = 500; 
     var height = 500;
     var screenWidth = document.getElementById('content').offsetWidth;
     if (screenWidth < width - 50) {
-        width = screenWidth - 50;
+        width = screenWidth - 50; 
         height = width;
-        document.getElementById("sejm").style.height = screenWidth / 2 + "px";
-    }
-    console.log("d3 version:", d3.version);
-    console.log("parliament plugin:", typeof d3.parliament);
-    console.log("svg exists?", document.getElementById("sejm"));
-    console.log("data:", data);
+        document.getElementById("reichstag").style.height = screenWidth/2 + "px";
+    } 
 
-    var parliament = d3.parliament(); // plugin adapted for Sejm
-    parliament.width(width)
-              .height(height)
-              .innerRadiusCoef(0.4)
-              .enter.fromCenter(true).smallToBig(true)
-              .exit.toCenter(false).bigToSmall(true);
-
-    d3.select("#sejm").datum(data).call(parliament);
+    var parliament = d3.parliament();
+    parliament.width(width).height(height).innerRadiusCoef(0.4);
+    parliament.enter.fromCenter(true).smallToBig(true);
+    parliament.exit.toCenter(false).bigToSmall(true);
+    d3.select("#reichstag").datum(data).call(parliament);
 }
 !}
-
 go-to: coalition_menu
 
 = Election results
 
-{!<svg id="sejm" style="width: 500px; height: 250px;"></svg>!}
+{!<svg id="reichstag" style="width: 500px; height: 250px;"> </svg>!}
 
 {!<table>!} 
 {!<tr><td>Party</td><td>Vote share</td><td>% Change</td></tr>!}
