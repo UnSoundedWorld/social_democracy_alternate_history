@@ -202,9 +202,6 @@ data = data.concat([
     { id: "konf", legend: "Konfederacja", name: "Konfederacja", seats: allocateSeats(Q.konf_r) }
 ]);
 
-// -------------------------
-// Visualization for Sejm (460 seats)
-// -------------------------
 if (window && d3) {
     var width = 500; 
     var height = 500;
@@ -212,31 +209,21 @@ if (window && d3) {
     if (screenWidth < width - 50) {
         width = screenWidth - 50; 
         height = width;
-        document.getElementById("reichstag").style.height = screenWidth / 2 + "px";
-    }
+        document.getElementById("chamber").style.height = screenWidth/2 + "px";
+    } 
 
-    console.log("d3 version:", d3.version);
-    console.log("parliament plugin:", typeof d3.parliament);
-    console.log("svg exists?", document.getElementById("sejm"));
-    console.log("data:", data);
-
-    var parliament = d3.parliament()
-        .width(width)
-        .height(height)
-        .innerRadiusCoef(0.4)
-        .seats(460);  // Sejm has 460 seats
-
+    var parliament = d3.parliament();
+    parliament.width(width).height(height).innerRadiusCoef(0.4);
     parliament.enter.fromCenter(true).smallToBig(true);
     parliament.exit.toCenter(false).bigToSmall(true);
-
-    d3.select("#reichstag").datum(data).call(parliament);
+    d3.select("#chamber").datum(data).call(parliament);
 }
 !}
 go-to: coalition_menu
 
 = Election results
 
-{!<svg id="reichstag" style="width: 500px; height: 250px;"> </svg>!}
+{!<svg id="chamber" style="width: 500px; height: 250px;"> </svg>!}
 
 {!<table>!} 
 {!<tr><td>Party</td><td>Vote share</td><td>% Change</td></tr>!}
