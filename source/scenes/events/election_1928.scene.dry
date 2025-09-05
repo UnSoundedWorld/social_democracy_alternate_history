@@ -188,12 +188,13 @@ data = [
         "seats": Math.round(Q.lew_r*5),
     }
 ];
-if (Q.pol_formed && Q.sapd_r) {
+if (Q.pol_formed && Q.pol_r) {
     data.push({
             "id": "pol",
             "legend": "PL2050",
             "name": "PL2050",
-            "seats": Math.round(Q.pol_r*5),
+            "seats": Math.round(Q.pol_r*5)
+            "color": #f5da1b,
             });
 }
 data = data.concat([
@@ -201,31 +202,36 @@ data = data.concat([
         "id": "raz",
         "legend": "Razem",
         "name": "Razem",
-        "seats": Math.round(Q.raz_r*5),
+        "seats": Math.round(Q.raz_r*5
+        "color": #af3091),
     },
     {
         "id": "psl",
         "legend": Q.PSL,
         "name": Q.PSL,
-        "seats": Math.round(Q.psl_r*5),
+        "seats": Math.round(Q.psl_r*5
+        "color":#23c62a),
     },
     {
         "id": "po",
         "legend": "PO",
         "name": "PO",
-        "seats": Math.round(Q.po_r*5),
+        "seats": Math.round(Q.po_r*5
+        "color": #e47f1b),
     },
     {
         "id": "pis",
         "legend": "PIS",
         "name": "PIS",
-        "seats": Math.round(Q.pis_r*5),
+        "seats": Math.round(Q.pis_r*5
+        "color": #3c53c3),
     },
     {
         "id": "konf",
         "legend": "Konfederacja",
         "name": "Konfederacja",
-        "seats": Math.round(Q.konf_r*5),
+        "seats": Math.round(Q.konf_r*5
+        "color":  #19007e),
     },
 ]);
 
