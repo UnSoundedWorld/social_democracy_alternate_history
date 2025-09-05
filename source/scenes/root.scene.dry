@@ -223,6 +223,10 @@ Q.parties = ['raz', 'lew', 'po', 'psl', 'pol', 'pis', 'konf'];
 // TODO: add 'sapd' later on
 Q.pol_formed = 0;
 
+//This forms common lists between left and razem, PL2050 and PSL
+Q.raz_lew_list_formed = 1;
+Q.pol_psl_list_formed = 0;
+
 // Support for party by social group
 // they don't have to sum to 100 since the electoral calculations will be normalized.
 Q.workers_raz = 5;
