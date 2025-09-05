@@ -60,28 +60,42 @@ d3.parliament = function() {
             }
 
             // -----------------------------
-            // Assign party data to seats proportionally
+            // Assign party data to exactly 460 seats
             // -----------------------------
-           /* fill the seat objects with data of its party and of itself if existing */
-            (function() {
-                var partyIndex = 0;
-                var seatIndex = 0;
-                seats.forEach(function(s) {
-                    /* get current party and go to the next one if it has all its seats filled */
-                    var party = d[partyIndex];
-                    var nSeatsInParty = typeof party.seats === 'number' ? party.seats : party.seats.length;
-                    if (seatIndex >= nSeatsInParty) {
-                        partyIndex++;
-                        seatIndex = 0;
-                        party = d[partyIndex];
-                    }
+            console.log("Raw party seat data before scaling:", d);
 
-                    /* set party data */
-                    s.party = party;
-                    s.data = typeof party.seats === 'number' ? null : party.seats[seatIndex];
+            // Step 1: normalize seats to exactly 460
+            let totalSeatsRequested = d.reduce((sum, p) => sum + p.seats, 0);
+            console.log("Total seats requested:", totalSeatsRequested);
 
-                    seatIndex++;
-                });
+            let scaledSeats = d.map(p => ({
+                ...p,
+                _scaledSeats: Math.floor(p.seats * 460 / totalSeatsRequested) // proportional allocation
+                }));
+
+            // Step 2: fix rounding error (distribute leftovers)
+            let assigned = scaledSeats.reduce((sum, p) => sum + p._scaledSeats, 0);
+            let leftover = 460 - assigned;
+            console.log("After scaling:", scaledSeats, "Assigned:", assigned, "Leftover:", leftover);
+
+            let i = 0;
+            while (leftover > 0) {
+                scaledSeats[i % scaledSeats.length]._scaledSeats++;
+                leftover--;
+                i++;
+            }
+            console.log("Final scaled seats:", scaledSeats);
+
+// Step 3: assign seats to actual positions
+let seatsArrWithParties = [];
+let seatCounter = 0;
+scaledSeats.forEach(party => {
+    for (let s = 0; s < party._scaledSeats; s++) {
+        seatsArr[seatCounter].party = party;
+        seatCounter++;
+    }
+});
+
             })();
                 // DEBUG LOG: show which seat belongs to which party and its color
                 console.log(`Seat ${i}: Party=${party.id || party.name}, Seats=${party.seats}, Color=${party.color}`);
