@@ -182,11 +182,11 @@ Q.election_records.push(election_result);
 on-display: {!
 data = [
     {
-        "id": "lew",
-        "legend": "New Left",
-        "name": "New Left",
-        "seats": Math.round(Q.lew_r*5),
-        "color": "#d43070",
+        id: "lew",
+        legend: "New Left",
+        name: "New Left",
+        seats: Math.round(Q.lew_r*5),
+        color: "#d43070",
     }
 ];
 if (Q.pol_formed && Q.pol_r) {
