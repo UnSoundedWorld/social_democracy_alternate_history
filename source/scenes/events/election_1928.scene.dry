@@ -43,26 +43,41 @@ for (var party of Q.parties) {
     Q['old_' + party + '_r'] = Q[party + '_r'] || 0; // default to 0 if undefined
 }
 
-// 2. Update Q[party + '_r'] based on votes, thresholds, and bans
+// 2. Update Q[party + '_r'] based on votes, thresholds, and exceptions
 for (var party of Q.parties) {
-    if (Q.constitutional_reform = 0) {
-        if (Q[party + '_votes'] < Q.electoral_threshold || Q.electoral_threshold) {
-            Q[party + '_r'] = 0;
-        } else {
-            Q[party + '_r'] = Q[party + '_votes'];
+    // Default: apply electoral threshold
+    let threshold_applies = true;
+
+    // Exception for Raz+Lew list
+    if (Q.raz_lew_list_formed === 1) {
+        const razLewVotes = (Q.raz_votes || 0) + (Q.lew_votes || 0);
+        if ((party === 'raz' || party === 'lew') && razLewVotes > Q.electoral_threshold) {
+            threshold_applies = false; // ignore threshold
         }
+    }
+
+    // Exception for Pol+PSL list
+    if (Q.pol_psl_list_formed === 1) {
+        const polPslVotes = (Q.pol_votes || 0) + (Q.psl_votes || 0);
+        if ((party === 'pol' || party === 'psl') && polPslVotes > Q.electoral_threshold) {
+            threshold_applies = false; // ignore threshold
+        }
+    }
+
+    // Apply votes based on threshold rules
+    if (Q.constitutional_reform === 0 && threshold_applies) {
+        Q[party + '_r'] = Q[party + '_votes'] >= Q.electoral_threshold ? Q[party + '_votes'] : 0;
     } else {
         Q[party + '_r'] = Q[party + '_votes'];
     }
-    
+
     // Display formatting
     if (Q.use_decimals) {
         Q[party + '_r_disp'] = Q[party + '_r'].toFixed(1);
     } else {
         Q[party + '_r_disp'] = Q[party + '_r'];
     }
-    
-    // Debug logging (optional)
+
     console.log("Party: " + party + ", Votes: " + Q[party + '_r']);
 }
 
@@ -72,7 +87,6 @@ for (var party of Q.parties) {
     var sign = Q['change_' + party + '_r'] > 0 ? '+' : '';
     Q['str_change_' + party] = sign + Q['change_' + party + '_r'];
     
-    // Debug logging (optional)
     console.log("Party: " + party + ", Change: " + Q['str_change_' + party]);
 }
 
