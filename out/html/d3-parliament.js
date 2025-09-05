@@ -23,30 +23,30 @@ d3.parliament = function() {
             width = width || this.getBoundingClientRect().width;
             height = width ? width / 2 : this.getBoundingClientRect().width / 2;
 
-            var outerR = Math.min(width / 2, height);
+            var outerR = Math.min(width/2, height);
             var innerR = outerR * innerRadiusCoef;
 
             var svg = d3.select(this);
 
             // -----------------------------
-            // Compute seats and rows for 460-seat Sejm
+            // Compute number of seats and rows
             // -----------------------------
-            var totalSeats = 460; // fixed Sejm seats
-            var nRows = 0, maxSeats = 0, b = 0.5;
-            while(maxSeats < totalSeats) {
+            var nSeats = d.reduce((sum,p)=>sum + (typeof p.seats==="number"?p.seats:p.seats.length), 0);
+            var nRows=0, maxSeats=0, b=0.5;
+            while(maxSeats < nSeats){
                 nRows++;
-                b += innerRadiusCoef / (1 - innerRadiusCoef);
+                b += innerRadiusCoef/(1-innerRadiusCoef);
                 maxSeats = 0;
-                for(var i=0;i<nRows;i++) maxSeats += Math.floor(Math.PI * (b + i));
+                for(var i=0;i<nRows;i++) maxSeats += Math.floor(Math.PI*(b+i));
             }
 
-            var rowWidth = (outerR - innerR) / nRows;
+            var rowWidth = (outerR - innerR)/nRows;
             var seatsArr = [];
-            var seatsToRemove = maxSeats - totalSeats;
 
             // -----------------------------
-            // Create seats with semicircle layout
+            // Create seats with polar coordinates
             // -----------------------------
+            var seatsToRemove = maxSeats - nSeats;
             for(var i=0;i<nRows;i++){
                 var rowRadius = innerR + rowWidth*(i+0.5);
                 var seatsInRow = Math.floor(Math.PI*(b+i)) - Math.floor(seatsToRemove/nRows) - (seatsToRemove%nRows > i ? 1:0);
@@ -60,13 +60,13 @@ d3.parliament = function() {
             }
 
             // -----------------------------
-            // Assign party data to seats proportionally
+            // Assign party data to seats
             // -----------------------------
-            var partyIndex=0, seatIndex=0, seatCountSoFar=0;
+            var partyIndex=0, seatIndex=0;
             seatsArr.forEach(function(s){
                 var party=d[partyIndex];
                 var partySeats=typeof party.seats==="number"?party.seats:party.seats.length;
-                if(seatIndex >= partySeats){
+                if(seatIndex>=partySeats){
                     partyIndex++; seatIndex=0; party=d[partyIndex];
                 }
                 s.party = party;
@@ -78,7 +78,9 @@ d3.parliament = function() {
             // Draw seats
             // -----------------------------
             var container = svg.select(".parliament");
-            if(container.empty()) container = svg.append("g").classed("parliament", true);
+            if(container.empty()){
+                container = svg.append("g").classed("parliament", true);
+            }
             container.attr("transform", "translate(" + width/2 + "," + outerR + ")");
 
             var circles = container.selectAll(".seat").data(seatsArr);
@@ -94,16 +96,18 @@ d3.parliament = function() {
 
             if(enter.fromCenter || enter.smallToBig){
                 var t = circlesEnter.transition().duration(1000);
-                if(enter.fromCenter) t.attr("cx", d=>d.cartesian.x).attr("cy", d=>d.cartesian.y);
-                if(enter.smallToBig) t.attr("r", rowWidth*0.4);
+                if(enter.fromCenter){ t.attr("cx", d=>d.cartesian.x).attr("cy", d=>d.cartesian.y); }
+                if(enter.smallToBig){ t.attr("r", rowWidth*0.4); }
             }
 
             // Attach events
             for(var evt in dispatch._){
-                (function(evt){ circlesEnter.on(evt, function(e){ dispatch.call(evt,this,e); }); })(evt);
+                (function(evt){
+                    circlesEnter.on(evt, function(e){ dispatch.call(evt,this,e); });
+                })(evt);
             }
 
-            // Update
+            // Update & exit
             if(update.animate){
                 circles.transition().duration(1000)
                     .attr("cx", d=>d.cartesian.x)
@@ -117,7 +121,6 @@ d3.parliament = function() {
                        .attr("fill", d=>d.party.color||"#999");
             }
 
-            // Exit
             if(exit.toCenter || exit.bigToSmall){
                 circles.exit().transition().duration(1000)
                     .attr("cx",0).attr("cy",0)
@@ -130,18 +133,13 @@ d3.parliament = function() {
     parliamentFunc.width = function(v){ if(!arguments.length) return width; width=v; return parliamentFunc; };
     parliamentFunc.height = function(v){ if(!arguments.length) return height; return parliamentFunc; };
     parliamentFunc.innerRadiusCoef = function(v){ if(!arguments.length) return innerRadiusCoef; innerRadiusCoef=v; return parliamentFunc; };
-    parliamentFunc.enter = { 
-        smallToBig(v){ if(!arguments.length) return enter.smallToBig; enter.smallToBig=v; return parliamentFunc.enter; },
-        fromCenter(v){ if(!arguments.length) return enter.fromCenter; enter.fromCenter=v; return parliamentFunc.enter; }
-    };
-    parliamentFunc.update = { animate(v){ if(!arguments.length) return update.animate; update.animate=v; return parliamentFunc.update; } };
-    parliamentFunc.exit = { 
-        bigToSmall(v){ if(!arguments.length) return exit.bigToSmall; exit.bigToSmall=v; return parliamentFunc.exit; },
-        toCenter(v){ if(!arguments.length) return exit.toCenter; exit.toCenter=v; return parliamentFunc.exit; }
-    };
+    parliamentFunc.enter = { smallToBig(v){ if(!arguments.length) return enter.smallToBig; enter.smallToBig=v; return parliamentFunc.enter; },
+                             fromCenter(v){ if(!arguments.length) return enter.fromCenter; enter.fromCenter=v; return parliamentFunc.enter; }};
+    parliamentFunc.update = { animate(v){ if(!arguments.length) return update.animate; update.animate=v; return parliamentFunc.update; }};
+    parliamentFunc.exit = { bigToSmall(v){ if(!arguments.length) return exit.bigToSmall; exit.bigToSmall=v; return parliamentFunc.exit; },
+                            toCenter(v){ if(!arguments.length) return exit.toCenter; exit.toCenter=v; return parliamentFunc.exit; }};
     parliamentFunc.on = function(type,callback){ dispatch.on(type,callback); };
 
     return parliamentFunc;
 
     function series(s,n){ var r=0; for(var i=0;i<=n;i++) r+=s(i); return r; }
-};
