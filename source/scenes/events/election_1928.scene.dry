@@ -173,58 +173,61 @@ Q.reichswehr_goal_completed = 0;
 
 Q.strike_term_seen = 0;
 
-var election_result = { 'date': new Date(Q.year, Q.month - 1) };
+var election_result = {'date': new Date(Q.year, Q.month - 1)};
 for (var party of Q.parties) {
     election_result[party] = Q[party + '_r'];
 }
 Q.election_records.push(election_result);
-
 !}
-on-display: {! 
-
-// -------------------------
-// Dynamic heading
-// -------------------------
-var termRoman = Q.term_roman || "I"; // Example: "I", "II", "III", etc.
-var headingDiv = document.getElementById("sejm_heading");
-if(!headingDiv){
-    headingDiv = document.createElement("div");
-    headingDiv.id = "sejm_heading";
-    headingDiv.style.textAlign = "center";
-    headingDiv.style.marginBottom = "10px";
-    headingDiv.style.fontWeight = "bold";
-    headingDiv.style.fontSize = "1.2em";
-    document.getElementById("content").prepend(headingDiv);
+on-departure: nazi_urgency = 1 if (nazi_urgency == 0 and nsdap_r >= 15)
+on-display: {!
+if (Q.sapd_formed && Q.sapd_r) {
+    data.push({
+            "id": "pol",
+            "legend": "PL2050",
+            "name": "PL2050",
+            "seats": Math.round(Q.pol_r*5),
+            });
 }
-headingDiv.innerText = "Composition of term " + termRoman + " Sejm";
-
-// -------------------------
-// Allocate seats
-// -------------------------
-function allocateSeats(ratio) {
-    return Math.round(ratio * 460); // Sejm has 460 seats
-}
-
-// Build party data
-var data = [
-    { id: "lew", legend: "New Left", name: "New Left", seats: allocateSeats(Q.lew_r), color: "#ff6666" }
-];
-
-if (Q.pol_formed && Q.pol_r) {
-    data.push({ id: "pol", legend: "PL2050", name: "PL2050", seats: allocateSeats(Q.pol_r), color: "#cc33ff" });
-}
-
 data = data.concat([
-    { id: "raz", legend: "Razem", name: "Razem", seats: allocateSeats(Q.raz_r), color: "#888888" },
-    { id: "psl", legend: "PSL", name: "PSL", seats: allocateSeats(Q.psl_r), color: "#66cc33" },
-    { id: "po", legend: "PO", name: "PO", seats: allocateSeats(Q.po_r), color: "#3399ff" },
-    { id: "pis", legend: "PIS", name: "PIS", seats: allocateSeats(Q.pis_r), color: "#f0db4f" },
-    { id: "konf", legend: "Konfederacja", name: "Konfederacja", seats: allocateSeats(Q.konf_r), color: "#ff9933" }
+    {
+        "id": "raz",
+        "legend": "Razem",
+        "name": "Razem",
+        "seats": Math.round(Q.raz_r*5),
+    },
+    {
+        "id": "lew",
+        "legend": "New Left",
+        "name": "New Left",
+        "seats": Math.round(Q.lew_r*5),
+    },
+    {
+        "id": "psl",
+        "legend": Q.PSL,
+        "name": Q.PSL,
+        "seats": Math.round(Q.psl_r*5),
+    },
+    {
+        "id": "po",
+        "legend": "PO",
+        "name": "PO",
+        "seats": Math.round(Q.po_r*5),
+    },
+    {
+        "id": "pis",
+        "legend": "PIS",
+        "name": "PIS",
+        "seats": Math.round(Q.pis_r*5),
+    },
+    {
+        "id": "konf",
+        "legend": "Konfederacja",
+        "name": "Konfederacja",
+        "seats": Math.round(Q.konf_r*5),
+    },
 ]);
 
-// -------------------------
-// Draw Sejm in #sejm
-// -------------------------
 if (window && d3) {
     var width = 500; 
     var height = 500;
@@ -232,25 +235,15 @@ if (window && d3) {
     if (screenWidth < width - 50) {
         width = screenWidth - 50; 
         height = width;
-        document.getElementById("sejm").style.height = screenWidth / 2 + "px";
-    }
-
-    var parliament = d3.parliament(); // uses your rewritten plugin
-    parliament.width(width)
-              .height(height)
-              .innerRadiusCoef(0.4)
-              .enter.fromCenter(true).smallToBig(true)
-              .exit.toCenter(false).bigToSmall(true);
-
-    // Render
-    d3.select("#sejm").datum(data).call(parliament);
+        document.getElementById("reichstag").style.height = screenWidth/2 + "px";
+    } 
 }
 !}
 go-to: coalition_menu
 
 = Election results
 
-{!<svg id="sejm" style="width: 500px; height: 250px;"> </svg>!}
+{!<svg id="reichstag" style="width: 500px; height: 250px;"> </svg>!}
 
 {!<table>!} 
 {!<tr><td>Party</td><td>Vote share</td><td>% Change</td></tr>!}
