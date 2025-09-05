@@ -54,7 +54,7 @@ for (var party of Q.parties) {
 }
 
 // 4. D'Hondt seat allocation
-var totalSeats = 100; // Change this to the number of seats to allocate
+var totalSeats = 460; // Change this to the number of seats to allocate
 
 // Initialize seat counts
 for (var party of Q.parties) {
