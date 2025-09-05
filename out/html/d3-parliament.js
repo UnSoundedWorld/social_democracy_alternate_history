@@ -25,6 +25,7 @@ d3.parliament = function() {
             var innerR = outerR * innerRadiusCoef;
 
             var svg = d3.select(this);
+            svg.selectAll("*").remove(); // clear previous
 
             // -----------------------------
             // Compute rows for 460-seat Sejm
@@ -43,7 +44,7 @@ d3.parliament = function() {
             var seatsToRemove = maxSeats - totalSeats;
 
             // -----------------------------
-            // Create semicircle seats
+            // Create semicircle seats (y positive downwards)
             // -----------------------------
             for(var i=0;i<nRows;i++){
                 var rowRadius = innerR + rowWidth*(i+0.5);
@@ -53,18 +54,17 @@ d3.parliament = function() {
                     var teta = -Math.PI/2 + angleStep*(j + 0.5); // left-to-right
                     seatsArr.push({
                         polar: { r: rowRadius, teta: teta },
-                        cartesian: { x: rowRadius*Math.cos(teta), y: -rowRadius*Math.sin(teta) } // flip y
+                        cartesian: { x: rowRadius*Math.cos(teta), y: rowRadius*Math.sin(teta) } // y positive down
                     });
                 }
             }
 
             // -----------------------------
-            // Assign party data proportionally
+            // Assign parties (proportional)
             // -----------------------------
             let totalRequested = d.reduce((sum,p)=>sum+p.seats,0);
             let scaled = d.map(p=>({ ...p, _scaled: Math.floor(p.seats * totalSeats / totalRequested) }));
 
-            // Distribute leftover seats
             let assigned = scaled.reduce((sum,p)=>sum+p._scaled,0);
             let leftover = totalSeats - assigned;
             let i = 0;
@@ -74,7 +74,7 @@ d3.parliament = function() {
                 i++;
             }
 
-            // Assign seats to positions
+            // Assign seats
             let seatCounter = 0;
             scaled.forEach(party=>{
                 for(let s=0; s<party._scaled; s++){
@@ -83,58 +83,20 @@ d3.parliament = function() {
                 }
             });
 
-            console.log("Seats assigned to parties:", seatsArr);
-
             // -----------------------------
             // Draw seats
             // -----------------------------
-            var container = svg.select(".parliament");
-            if(container.empty()) container = svg.append("g").classed("parliament", true);
-            container.attr("transform", "translate("+width/2+","+(outerR)+")");
+            var container = svg.append("g").classed("parliament", true);
+            container.attr("transform", "translate("+width/2+","+(outerR)+")"); // bottom-center
 
-            var circles = container.selectAll(".seat").data(seatsArr);
-            circles.attr("class","seat");
-
-            var circlesEnter = circles.enter().append("circle")
+            container.selectAll(".seat").data(seatsArr)
+                .enter().append("circle")
                 .attr("class","seat")
-                .attr("cx", enter.fromCenter ? 0 : d=>d.cartesian.x)
-                .attr("cy", enter.fromCenter ? 0 : d=>d.cartesian.y)
-                .attr("r", enter.smallToBig ? 0 : rowWidth*0.4)
+                .attr("cx", d=>d.cartesian.x)
+                .attr("cy", d=>d.cartesian.y)
+                .attr("r", rowWidth*0.4)
                 .attr("fill", d=>d.party.color || "#999")
                 .attr("stroke", "#333");
-
-            if(enter.fromCenter || enter.smallToBig){
-                let t = circlesEnter.transition().duration(1000);
-                if(enter.fromCenter) t.attr("cx", d=>d.cartesian.x).attr("cy", d=>d.cartesian.y);
-                if(enter.smallToBig) t.attr("r", rowWidth*0.4);
-            }
-
-            // Attach events
-            for(var evt in dispatch._){
-                (function(evt){ circlesEnter.on(evt, function(e){ dispatch.call(evt,this,e); }); })(evt);
-            }
-
-            // Update seats
-            if(update.animate){
-                circles.transition().duration(1000)
-                    .attr("cx", d=>d.cartesian.x)
-                    .attr("cy", d=>d.cartesian.y)
-                    .attr("r", rowWidth*0.4)
-                    .attr("fill", d=>d.party.color || "#999");
-            } else {
-                circles.attr("cx", d=>d.cartesian.x)
-                       .attr("cy", d=>d.cartesian.y)
-                       .attr("r", rowWidth*0.4)
-                       .attr("fill", d=>d.party.color || "#999");
-            }
-
-            // Remove seats
-            if(exit.toCenter || exit.bigToSmall){
-                circles.exit().transition().duration(1000)
-                    .attr("cx",0).attr("cy",0)
-                    .attr("r",0)
-                    .remove();
-            } else circles.exit().remove();
         });
     }
 
