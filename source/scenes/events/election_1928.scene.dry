@@ -259,6 +259,10 @@ if (window && d3) {
         height = width;
         document.getElementById("sejm").style.height = screenWidth / 2 + "px";
     }
+    console.log("d3 version:", d3.version);
+    console.log("parliament plugin:", typeof d3.parliament);
+    console.log("svg exists?", document.getElementById("sejm"));
+    console.log("data:", data);
 
     var parliament = d3.parliament(); // plugin adapted for Sejm
     parliament.width(width)
