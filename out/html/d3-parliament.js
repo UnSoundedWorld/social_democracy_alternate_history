@@ -35,7 +35,21 @@ d3.parliament = function() {
             d.sort((a,b) => partyOrder.indexOf(a.id) - partyOrder.indexOf(b.id));
 
             // -----------------------------
-            // Compute rows for 460-seat Sejm
+            // Normalize seats to exactly 460
+            // -----------------------------
+            let totalSeatsRequested = d.reduce((sum,p)=>sum + p.seats,0);
+            let scaledSeats = d.map(p => ({
+                ...p,
+                _scaledSeats: Math.floor(p.seats * 460 / totalSeatsRequested)
+            }));
+            let assigned = scaledSeats.reduce((sum,p)=>sum + p._scaledSeats,0);
+            let leftover = 460 - assigned;
+            for(let i=0; leftover>0; i++, leftover--){
+                scaledSeats[i % scaledSeats.length]._scaledSeats++;
+            }
+
+            // -----------------------------
+            // Compute number of rows
             // -----------------------------
             var totalSeats = 460;
             var nRows = 0, maxSeats = 0, b = 0.5;
@@ -51,43 +65,24 @@ d3.parliament = function() {
             var seatsToRemove = maxSeats - totalSeats;
 
             // -----------------------------
-            // Create seat positions
+            // Generate seats in semicircle
             // -----------------------------
             for(var i=0;i<nRows;i++){
                 var rowRadius = innerR + rowWidth*(i+0.5);
                 var seatsInRow = Math.floor(Math.PI*(b+i)) - Math.floor(seatsToRemove/nRows) - (seatsToRemove%nRows > i ? 1:0);
-                var angleStep = Math.PI / seatsInRow;
                 for(var j=0;j<seatsInRow;j++){
+                    // Map j to theta linearly so that party positions are left-to-right along outermost arc
+                    var teta = -Math.PI + Math.PI * (j + 0.5)/seatsInRow;
                     seatsArr.push({
-                        polar: { r: rowRadius, teta: -Math.PI + angleStep*(j+0.5) },
-                        cartesian: { x: rowRadius*Math.cos(-Math.PI + angleStep*(j+0.5)), y: rowRadius*Math.sin(-Math.PI + angleStep*(j+0.5)) }
+                        polar: { r: rowRadius, teta: teta },
+                        cartesian: { x: rowRadius*Math.cos(teta), y: rowRadius*Math.sin(teta) }
                     });
                 }
             }
 
             // -----------------------------
-            // Assign party data to exactly 460 seats
+            // Assign parties left-to-right
             // -----------------------------
-            let totalSeatsRequested = d.reduce((sum,p) => sum + p.seats, 0);
-            let scaledSeats = d.map(p => ({
-                ...p,
-                _scaledSeats: Math.floor(p.seats * 460 / totalSeatsRequested)
-            }));
-
-            let assigned = scaledSeats.reduce((sum,p) => sum + p._scaledSeats, 0);
-            let leftover = 460 - assigned;
-            for(let i=0; leftover>0; i++, leftover--){
-                scaledSeats[i % scaledSeats.length]._scaledSeats++;
-            }
-
-            // -----------------------------
-            // Assign seats LEFT TO RIGHT in each row
-            // -----------------------------
-            seatsArr.sort((a,b) => {
-                if(a.polar.r !== b.polar.r) return a.polar.r - b.polar.r; // inner rows first
-                return a.polar.teta - b.polar.teta; // left to right
-            });
-
             let seatCounter = 0;
             scaledSeats.forEach(party => {
                 for(let s=0; s<party._scaledSeats; s++){
