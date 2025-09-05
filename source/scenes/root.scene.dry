@@ -280,13 +280,13 @@ Q.lgbt_konf = 5;
 // note: the Z figures also include the BVP (Bavarian people's party)
 // since they were ideologically similar, but they were separate parties.
 // They did not have a CDU/CSU-style relationship.
-Q.raz_r = 26;
-Q.lew_r = 9;
-Q.po_r = 17;
-Q.psl_r = 6;
-Q.pol_r = 10;
-Q.pis_r = 20;
-Q.konf_r = 3;
+Q.raz_r = 0;
+Q.lew_r = 0;
+Q.po_r = 28;
+Q.psl_r = 3;
+Q.pol_r = 0;
+Q.pis_r = 51;
+Q.konf_r = 0;
 
 // diff from prev
 Q.old_raz_r = 26;
