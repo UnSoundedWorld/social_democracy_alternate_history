@@ -212,7 +212,7 @@ if (window && d3) {
     if (screenWidth < width - 50) {
         width = screenWidth - 50; 
         height = width;
-        document.getElementById("sejm").style.height = screenWidth / 2 + "px";
+        document.getElementById("reichstag").style.height = screenWidth / 2 + "px";
     }
 
     console.log("d3 version:", d3.version);
@@ -229,14 +229,14 @@ if (window && d3) {
     parliament.enter.fromCenter(true).smallToBig(true);
     parliament.exit.toCenter(false).bigToSmall(true);
 
-    d3.select("#sejm").datum(data).call(parliament);
+    d3.select("#reichstag").datum(data).call(parliament);
 }
 !}
 go-to: coalition_menu
 
 = Election results
 
-{!<svg id="sejm" style="width: 500px; height: 250px;"> </svg>!}
+{!<svg id="reichstag" style="width: 500px; height: 250px;"> </svg>!}
 
 {!<table>!} 
 {!<tr><td>Party</td><td>Vote share</td><td>% Change</td></tr>!}
