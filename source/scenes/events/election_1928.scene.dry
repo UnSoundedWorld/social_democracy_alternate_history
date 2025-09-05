@@ -180,12 +180,7 @@ for (var party of Q.parties) {
 Q.election_records.push(election_result);
 
 !}
-on-departure: nazi_urgency = 1 if (nazi_urgency == 0 && nsdap_r >= 15)
 on-display: {!
-
-// -------------------------
-// Allocate seats for Sejm (460 seats total)
-// -------------------------
 function allocateSeats(ratio) {
     return Math.round(ratio * 460);
 }
