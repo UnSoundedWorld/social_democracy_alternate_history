@@ -40,18 +40,21 @@ Let us hope this does not backfire.
 on-arrival: {!
 // 1. Save old results BEFORE updating
 for (var party of Q.parties) {
-    Q['old_' + party + '_r'] = Q[party + '_r'] || 0; // default to 0 if undefined
+    const key = party.toLowerCase(); // normalize to lowercase
+    Q['old_' + key + '_r'] = Q[key + '_r'] || 0;
 }
 
 // 2. Update Q[party + '_r'] based on votes, thresholds, and exceptions
 for (var party of Q.parties) {
+    const key = party.toLowerCase(); // normalize
+
     // Default: apply electoral threshold
     let threshold_applies = true;
 
     // Exception for Raz+Lew list
     if (Q.raz_lew_list_formed === 1) {
         const razLewVotes = (Q.raz_votes || 0) + (Q.lew_votes || 0);
-        if ((party === 'raz' || party === 'lew') && razLewVotes > Q.electoral_threshold) {
+        if ((key === 'raz' || key === 'lew') && razLewVotes > Q.electoral_threshold) {
             threshold_applies = false; // ignore threshold
         }
     }
@@ -59,26 +62,40 @@ for (var party of Q.parties) {
     // Exception for Pol+PSL list
     if (Q.pol_psl_list_formed === 1) {
         const polPslVotes = (Q.pol_votes || 0) + (Q.psl_votes || 0);
-        if ((party === 'pol' || party === 'psl') && polPslVotes > Q.electoral_threshold) {
+        if ((key === 'pol' || key === 'psl') && polPslVotes > Q.electoral_threshold) {
             threshold_applies = false; // ignore threshold
         }
     }
 
+    // Check if party passes threshold
+    const passesThreshold = !threshold_applies || (Q[key + '_votes'] >= Q.electoral_threshold);
+    console.log(`Party: ${key}, Votes: ${Q[key + '_votes']}, Passes Threshold: ${passesThreshold}`);
+
     // Apply votes based on threshold rules
     if (Q.constitutional_reform === 0 && threshold_applies) {
-        Q[party + '_r'] = Q[party + '_votes'] >= Q.electoral_threshold ? Q[party + '_votes'] : 0;
+        Q[key + '_r'] = passesThreshold ? Q[key + '_votes'] : 0;
     } else {
-        Q[party + '_r'] = Q[party + '_votes'];
+        Q[key + '_r'] = Q[key + '_votes'];
     }
 
     // Display formatting
     if (Q.use_decimals) {
-        Q[party + '_r_disp'] = Q[party + '_r'].toFixed(1);
+        Q[key + '_r_disp'] = Q[key + '_r'].toFixed(1);
     } else {
-        Q[party + '_r_disp'] = Q[party + '_r'];
+        Q[key + '_r_disp'] = Q[key + '_r'];
     }
 
-    console.log("Party: " + party + ", Votes: " + Q[party + '_r']);
+    console.log("Updated Votes for " + key + ": " + Q[key + '_r']);
+}
+
+// 3. Calculate change based on old and new values
+for (var party of Q.parties) {
+    const key = party.toLowerCase();
+    Q['change_' + key + '_r'] = Q[key + '_r'] - Q['old_' + key + '_r'];
+    var sign = Q['change_' + key + '_r'] > 0 ? '+' : '';
+    Q['str_change_' + key] = sign + Q['change_' + key + '_r'];
+
+    console.log("Party: " + key + ", Change: " + Q['str_change_' + key]);
 }
 
 // 3. Calculate change based on old and new values
