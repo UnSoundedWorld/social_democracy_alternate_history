@@ -92,10 +92,10 @@ var rankedParties = [...effectiveParties].sort((a, b) => {
 var biasMap = {};
 for (var i = 0; i < rankedParties.length; i++) {
     var party = rankedParties[i];
-    if (i === 0) biasMap[party] = 1.15;   // largest bonus
+    if (i === 0) biasMap[party] = 1.70;   // largest bonus
     else if (i === 1) biasMap[party] = 0.95;
     else if (i === 2) biasMap[party] = 0.85;
-    else biasMap[party] = 0.80;
+    else biasMap[party] = 0.50;
 }
 
 // -----------------------------
