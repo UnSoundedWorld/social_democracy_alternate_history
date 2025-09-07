@@ -274,7 +274,6 @@ for (var p of data) console.log("  ->", p.id, "seats:", p.seats);
 // If you call the plugin here, example:
 // var svg = d3.select("#parliamentSvg"); // your svg/container selector
 // svg.datum(data).call(d3.parliament());
-!}
 
 
 
