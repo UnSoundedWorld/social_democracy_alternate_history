@@ -50,6 +50,8 @@ for (var party of Q.parties) {
 
     // Default: apply electoral threshold
     let threshold_applies = true;
+    const passesThreshold = !threshold_applies || (Q[key + '_votes'] >= Q.electoral_threshold);
+    console.log(`Party: ${key}, Votes: ${Q[key + '_votes']}, Passes Threshold: ${passesThreshold}`);
 
     // Exception for Raz+Lew list
     if (Q.raz_lew_list_formed === 1) {
@@ -66,10 +68,6 @@ for (var party of Q.parties) {
             passesThreshold = true; // ignore threshold
         }
     }
-
-    // Check if party passes threshold
-    const passesThreshold = !threshold_applies || (Q[key + '_votes'] >= Q.electoral_threshold);
-    console.log(`Party: ${key}, Votes: ${Q[key + '_votes']}, Passes Threshold: ${passesThreshold}`);
 
     // Apply votes based on threshold rules
     if (Q.constitutional_reform === 0 && threshold_applies) {
