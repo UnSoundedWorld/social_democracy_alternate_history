@@ -75,7 +75,7 @@ for (var party of Q.parties) {
     if (Q.constitutional_reform === 0 && threshold_applies) {
         Q[key + '_r'] = passesThreshold ? Q[key + '_votes'] : 0;
     } else {
-        Q[key + '_r'] = Q[key + '_votes'];
+        Q[key + '_r'] = Q[key + '_r'];
     }
 
     // Display formatting
