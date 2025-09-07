@@ -333,20 +333,7 @@ There are some potential coalition arrangements.
 
 @coalition_menu
 
-// - @raz_majority
-// - @pis_majority
-// - @po_majority
-// - @konf_majority
-// - @centreleft_coalition
 - @october_coalition
-// - @bigoctober_coalition
-// - @centre_right_coalition
-// - @right_coalition
-// - @no_majority
-// - @zandbergs_dilemma
-// - @left_coalition
-// - @querfront_coalition
-// - @far_right_coalition
 
 @october_coalition
 count-visits-max: 3
