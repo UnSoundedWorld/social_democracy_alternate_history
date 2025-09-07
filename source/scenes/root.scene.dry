@@ -237,32 +237,32 @@ Q.workers_pol = 0;
 Q.workers_pis = 50;
 Q.workers_konf = 6;
 
-Q.middle_raz = 10;
-Q.middle_lew = 10;
+Q.middle_raz = 20;
+Q.middle_lew = 20;
 Q.middle_po = 45;
 Q.middle_psl = 6
 Q.middle_pol = 0;
 Q.middle_pis = 34;
 Q.middle_konf = 7;
 
-Q.smallcities_raz = 10;
-Q.smallcities_lew = 10;
+Q.smallcities_raz = 20;
+Q.smallcities_lew = 20;
 Q.smallcities_po = 39;
 Q.smallcities_psl= 8;
 Q.smallcities_pol = 0;
 Q.smallcities_pis = 39;
 Q.smallcities_konf = 5;
 
-Q.rural_raz = 8;
-Q.rural_lew = 14;
+Q.rural_raz = 20;
+Q.rural_lew = 20;
 Q.rural_po = 16;
 Q.rural_psl= 12;
 Q.rural_pol = 0;
 Q.rural_pis = 56;
 Q.rural_konf = 6;
 
-Q.unemployed_raz = 10;
-Q.unemployed_lew = 4;
+Q.unemployed_raz = 20;
+Q.unemployed_lew = 20;
 Q.unemployed_po = 30;
 Q.unemployed_psl = 5;
 Q.unemployed_pol = 0;
