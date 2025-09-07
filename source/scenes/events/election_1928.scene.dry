@@ -211,62 +211,71 @@ for (var party of Q.parties) {
 Q.election_records.push(election_result);
 !}
 on-display: {!
-data = [
-    {
-        id: "lew",
-        legend: "New Left",
-        name: "New Left",
-        seats: Math.round(Q.lew_r*5),
-        color: "#d43070",
-    }
+// Build data from the final seat counts (Q.<party>_r).
+// IMPORTANT: pass the actual integer seat counts (sum should be 460).
+var partyDefs = [
+    { id: "raz", legend: "Razem", name: "Razem", color: "#af3091" },
+    { id: "lew", legend: "New Left", name: "New Left", color: "#d43070" },
+    { id: "po",  legend: "PO",       name: "PO",       color: "#e47f1b" },
+    { id: "pol", legend: "PL2050",   name: "PL2050",   color: "#f5da1b" },
+    { id: "psl", legend: Q.PSL || "PSL", name: Q.PSL || "PSL", color: "#23c62a" },
+    { id: "pis", legend: "PIS",      name: "PIS",      color: "#3c53c3" },
+    { id: "konf",legend: "Konfederacja", name: "Konfederacja", color: "#19007e" }
 ];
-if (Q.pol_formed && Q.pol_r) {
+
+data = [];
+for (var pd of partyDefs) {
+    // Use the seat counts produced by your election algorithm (integers that sum to 460)
+    var seats = Math.max(0, Math.floor(Q[pd.id + "_r"] || 0));
     data.push({
-        id: "pol",
-        legend: "PL2050",
-        name: "PL2050",
-        seats: Math.round(Q.pol_r*5),
-        color: "#f5da1b",
+        id: pd.id,
+        legend: pd.legend,
+        name: pd.name,
+        seats: seats,
+        color: pd.color
     });
 }
 
-data = data.concat([
-    {
-        id: "raz",
-        legend: "Razem",
-        name: "Razem",
-        seats: Math.round(Q.raz_r*5),
-        color: "#af3091",
-    },
-    {
-        id: "psl",
-        legend: Q.PSL,
-        name: Q.PSL,
-        seats: Math.round(Q.psl_r*5),
-        color: "#23c62a",
-    },
-    {
-        id: "po",
-        legend: "PO",
-        name: "PO",
-        seats: Math.round(Q.po_r*5),
-        color: "#e47f1b",
-    },
-    {
-        id: "pis",
-        legend: "PIS",
-        name: "PIS",
-        seats: Math.round(Q.pis_r*5),
-        color: "#3c53c3",
-    },
-    {
-        id: "konf",
-        legend: "Konfederacja",
-        name: "Konfederacja",
-        seats: Math.round(Q.konf_r*5),
-        color: "#19007e",
-    },
-]);
+// --- Debugging outputs (diagnose mismatch between algorithm and visualization) ---
+var totalSeatsRequested = data.reduce((s,p) => s + (p.seats || 0), 0);
+console.log("Seats passed to plugin (sum):", totalSeatsRequested);
+for (var p of data) console.log("  ->", p.id, "seats:", p.seats);
+
+// Mirror the plugin's internal scaling (so you can see how it will map your 'seats' to 460)
+(function debugPluginScaling(d) {
+    var totalRequested = d.reduce((s,p) => s + (p.seats || 0), 0);
+    if (totalRequested === 0) {
+        console.log("DEBUG: totalRequested is 0 — nothing to draw.");
+        return;
+    }
+    var scaled = d.map(p => ({
+        id: p.id,
+        requested: p.seats,
+        _scaled: Math.floor((p.seats * 460) / totalRequested)
+    }));
+    var assigned = scaled.reduce((s,p) => s + p._scaled, 0);
+    var leftover = 460 - assigned;
+    if (leftover > 0) {
+        var remainders = d.map(p => {
+            var exact = (p.seats * 460) / totalRequested;
+            return { id: p.id, frac: exact - Math.floor(exact) };
+        }).sort((a,b) => b.frac - a.frac);
+        for (var i = 0; i < leftover; i++) {
+            var idToInc = remainders[i % remainders.length].id;
+            var entry = scaled.find(s => s.id === idToInc);
+            entry._scaled++;
+        }
+    }
+    console.log("Predicted scaled seats (plugin would draw):", JSON.stringify(scaled));
+    console.log("Predicted scaled sum:", scaled.reduce((s,p) => s + p._scaled, 0));
+})(data);
+
+// Now `data` is ready for your existing d3.parliament call (which should be elsewhere in your display code).
+// If you call the plugin here, example:
+// var svg = d3.select("#parliamentSvg"); // your svg/container selector
+// svg.datum(data).call(d3.parliament());
+!}
+
 
 
 if (window && d3) {
