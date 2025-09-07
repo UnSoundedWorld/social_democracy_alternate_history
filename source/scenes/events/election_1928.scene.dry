@@ -55,7 +55,7 @@ for (var party of Q.parties) {
     if (Q.raz_lew_list_formed === 1) {
         const razLewVotes = (Q.raz_votes || 0) + (Q.lew_votes || 0);
         if ((key === 'raz' || key === 'lew') && razLewVotes > Q.electoral_threshold) {
-            threshold_applies = false; // ignore threshold
+            passesThreshold = true; // ignore threshold
         }
     }
 
@@ -63,7 +63,7 @@ for (var party of Q.parties) {
     if (Q.pol_psl_list_formed === 1) {
         const polPslVotes = (Q.pol_votes || 0) + (Q.psl_votes || 0);
         if ((key === 'pol' || key === 'psl') && polPslVotes > Q.electoral_threshold) {
-            threshold_applies = false; // ignore threshold
+            passesThreshold = true; // ignore threshold
         }
     }
 
