@@ -333,66 +333,95 @@ There are some potential coalition arrangements.
 
 @coalition_menu
 
-- @spd_majority
-- @weimar_coalition
-- @grand_coalition
-- @new_grand_coalition
-- @unity_government
-- @far_right_coalition
-- @no_majority
-- @brauns_dilemma
-- @left_coalition
-- @popular_front_coalition
+- @raz_majority
+- @pis_majority
+- @po_majority
+- @konf_majority
+- @centreleft_coalition
+- @october_coalition
+- @bigoctober_coalition
+- @centre_right_coalition
 - @right_coalition
+- @no_majority
+- @zandbergs_dilemma
+- @left_coalition
+- @querfront_coalition
+- @far_right_coalition
 
-# TODO: black-brown coalition
+@october_coalition
+title: The October 15th Coalition
+subtitle: Razem + New Left  + PO + PSL ([+ october_coalition +]%)
+unavailable-subtitle: Razem + New Left + PO + PSL ([+ popular_front_coalition +]%) - [? if ((lew_relation < 60 and kpd_party_leader == "Czarzasty") or (lew_relation < 45 and kpd_party_leader != "Czarzasty")): We do not have good enough relations with the New Left. ?][? if (po_relation < 65 and po_party_leader == "Budka") or (po_relation < 70 and po_party_leader = "Tusk") or (po_relation < 55 and po_party_leader == "Nowacka"): We do not have good enough relations with the Center Party. ?]
+view-if: @october_coalition >= 50
+choose-if: (((lew_relation >= 60 and lew_party_leader == "Czarzasty") or (lew_relation >= 45 and lew_party_leader != "Czarzasty")) and ((po_relation >= 55 and z_party_leader == "Nowacka") or (po_relation >= 65 and po_party_leader == "Budka") or (po_relation >= 70 and po_party_leader == "Tusk") and (psl_relation >= 60 and psl_party_leader == "Kosiniak-Kamysz") or (psl_relation >= 40 and psl_party_leader == "Baszszar-al-Kamysz")
+
+PiS is defeated at last, therefore we can form a wide-front coalition to reform the justice system and clean up the constitutional mess left by the previous government. But do we really want to burden ourselves with cooperating with liberals and conservatives? This might be unpopular in our socialist-wing.
 
 
-@popular_front_coalition
-title: A new "Popular Front" coalition?
-subtitle: SPD + KPD + Z + [+ ddp_name +]  [? if sapd_formed: + SAPD ?]([+ popular_front_coalition +]%)
-unavailable-subtitle: SPD + KPD + Z + [+ ddp_name +] [? if sapd_formed: + SAPD ?]([+ popular_front_coalition +]%) - [? if ((kpd_relation < 65 and kpd_party_leader == "Thälmann") or (kpd_relation < 45 and kpd_party_leader == "Conciliators")): We do not have good enough relations with the KPD. ?][? if (z_relation < 45 and z_party_leader == "Joos") or (z_relation < 65 and z_party_leader != "Joos" and kpd_party_leader != "Conciliators") or (z_relation < 55 and z_party_leader != "Joos" and kpd_party_leader == "Conciliators"): We do not have good enough relations with the Center Party. ?][? if communist_coalition < 3 : The Communists are unwilling to compromise at all. ?]
-view-if: popular_front_coalition >= 50
-choose-if: (((kpd_relation >= 65 and kpd_party_leader == "Thälmann") or (kpd_relation >= 45 and kpd_party_leader == "Conciliators")) and ((z_relation >= 45 and z_party_leader == "Joos") or (z_relation >= 65 and z_party_leader != "Joos" and kpd_party_leader != "Conciliators") or (z_relation >= 55 and z_party_leader != "Joos" and kpd_party_leader == "Conciliators")) and ddp_relation >= 50 and communist_coalition >= 3) or (z_party_leader == "Joos" and kpd_party_leader == "Conciliators" and z_relation >= 30 and kpd_relation >= 30)
+- @october_coalition2: Form the October 15th Coalition!
 
-Could we really form a coalition that included both the Center and the Communists? It seems like an absurd concept, but given our good relationships with both sides, it is not an impossibility.
+@october_coalition
+on-arrival: leverage += 5; leverage += 5 if po_party_leader == "Nowacka"; in_october_coalition = 1; raz_in_government = 1; foreign_minister_party = "PO"; interior_minister_party = "PO"; justice_minister_party = "PO"; labor_minister_party = "New Left""; defence_minister_party = "PSL"; digitalization_minister_party = "New Left" ; finance_minister_party = "PO"; environment_minister_party = "New Left"; health_minister_party: "PO"; foreign_minister = "Sikorski"; interior_minister = "Kierwiński"; justice_minister = "Bodnar"; labor_minister = "Dziemianowicz-Bąk"; defence_minister = "Kosiniak-Kamysz"; digitalization_minister = "Gawkowski"; finance_minister = "Domański"; environment_minister = "Sowińska"; health_minister = "Arłukowicz"; pro_republic += 5; socialist_dissent += 15; zandbergist_dissent += 10; soclib_dissent -= 10;
+achievement: october_coalition
 
-The far-right might attempt a coup, if such a coalition were formed.
+We have decided to enter the government instead of taking an anti-government, critical stance in the opposition. The socialliberal-wing in our party are enthusiastic about this move, while the socialists don't seem to be especially pleased.
 
-- @popular_front_2: Form the Popular Front!
-- @great_popular_front: Form the Popular Front!
+Who should be the Prime Minister?
 
-@popular_front_2
-view-if: z_party_leader != "Joos" or kpd_party_leader != "Conciliators"
+- @tusk
+- @budka
+- @kosiniak-kamysz
+- @czarzasty
+- @dziemianowicz-bąk
+- @zandberg
 
-Somehow, both the Communists and Center are at the very least willing to entertain negotiations. Of course, KPD radicals and Center conservatives derail the negotiations almost immediately. The KPD demands leadership of the coalition for themselves and their chairman Ernst Thälmann, [? if spd_r > kpd_r : despite our higher vote share, ?]while the Center is offended by the prospect of helping Bolsheviks enter government. *Something* must be done to restore balance.
+@tusk
+title: Donald Tusk for Prime Minister
+view-if: tusk_back = 1
+subtitle: Donald Tusk is the leader of Civic Platform and a person seen by many Poles as an architect of PiS's fall, him being the Prime Minister is almost natural. However, our socialist-wing would not like a liberal to be a Prime Minister.
+on-arrival: prime_minister = "Tusk"; chancellor_party = "PO"; in_october_coalition = 1; socialist_dissent += 15; zandbergist_dissent += 10; leverage += 5;
+go-to: ministries
 
-- @popular_front_resources
-- @popular_front_democracy
-- @popular_front_braun
-- @coalition_menu: This is impossible. Try another governing arrangement.
+Tusk's appointment has been accepted by all the parties forming the coalition.
 
-@popular_front_resources
-title: Use our resources to smooth things over.
-unavailable-subtitle: Required: 4 resources
-subtitle: -4 resources
-choose-if: resources >= 4
-on-arrival: resources -= 4
-go-to: popular_front_success
+@kosiniak-kamysz
+title: Otto Wels for Chancellor
+view-if: psl_r >= 30
+subtitle: Władysław Kosiniak-Kamysz is the leader of PSL, his appointment would be the way of compromise for all the parties in the coalition. Though, our socialist-wing seems to not be pleased by a conservative as well.
+on-arrival: prime_minister = "Kosiniak-Kamysz"; chancellor_party = "New Left"; in_october_coalition = 1; socialist_dissent += 15; zandbergist_dissent += 10; leverage += 10;
+go-to: ministries
 
-@popular_front_democracy
-title: Convince the KPD to accept democracy.
-subtitle: [? if kpd_party_leader == "Conciliators" : The Conciliator leadership of the KPD at least claim to support the Popular Front. ?]
-unavailable-subtitle: Our relationship with the KPD is not high enough.
-choose-if: (kpd_relation >= 60 and communist_coalition >= 3) or kpd_party_leader == "Conciliators"
-go-to: popular_front_success
+Kosiniak-Kamysz's appointment has been accepted by our coalition partners, and gave as more leverage for other cabinet positions.
 
-@popular_front_braun
-title: Use pressure from President Braun to force the parties to cooperate.
-view-if: president == "Braun"
-go-to: popular_front_success
+@czarzasty
+title: Czarzasty for Prime Minister
+view-if: lew_r >= 30 and lew_party_leader = "Czarzasty"
+subtitle: Włodzimierz Czarzasty is the leader of SLD party, which has been starting as a part of New Left. His appointment might not be popular, but at least we would not have a libtard as a Prime Minister, right?
+on-arrival: prime_minister = "Czarzasty"; chancellor_party = "New Left"; leverage -= 10; in_october_coalition = 1;
+go-to: ministries
 
-@great_popular_front
+We have negotiated with coalition, to let Czarzasty be a Prime Minister, however as it is in our interest, we have lost leverage for other cabinet positions.
+
+@dziemianowicz_bąk
+title: Dziemianowicz-Bąk for Prime Minister
+view-if: lew_r >= 30 and lew_party_leader = "Dziemianowicz-Bąk"
+subtitle: Agnieszka Dziemianowicz-Bąk is the leader of of New Left. Her appointment would be the way of compromise for all the parties in the coalition. Our party deeply agrees with this choice, as she was previously a member of Razem.
+on-arrival: prime_minister = "Dziemianowicz-Bąk"; chancellor_party = "New Left"; in_october_coalition = 1;
+go-to: ministries
+
+Agnieszka Dziemianowicz-Bąk has been accepted as the Prime Minister.
+
+
+@zandberg
+title: Adrian Zandberg for Prime Minister
+subtitle: As we have a considerable vote share, our most prominent politician, Adrian Zandberg will be presented to our partners as Chancellor, this however will cost us leverage.
+on-arrival: raz_in_government = 1; prime_minister = "Zandberg"; leverage -= 15; chancellor_party = "Razem"; in_october_coalition = 1;
+go-to: ministries
+
+We managed to push Zandberg as a Prime Minister in coalition negotiations, a huge success for our party!
+
+[? if year == 1928 : Since Wilhelm Marx resigned, Heinrich Brüning has been appointed chancellor. ?]
+[? if year > 1928: Heinrich Brüning of the Center Party has been appointed chancellor. ?]
 view-if: z_party_leader == "Joos" and kpd_party_leader == "Conciliators"
 on-arrival: spd_in_government = 1; in_popular_front = 1; chancellor = "Breitscheid"; chancellor_party = "SPD"; kpd_relation += 10; coup_progress += 2; in_left_front = 0; in_weimar_coalition = 0; in_grand_coalition = 0; coalition_dissent = 0;
 achievement: grosse_volksfront
@@ -1269,20 +1298,20 @@ subtitle: Taking the Labor Ministry is expected of us.
 unavailable-subtitle: We do not have enough leverage.
 tags: mins_1928
 choose-if: leverage >= 5
-view-if: labor_minister_party != "SPD"
-on-arrival: leverage -= 5; labor_minister_party = "SPD"; labor_minister = "Wissell"
+view-if: labor_minister_party != "Razem"
+on-arrival: leverage -= 5; labor_minister_party = "Razem"; labor_minister = "Konieczny"
 go-to: ministries
 
-Rudolf Wissell of the SPD has been appointed labor minister.
+Maciej Konieczny of Razem has been appointed Labor Minister.
 
 @interior
 title: Interior Ministry
-subtitle: Taking the Interior Ministry is expected of us. The Interior Ministry controls domestic security.
+subtitle: The Interior Ministry controls domestic security.
 unavailable-subtitle: We do not have enough leverage.
 tags: mins_1928
 choose-if: leverage >= 5
-view-if: interior_minister_party != "SPD"
-on-arrival: leverage -= 5; interior_minister_party = "SPD"; interior_minister = "Severing"
+view-if: interior_minister_party != "Razem"
+on-arrival: leverage -= 5; interior_minister_party = "Razem"; interior_minister = "Zandberg"
 go-to: ministries
 
 Carl Severing of the SPD has been appointed Interior Minister.
@@ -1293,72 +1322,84 @@ subtitle: The Finance Ministry controls the government budget and taxes.
 unavailable-subtitle: We do not have enough leverage.
 tags: mins_1928
 choose-if: leverage >= 10 
-view-if: finance_minister_party != "SPD"
-on-arrival: leverage -= 10; finance_minister_party = "SPD"; finance_minister = "Hilferding"
+view-if: finance_minister_party != "Razem"
+on-arrival: leverage -= 10; finance_minister_party = "Razem"; finance_minister = "Jura-Czarnecki"
 go-to: ministries
 
-Rudolf Hilferding of the SPD has been appointed Finance Minister.
+Adam Jura-Czarnecki of Razem has been appointed Finance Minister.
 
-@economic
-title: Economic Ministry
-subtitle: The Economic Ministry controls broader economic policy.
+@digitalization
+title: Digitalization Ministry
+subtitle: Digitalization Ministry conrols the technological aspect of state functioning.
 unavailable-subtitle: We do not have enough leverage.
 tags: mins_1928
 choose-if: leverage >= 10 
-view-if: economic_minister_party != "SPD"
-on-arrival: leverage -= 10; economic_minister_party = "SPD"; economic_minister = "Schmidt"
+view-if: digitalization_minister_party != "Razem"
+on-arrival: leverage -= 10; digitalization_minister_party = "Razem"; digitalization_minister = "Stożek"
 go-to: ministries
 
-Robert Schmidt of the SPD has been appointed Economic Minister.
+Marta Stożek of Razem has been appointed Digitalization Minister.
 
 @justice
-title: Justice Ministry
-subtitle: The Justice Ministry controls the courts.
+title: Justice Ministry and Prosecutor General
+subtitle: The Justice Ministry controls the courts. Along with the office of Justice Minister, the office of Prosecutor General is passed.
 unavailable-subtitle: We do not have enough leverage.
 tags: mins_1928
 choose-if: leverage >= 10 
-view-if: justice_minister_party != "SPD"
-on-arrival: leverage -= 10; justice_minister_party = "SPD"; justice_minister = "Radbruch"
+view-if: justice_minister_party != "Razem"
+on-arrival: leverage -= 10; justice_minister_party = "Razem"; justice_minister = "Paulina Matysiak"
 go-to: ministries
 
-Gustav Radbruch of the SPD has been appointed Justice Minister.
+Paulina Matysiak of Razem has been appointed Justice Minister and Prosecutor General.
 
 @foreign
-title: Foreign Ministry
-subtitle: This is usually the domain of Gustav Stresemann of the DVP.
+title: Foreign Affairs Ministry
+subtitle: Foreign Affairs Ministry controls the international relations.
 unavailable-subtitle: We do not have enough leverage.
 tags: mins_1928
 choose-if: leverage >= 10 
-view-if: foreign_minister_party != "SPD"
-on-arrival: leverage -= 10; foreign_minister_party = "SPD"; foreign_minister = "Breitscheid"
+view-if: foreign_minister_party != "Razem"
+on-arrival: leverage -= 10; foreign_minister_party = "Razem"; foreign_minister = "Malisz"
 go-to: ministries
 
-Rudolf Breitscheid of the SPD has been appointed Foreign Minister.
+Zofia Malisz of Razem has been appointed Foreign Affairs Minister.
 
 
-@agriculture
-title: Agricultural Ministry
-subtitle: This is not our usual domain.
+@environment
+title: Environment Ministry
+subtitle: Environment Ministry controls the issues related to environment protection.
 unavailable-subtitle: We do not have enough leverage.
 choose-if: leverage >= 10 
-view-if: agriculture_minister_party != "SPD"
-on-arrival: leverage -= 10; agriculture_minister_party = "SPD"; agriculture_minister = "Baade"
+view-if: environment_minister_party != "Razem"
+on-arrival: leverage -= 10; environment_minister_party = "Razem"; environment_minister = "Szymon Furmaniak"
 go-to: ministries
 tags: mins_1928
 
-Fritz Baade of the SPD has been appointed Agriculture Minister.
+Szymon Furmaniak of Razem has been appointed Environment Minister.
 
-@reichswehr
-title: Reichswehr Ministry
-subtitle: The Ministry responsible for the armed forces is not typically our domain; General Groener and the bourgeois-conservatives will be displeased.
+@defence
+title: Defence Ministry
+subtitle: Defence Ministry is responsible for armed forces.
 unavailable-subtitle: We do not have enough leverage.
 tags: mins_1928
 choose-if: leverage >= 15 
-view-if: reichswehr_minister_party != "SPD"
-on-arrival: leverage -= 15; reichswehr_minister_party = "SPD"; reichswehr_minister = "Leber"
+view-if: reichswehr_minister_party != "Razem"
+on-arrival: leverage -= 15; reichswehr_minister_party = "Razem"; reichswehr_minister = "Kasia Babis"
 go-to: ministries
 
-Julius Leber of the SPD has been appointed Reichswehr Minister.
+Kasia Babis of Razem has been appointed the Defence Minister
+
+@health
+title: Health Ministry
+subtitle: Health Ministry is responsible for conduct of public health services and security.
+unavailable-subtitle: We do not have enough leverage.
+tags: mins_1928
+choose-if: leverage >= 5
+view-if: reichswehr_minister_party != "Razem"
+on-arrival: leverage -= 5; health_minister_party = "Razem"; health_minister = "Zawisza"
+go-to: ministries
+
+Marcelina Zawisza of Razem has been appointed Health Minister.
 
 
 
