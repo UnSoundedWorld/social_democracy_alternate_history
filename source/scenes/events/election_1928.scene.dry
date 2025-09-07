@@ -299,7 +299,7 @@ go-to: coalition_menu
 {!<svg id="reichstag" style="width: 500px; height: 250px;"> </svg>!}
 
 {!<table>!} 
-{!<tr><td>Party</td><td>Vote share</td><td>Seats</td></tr>Seats change</td></tr>!}
+{!<tr><td>Party</td><td>Vote share</td><td>Seats</td></tr>}
 {!<tr><td><div class="box" style='background-color:#af3091; outline: 2px; outline-style: solid;'> </div> !} **Razem:** {!</td><td>!} **[+ raz_votes_int +]%** {!</td><td>!} **[+ raz_r +]** {!</td></tr>!} **[str_change_raz]** {!</td></tr>!}
 
 {!<tr><td><div class="box" style='background-color:#d43070'> </div> !}New Left: {!</td><td>!} [+ lew_votes_int +]% {!</td><td>!} [+ lew_r +] {!</td></tr>!} **[str_change_lew]** {!</td></tr>!}
