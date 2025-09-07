@@ -27,7 +27,7 @@ for (var party of Q.parties) {
     total_votes += Q[party + '_votes_int'];
 }
 
-// Adjust rounding leftovers
+// Adjust rounding leftovers (to ensure percentages sum to 100)
 var leftover = 100 - total_votes;
 if (leftover !== 0) {
     var remainders = Q.parties.map(party => ({
@@ -44,10 +44,11 @@ if (leftover !== 0) {
 // Store display and normalized percentages
 for (var party of Q.parties) {
     Q[party + '_votes_disp'] = Q[party + '_votes_int'] + '%';
+    // normalized is fraction 0..1 (sum ≈ 1.0)
     Q[party + '_normalized'] = Q[party + '_votes_int'] / 100;
 }
 
-// 3. Seat allocation using bias factors (no D'Hondt)
+// 3. Seat allocation using bias factors (no D'Hondt) — using normalized vote shares
 var totalSeats = 460;
 
 // Reset seat counts
@@ -56,36 +57,37 @@ for (var party of Q.parties) {
 }
 
 // -----------------------------
-// Handle special list formations
+// Handle special list formations (operate on normalized shares)
 // -----------------------------
 var effectiveParties = [...Q.parties];
-var mergedVotes = {};
-var mergedMap = {}; // merged bloc -> its members
+var mergedNorm = {}; // merged bloc -> normalized total (0..1)
+var mergedMap = {};  // merged bloc -> member array
 
 if (Q.raz_lew_list_formed === 1) {
     effectiveParties = effectiveParties.filter(p => p !== "raz" && p !== "lew");
     effectiveParties.push("raz_lew");
-    mergedMap["raz_lew"] = ["raz","lew"];
-    mergedVotes["raz_lew"] = Q["raz_support"] + Q["lew_support"];
+    mergedMap["raz_lew"] = ["raz", "lew"];
+    mergedNorm["raz_lew"] = (Q["raz_normalized"] || 0) + (Q["lew_normalized"] || 0);
 }
 if (Q.pol_psl_list_formed === 1) {
     effectiveParties = effectiveParties.filter(p => p !== "pol" && p !== "psl");
     effectiveParties.push("pol_psl");
-    mergedMap["pol_psl"] = ["pol","psl"];
-    mergedVotes["pol_psl"] = Q["pol_support"] + Q["psl_support"];
+    mergedMap["pol_psl"] = ["pol", "psl"];
+    mergedNorm["pol_psl"] = (Q["pol_normalized"] || 0) + (Q["psl_normalized"] || 0);
 }
 
+// For parties not in mergedNorm, their "normalized" value is Q[party + '_normalized']
 // -----------------------------
-// Rank parties by support (merged blocs included)
+// Rank parties by normalized support (merged blocs included)
 // -----------------------------
 var rankedParties = [...effectiveParties].sort((a, b) => {
-    let sa = mergedVotes[a] !== undefined ? mergedVotes[a] : Q[a + "_support"];
-    let sb = mergedVotes[b] !== undefined ? mergedVotes[b] : Q[b + "_support"];
+    let sa = mergedNorm[a] !== undefined ? mergedNorm[a] : (Q[a + "_normalized"] || 0);
+    let sb = mergedNorm[b] !== undefined ? mergedNorm[b] : (Q[b + "_normalized"] || 0);
     return sb - sa;
 });
 
 // -----------------------------
-// Assign bias factors by rank
+// Assign bias factors by rank (same scheme as before)
 // -----------------------------
 var biasMap = {};
 for (var i = 0; i < rankedParties.length; i++) {
@@ -97,76 +99,103 @@ for (var i = 0; i < rankedParties.length; i++) {
 }
 
 // -----------------------------
-// Compute biased vote totals
+// Compute biased totals (based on normalized shares)
 // -----------------------------
 var biasedTotals = {};
 var totalBiased = 0;
 for (var party of effectiveParties) {
-    let baseVotes = mergedVotes[party] !== undefined ? mergedVotes[party] : Q[party + "_support"];
-    let biased = baseVotes * biasMap[party];
+    let baseNorm = mergedNorm[party] !== undefined ? mergedNorm[party] : (Q[party + "_normalized"] || 0);
+    let biased = baseNorm * (biasMap[party] || 1);
     biasedTotals[party] = biased;
     totalBiased += biased;
 }
 
+// debug: show biased totals
+console.log("Biased totals (normalized):", JSON.stringify(biasedTotals), "totalBiased:", totalBiased);
+
 // -----------------------------
-// Distribute seats proportionally by biased totals
+// Distribute seats proportionally by biased totals (floor + largest remainders)
 // -----------------------------
 var seatAllocs = {};
 var seatSum = 0;
 for (var party of effectiveParties) {
-    let seats = Math.floor((biasedTotals[party] / totalBiased) * totalSeats);
-    seatAllocs[party] = seats;
-    seatSum += seats;
+    var exactSeats = totalBiased > 0 ? (biasedTotals[party] / totalBiased) * totalSeats : 0;
+    seatAllocs[party] = Math.floor(exactSeats);
+    seatSum += seatAllocs[party];
 }
 
-// fix rounding leftovers
+// fix rounding leftovers by fractional remainders
 var leftoverSeats = totalSeats - seatSum;
 if (leftoverSeats !== 0) {
     var remainders = effectiveParties.map(p => {
-        let exact = (biasedTotals[p] / totalBiased) * totalSeats;
+        var exact = totalBiased > 0 ? (biasedTotals[p] / totalBiased) * totalSeats : 0;
         return { party: p, frac: exact - seatAllocs[p] };
-    }).sort((a,b) => b.frac - a.frac);
-    for (var i=0; i<leftoverSeats; i++) {
+    }).sort((a, b) => b.frac - a.frac);
+    for (var i = 0; i < leftoverSeats; i++) {
         seatAllocs[remainders[i % remainders.length].party]++;
     }
 }
 
+// debug: show allocations for merged/non-merged blocks
+console.log("Seat allocations (by effective party):", JSON.stringify(seatAllocs));
+
 // -----------------------------
-// Split merged blocs back to members
+// If merged blocs exist, split their seats back to members (by normalized share inside bloc)
 // -----------------------------
 for (var party of effectiveParties) {
     if (mergedMap[party]) {
         let members = mergedMap[party];
-        let blocVotes = members.map(m => Q[m + "_support"]);
-        let blocTotal = blocVotes.reduce((a,b)=>a+b,0);
+        let blocTotalNorm = 0;
+        for (let m of members) blocTotalNorm += (Q[m + "_normalized"] || 0);
 
         let assigned = 0;
-        for (var j=0;j<members.length;j++) {
+        for (let j = 0; j < members.length; j++) {
             let m = members[j];
-            let exact = (Q[m + "_support"]/blocTotal) * seatAllocs[party];
+            let exact = blocTotalNorm > 0 ? ((Q[m + "_normalized"] || 0) / blocTotalNorm) * seatAllocs[party] : seatAllocs[party] / members.length;
             let s = Math.floor(exact);
             Q[m + "_r"] = s;
             assigned += s;
+            Q[m + '_bias_factor'] = biasMap[party];
         }
-        // leftover seats inside bloc
+
         var blocLeftover = seatAllocs[party] - assigned;
         if (blocLeftover > 0) {
             let remainders = members.map(m => {
-                let exact = (Q[m + "_support"]/blocTotal) * seatAllocs[party];
-                return { party: m, frac: exact - Q[m + "_r"] };
-            }).sort((a,b) => b.frac - a.frac);
-            for (var k=0; k<blocLeftover; k++) {
-                Q[remainders[k % remainders.length].party + "_r"]++;
+                let exact = blocTotalNorm > 0 ? ((Q[m + "_normalized"] || 0) / blocTotalNorm) * seatAllocs[party] : seatAllocs[party] / members.length;
+                return { party: m, frac: exact - (Q[m + "_r"] || 0) };
+            }).sort((a, b) => b.frac - a.frac);
+            for (var k = 0; k < blocLeftover; k++) {
+                Q[remainders[k % remainders.length].party + "_r"] = (Q[remainders[k % remainders.length].party + "_r"] || 0) + 1;
             }
         }
     } else {
-        Q[party + "_r"] = seatAllocs[party];
+        Q[party + "_r"] = seatAllocs[party] || 0;
+        Q[party + '_bias_factor'] = biasMap[party];
     }
 }
 
-// Optional: store bias info for debugging
-for (var party of effectiveParties) {
-    Q[party + "_bias_factor"] = biasMap[party];
+// -----------------------------
+// Final debug logs
+// -----------------------------
+for (var party of Q.parties) {
+    console.log("Party:", party,
+                "Votes%:", (Q[party + "_votes_int"] || 0) + "%",
+                "Normalized:", (Q[party + "_normalized"] || 0).toFixed(4),
+                "Bias:", (Q[party + "_bias_factor"] || "").toString(),
+                "Seats:", Q[party + "_r"]);
 }
+
+console.log("=== Final Seat Counts ===");
+for (var party of Q.parties) {
+    console.log(party.toUpperCase() + " seats:", Q[party + "_r"]);
+}
+console.log("=========================");
+
+// store election record
+var election_result = {'date': new Date(Q.year, Q.month - 1)};
+for (var party of Q.parties) {
+    election_result[party] = Q[party + '_r'];
+}
+Q.election_records.push(election_result);
 !}
 go-to: jumpScene
