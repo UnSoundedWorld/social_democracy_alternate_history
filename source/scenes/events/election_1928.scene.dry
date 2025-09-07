@@ -349,7 +349,7 @@ There are some potential coalition arrangements.
 // - @far_right_coalition
 
 @october_coalition
-count-visits-max = 0
+count-visits-max: 0
 title: The October 15th Coalition
 subtitle: Razem + New Left  + PO + PSL ([+ october_coalition +]%)
 unavailable-subtitle: Razem + New Left + PO + PSL ([+ october_coalition +]%) - [? if ((lew_relation < 60 and kpd_party_leader == "Czarzasty") or (lew_relation < 45 and kpd_party_leader != "Czarzasty")): We do not have good enough relations with the New Left. ?][? if (po_relation < 65 and po_party_leader == "Budka") or (po_relation < 70 and po_party_leader == "Tusk") or (po_relation < 55 and po_party_leader == "Nowacka"): We do not have good enough relations with the PO ?]
