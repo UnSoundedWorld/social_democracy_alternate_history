@@ -331,8 +331,9 @@ Right-wing Coalition (Z + BVP + DVP + Others + DNVP): [+ right_coalition +]%
 
 There are some potential coalition arrangements.
 
-@coalition_menu
-- @october_coalition
+@coalition_menu:
+
+- @october_coalition: Form the 15th october coalition
 
 @october_coalition
 count-visits-max: 3
