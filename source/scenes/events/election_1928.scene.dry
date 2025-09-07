@@ -351,23 +351,9 @@ There are some potential coalition arrangements.
 @october_coalition
 title: The October 15th Coalition
 subtitle: Razem + New Left  + PO + PSL ([+ october_coalition +]%)
-unavailable-subtitle: Razem + New Left + PO + PSL ([+ october_coalition +]%) - [? if ((lew_relation < 60 and kpd_party_leader == "Czarzasty") or (lew_relation < 45 and kpd_party_leader != "Czarzasty")): We do not have good enough relations with the New Left. ?][? if (po_relation < 65 and po_party_leader == "Budka") or (po_relation < 70 and po_party_leader = "Tusk") or (po_relation < 55 and po_party_leader == "Nowacka"): We do not have good enough relations with the Center Party. ?]
+unavailable-subtitle: Razem + New Left + PO + PSL ([+ october_coalition +]%) - [? if ((lew_relation < 60 and kpd_party_leader == "Czarzasty") or (lew_relation < 45 and kpd_party_leader != "Czarzasty")): We do not have good enough relations with the New Left. ?][? if (po_relation < 65 and po_party_leader == "Budka") or (po_relation < 70 and po_party_leader == "Tusk") or (po_relation < 55 and po_party_leader == "Nowacka"): We do not have good enough relations with the PO ?]
 view-if: @october_coalition >= 50
-choose_if = (
-    (
-        (lew_relation >= 60 and lew_party_leader == "Czarzasty")
-        or (lew_relation >= 45 and lew_party_leader != "Czarzasty")
-    )
-    and (
-        (po_relation >= 55 and z_party_leader == "Nowacka")
-        or (po_relation >= 65 and po_party_leader == "Budka")
-        or (po_relation >= 70 and po_party_leader == "Tusk")
-    )
-    and (
-        (psl_relation >= 60 and psl_party_leader == "Kosiniak-Kamysz")
-        or (psl_relation >= 40 and psl_party_leader == "Baszszar-al-Kamysz")
-    )
-)
+choose-if: (((lew_relation >= 60 and lew_party_leader == "Czarzasty") or (lew_relation >= 45 and lew_party_leader != "Czarzasty")) and ((po_relation >= 55 and z_party_leader == "Nowacka") or (po_relation >= 65 and po_party_leader == "Budka") or (po_relation >= 70 and po_party_leader == "Tusk") and (psl_relation >= 60 and psl_party_leader == "Kosiniak-Kamysz") or (psl_relation >= 40 and psl_party_leader == "Baszszar-al-Kamysz")
 
 PiS is defeated at last, therefore we can form a wide-front coalition to reform the justice system and clean up the constitutional mess left by the previous government. But do we really want to burden ourselves with cooperating with liberals and conservatives? This might be unpopular in our socialist-wing.
 
