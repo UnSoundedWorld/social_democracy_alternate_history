@@ -27,7 +27,7 @@ for (var party of Q.parties) {
     total_votes += Q[party + '_votes_int'];
 }
 
-// Adjust leftover
+// Adjust rounding leftovers
 var leftover = 100 - total_votes;
 if (leftover !== 0) {
     var remainders = Q.parties.map(party => ({
@@ -41,54 +41,132 @@ if (leftover !== 0) {
     }
 }
 
-// Store display and normalized
+// Store display and normalized percentages
 for (var party of Q.parties) {
     Q[party + '_votes_disp'] = Q[party + '_votes_int'] + '%';
     Q[party + '_normalized'] = Q[party + '_votes_int'] / 100;
 }
 
-// 3. D'Hondt seat allocation with graduated bias
+// 3. Seat allocation using bias factors (no D'Hondt)
 var totalSeats = 460;
 
-// Initialize seat counts
+// Reset seat counts
 for (var party of Q.parties) {
     Q[party + '_r'] = 0;
 }
 
-// 🔥 Sort parties by support to assign ranks
-var rankedParties = [...Q.parties].sort((a, b) => Q[b + '_support'] - Q[a + '_support']);
+// -----------------------------
+// Handle special list formations
+// -----------------------------
+var effectiveParties = [...Q.parties];
+var mergedVotes = {};
+var mergedMap = {}; // merged bloc -> its members
 
-// Assign bias factors based on rank
+if (Q.raz_lew_list_formed === 1) {
+    effectiveParties = effectiveParties.filter(p => p !== "raz" && p !== "lew");
+    effectiveParties.push("raz_lew");
+    mergedMap["raz_lew"] = ["raz","lew"];
+    mergedVotes["raz_lew"] = Q["raz_support"] + Q["lew_support"];
+}
+if (Q.pol_psl_list_formed === 1) {
+    effectiveParties = effectiveParties.filter(p => p !== "pol" && p !== "psl");
+    effectiveParties.push("pol_psl");
+    mergedMap["pol_psl"] = ["pol","psl"];
+    mergedVotes["pol_psl"] = Q["pol_support"] + Q["psl_support"];
+}
+
+// -----------------------------
+// Rank parties by support (merged blocs included)
+// -----------------------------
+var rankedParties = [...effectiveParties].sort((a, b) => {
+    let sa = mergedVotes[a] !== undefined ? mergedVotes[a] : Q[a + "_support"];
+    let sb = mergedVotes[b] !== undefined ? mergedVotes[b] : Q[b + "_support"];
+    return sb - sa;
+});
+
+// -----------------------------
+// Assign bias factors by rank
+// -----------------------------
 var biasMap = {};
 for (var i = 0; i < rankedParties.length; i++) {
     var party = rankedParties[i];
-    if (i === 0) biasMap[party] = 1.15; // Biggest party gets bonus
-    else if (i === 1) biasMap[party] = 0.95; // Second party slight penalty
-    else if (i === 2) biasMap[party] = 0.85; // Third party more penalty
-    else biasMap[party] = 0.80; // All smaller parties penalized more
+    if (i === 0) biasMap[party] = 1.15;   // largest bonus
+    else if (i === 1) biasMap[party] = 0.95;
+    else if (i === 2) biasMap[party] = 0.85;
+    else biasMap[party] = 0.80;
 }
 
-// Optional: Store bias info for debugging or display
-for (var party of Q.parties) {
-    Q[party + '_bias_factor'] = biasMap[party];
+// -----------------------------
+// Compute biased vote totals
+// -----------------------------
+var biasedTotals = {};
+var totalBiased = 0;
+for (var party of effectiveParties) {
+    let baseVotes = mergedVotes[party] !== undefined ? mergedVotes[party] : Q[party + "_support"];
+    let biased = baseVotes * biasMap[party];
+    biasedTotals[party] = biased;
+    totalBiased += biased;
 }
 
-// D’Hondt allocation with bias
-for (var seat = 0; seat < totalSeats; seat++) {
-    var quotients = Q.parties.map(function(party) {
-        var seatsAlready = Q[party + '_r'];
-        var baseVotes = Q[party + '_support'];
-        var biasedVotes = baseVotes * biasMap[party];
-        return {
-            party: party,
-            quotient: biasedVotes / (seatsAlready + 1)
-        };
-    });
+// -----------------------------
+// Distribute seats proportionally by biased totals
+// -----------------------------
+var seatAllocs = {};
+var seatSum = 0;
+for (var party of effectiveParties) {
+    let seats = Math.floor((biasedTotals[party] / totalBiased) * totalSeats);
+    seatAllocs[party] = seats;
+    seatSum += seats;
+}
 
-    quotients.sort((a, b) => b.quotient - a.quotient);
-    var winner = quotients[0].party;
-    Q[winner + '_r'] += 1;
+// fix rounding leftovers
+var leftoverSeats = totalSeats - seatSum;
+if (leftoverSeats !== 0) {
+    var remainders = effectiveParties.map(p => {
+        let exact = (biasedTotals[p] / totalBiased) * totalSeats;
+        return { party: p, frac: exact - seatAllocs[p] };
+    }).sort((a,b) => b.frac - a.frac);
+    for (var i=0; i<leftoverSeats; i++) {
+        seatAllocs[remainders[i % remainders.length].party]++;
+    }
+}
+
+// -----------------------------
+// Split merged blocs back to members
+// -----------------------------
+for (var party of effectiveParties) {
+    if (mergedMap[party]) {
+        let members = mergedMap[party];
+        let blocVotes = members.map(m => Q[m + "_support"]);
+        let blocTotal = blocVotes.reduce((a,b)=>a+b,0);
+
+        let assigned = 0;
+        for (var j=0;j<members.length;j++) {
+            let m = members[j];
+            let exact = (Q[m + "_support"]/blocTotal) * seatAllocs[party];
+            let s = Math.floor(exact);
+            Q[m + "_r"] = s;
+            assigned += s;
+        }
+        // leftover seats inside bloc
+        var blocLeftover = seatAllocs[party] - assigned;
+        if (blocLeftover > 0) {
+            let remainders = members.map(m => {
+                let exact = (Q[m + "_support"]/blocTotal) * seatAllocs[party];
+                return { party: m, frac: exact - Q[m + "_r"] };
+            }).sort((a,b) => b.frac - a.frac);
+            for (var k=0; k<blocLeftover; k++) {
+                Q[remainders[k % remainders.length].party + "_r"]++;
+            }
+        }
+    } else {
+        Q[party + "_r"] = seatAllocs[party];
+    }
+}
+
+// Optional: store bias info for debugging
+for (var party of effectiveParties) {
+    Q[party + "_bias_factor"] = biasMap[party];
 }
 !}
 go-to: jumpScene
-
