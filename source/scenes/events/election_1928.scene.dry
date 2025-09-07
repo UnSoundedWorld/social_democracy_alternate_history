@@ -300,19 +300,19 @@ go-to: coalition_menu
 
 {!<table>!} 
 {!<tr><td>Party</td><td>Vote share</td><td>Seats</td></tr>Seats change!}
-{!<tr><td><div class="box" style='background-color:#af3091; outline: 2px; outline-style: solid;'> </div> !} **Razem:** {!</td><td>!} **[+ raz_votes_int +]%** {!</td><td>!} **[+ raz_r +]** {!</td></tr>!}
+{!<tr><td><div class="box" style='background-color:#af3091; outline: 2px; outline-style: solid;'> </div> !} **Razem:** {!</td><td>!} **[+ raz_votes_int +]%** {!</td><td>!} **[+ raz_r +]** {!</td></tr>!} **[str_change_raz]** {!</td></tr>!}
 
-{!<tr><td><div class="box" style='background-color:#d43070'> </div> !}New Left: {!</td><td>!} [+ lew_votes_int +]% {!</td><td>!} [+ lew_r +] {!</td></tr>!}
+{!<tr><td><div class="box" style='background-color:#d43070'> </div> !}New Left: {!</td><td>!} [+ lew_votes_int +]% {!</td><td>!} [+ lew_r +] {!</td></tr>!} **[str_change_lew]** {!</td></tr>!}
 
-{!<tr><td><div class="box" style='background-color:#e47f1b'> </div> !} PO: {!</td><td>!} [+ po_votes_int +]% {!</td><td>!} [+ po_r +] {!</td></tr>!}
+{!<tr><td><div class="box" style='background-color:#e47f1b'> </div> !} PO: {!</td><td>!} [+ po_votes_int +]% {!</td><td>!} [+ po_r +] {!</td></tr>!} **[str_change_po]** {!</td></tr>!}
 
-[? if pol_formed : {!<tr><td><div class="box" style='background-color:#f5da1b'> </div> !}Polska 2050: {!</td><td>!} [+ pol_votes_int +]% {!</td><td>!} [+ pol_r +] {!</td></tr>!} ?]
+[? if pol_formed : {!<tr><td><div class="box" style='background-color:#f5da1b'> </div> !}Polska 2050: {!</td><td>!} [+ pol_votes_int +]% {!</td><td>!} [+ pol_r +] {!</td></tr>!} ?] **[str_change_pol]** {!</td></tr>!}
 
-{!<tr><td><div class="box" style='background-color:#23c62a'> </div> !} PSL: {!</td><td>!} [+ psl_votes_int +]% {!</td><td>!} [+ psl_r +] {!</td></tr>!}
+{!<tr><td><div class="box" style='background-color:#23c62a'> </div> !} PSL: {!</td><td>!} [+ psl_votes_int +]% {!</td><td>!} [+ psl_r +] {!</td></tr>!} **[str_change_psl]** {!</td></tr>!}
 
-{!<tr><td><div class="box" style='background-color:#3c53c3'> </div> !} PIS: {!</td><td>!} [+ pis_votes_int +]% {!</td><td>!} [+ pis_r +] {!</td></tr>!}
+{!<tr><td><div class="box" style='background-color:#3c53c3'> </div> !} PIS: {!</td><td>!} [+ pis_votes_int +]% {!</td><td>!} [+ pis_r +] {!</td></tr>!} **[str_change_pis]** {!</td></tr>!}
 
-{!<tr><td><div class="box" style='background-color:#19007e'> </div> !} Konfederacja: {!</td><td>!} [+ konf_votes_int +]% {!</td><td>!} [+ konf_r +] {!</td></tr>!}
+{!<tr><td><div class="box" style='background-color:#19007e'> </div> !} Konfederacja: {!</td><td>!} [+ konf_votes_int +]% {!</td><td>!} [+ konf_r +] {!</td></tr>!} **[str_change_konf]** {!</td></tr>!}
 {!</table>!}
 
 **Potential coalitions:**
