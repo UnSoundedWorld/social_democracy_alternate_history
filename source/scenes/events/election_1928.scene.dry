@@ -360,7 +360,7 @@ PiS is defeated at last, therefore we can form a wide-front coalition to reform 
 
 - @october_coalition2: Form the October 15th Coalition!
 
-@october_coalition
+@october_coalition2
 on-arrival: leverage += 5; leverage += 5 if po_party_leader == "Nowacka"; in_october_coalition = 1; raz_in_government = 1; foreign_minister_party = "PO"; interior_minister_party = "PO"; justice_minister_party = "PO"; labor_minister_party = "New Left""; defence_minister_party = "PSL"; digitalization_minister_party = "New Left" ; finance_minister_party = "PO"; environment_minister_party = "New Left"; health_minister_party: "PO"; foreign_minister = "Sikorski"; interior_minister = "Kierwiński"; justice_minister = "Bodnar"; labor_minister = "Dziemianowicz-Bąk"; defence_minister = "Kosiniak-Kamysz"; digitalization_minister = "Gawkowski"; finance_minister = "Domański"; environment_minister = "Sowińska"; health_minister = "Arłukowicz"; pro_republic += 5; socialist_dissent += 15; zandbergist_dissent += 10; soclib_dissent -= 10;
 achievement: october_coalition
 
