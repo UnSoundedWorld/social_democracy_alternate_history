@@ -293,13 +293,13 @@ Q.pis_r = 51;
 Q.konf_r = 0;
 
 // diff from prev
-Q.old_raz_r = 26;
-Q.old_lew_r = 9;
-Q.old_po_r = 17;
-Q.old_psl_r = 6;
-Q.old_pl_r = 10;
-Q.old_pis_r = 20;
-Q.old_konf_r = 3;
+Q.old_raz_r = 0;
+Q.old_lew_r = 0;
+Q.old_po_r = 28;
+Q.old_psl_r = 3;
+Q.old_pl_r = 0;
+Q.old_pis_r = 51;
+Q.old_konf_r = 0;
 
 // sapd isn't formed yet, but it may be formed
 Q.pol_r = 0;
