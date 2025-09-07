@@ -372,7 +372,7 @@ Who should be the Prime Minister?
 - @budka
 - @kosiniak-kamysz
 - @czarzasty
-- @dziemianowicz-bąk
+- @dziemianowicz-bak
 - @zandberg
 
 @tusk
@@ -402,7 +402,7 @@ go-to: ministries
 
 We have negotiated with coalition, to let Czarzasty be a Prime Minister, however as it is in our interest, we have lost leverage for other cabinet positions.
 
-@dziemianowicz_bąk
+@dziemianowicz_bak
 title: Dziemianowicz-Bąk for Prime Minister
 view-if: lew_r >= 30 and lew_party_leader = "Dziemianowicz-Bąk"
 subtitle: Agnieszka Dziemianowicz-Bąk is the leader of of New Left. Her appointment would be the way of compromise for all the parties in the coalition. Our party deeply agrees with this choice, as she was previously a member of Razem.
