@@ -349,6 +349,7 @@ There are some potential coalition arrangements.
 // - @far_right_coalition
 
 @october_coalition
+count-visits-max = 0
 title: The October 15th Coalition
 subtitle: Razem + New Left  + PO + PSL ([+ october_coalition +]%)
 unavailable-subtitle: Razem + New Left + PO + PSL ([+ october_coalition +]%) - [? if ((lew_relation < 60 and kpd_party_leader == "Czarzasty") or (lew_relation < 45 and kpd_party_leader != "Czarzasty")): We do not have good enough relations with the New Left. ?][? if (po_relation < 65 and po_party_leader == "Budka") or (po_relation < 70 and po_party_leader == "Tusk") or (po_relation < 55 and po_party_leader == "Nowacka"): We do not have good enough relations with the PO ?]
@@ -421,12 +422,12 @@ go-to: ministries
 
 We managed to push Zandberg as a Prime Minister in coalition negotiations, a huge success for our party!
 
-[? if year == 1928 : Since Wilhelm Marx resigned, Heinrich Brüning has been appointed chancellor. ?]
-[? if year > 1928: Heinrich Brüning of the Center Party has been appointed chancellor. ?]
-view-if: z_party_leader == "Joos" and kpd_party_leader == "Conciliators"
-on-arrival: spd_in_government = 1; in_popular_front = 1; chancellor = "Breitscheid"; chancellor_party = "SPD"; kpd_relation += 10; coup_progress += 2; in_left_front = 0; in_weimar_coalition = 0; in_grand_coalition = 0; coalition_dissent = 0;
-achievement: grosse_volksfront
-go-to: popular_front_civil_war if coup_progress >= 10; popular_front_no_civil_war if coup_progress < 10
+// [? if year == 1928 : Since Wilhelm Marx resigned, Heinrich Brüning has been appointed chancellor. ?]
+// [? if year > 1928: Heinrich Brüning of the Center Party has been appointed chancellor. ?]
+// view-if: z_party_leader == "Joos" and kpd_party_leader == "Conciliators"
+// on-arrival: spd_in_government = 1; in_popular_front = 1; chancellor = "Breitscheid"; chancellor_party = "SPD"; kpd_relation += 10; coup_progress += 2; in_left_front = 0; in_weimar_coalition = 0; in_grand_coalition = 0; coalition_dissent = 0;
+// achievement: grosse_volksfront
+// go-to: popular_front_civil_war if coup_progress >= 10; popular_front_no_civil_war if coup_progress < 10
 
 Somehow, the coalition is successfully formed! The conciliatory leadership of the Center Party and KPD helped make the negotiations possible. We still need a chancellor; the only acceptable choice among the parties was Rudolf Breitscheid of the SPD, acceptable to the Center and KPD [? if president == "Hindenburg" : as well as President Hindenburg, albeit extremely reluctantly ?].
 
