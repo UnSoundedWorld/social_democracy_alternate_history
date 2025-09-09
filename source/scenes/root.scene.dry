@@ -102,7 +102,7 @@ Q.moderate_plan_adopted = 0;
 // inter-party relations
 Q.po_relation = 100;
 Q.lew_relation = 70;
-Q.psl_relation = 20;
+Q.psl_relation = 100;
 Q.pol_relation = 40;
 Q.pis_relation = 20;
 Q.konf_relation = 0;
