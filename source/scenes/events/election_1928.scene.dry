@@ -281,6 +281,7 @@ if (window && d3) {
     d3.select("#reichstag").datum(data).call(parliament);
 }
 !}
+
 Q.leverage = Q.raz_r;
 console.log("Q.leverage:", Q.leverage);
 console.log("Q.raz_r:", Q.raz_r);
