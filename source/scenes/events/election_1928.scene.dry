@@ -404,7 +404,7 @@ Agnieszka Dziemianowicz-Bąk has been accepted as the Prime Minister.
 @zandberg
 title: Adrian Zandberg for Prime Minister
 subtitle: As we have a considerable vote share, our most prominent politician, Adrian Zandberg will be presented to our partners as Chancellor, this however will cost us leverage.
-on-arrival: raz_in_government = 1; prime_minister = "Zandberg"; leverage -= 15; chancellor_party = "Razem"; in_october_coalition = 1;
+on-arrival: raz_in_government = 1; prime_minister = "Zandberg"; leverage -= 0; chancellor_party = "Razem"; in_october_coalition = 1;
 go-to: ministries
 
 
@@ -1337,9 +1337,9 @@ title: Labor Ministry
 subtitle: Taking the Labor Ministry is expected of us.
 unavailable-subtitle: We do not have enough leverage.
 tags: mins_1928
-choose-if: leverage >= 5
+choose-if: leverage >= 0
 view-if: labor_minister_party != "Razem"
-on-arrival: leverage -= 5; labor_minister_party = "Razem"; labor_minister = "Konieczny"
+on-arrival: leverage -= 0; labor_minister_party = "Razem"; labor_minister = "Konieczny"
 go-to: ministries
 
 Maciej Konieczny of Razem has been appointed Labor Minister.
@@ -1349,9 +1349,9 @@ title: Interior Ministry
 subtitle: The Interior Ministry controls domestic security.
 unavailable-subtitle: We do not have enough leverage.
 tags: mins_1928
-choose-if: leverage >= 5
+choose-if: leverage >= 0
 view-if: interior_minister_party != "Razem"
-on-arrival: leverage -= 5; interior_minister_party = "Razem"; interior_minister = "Zandberg"
+on-arrival: leverage -= 0; interior_minister_party = "Razem"; interior_minister = "Zandberg"
 go-to: ministries
 
 Carl Severing of the SPD has been appointed Interior Minister.
@@ -1361,9 +1361,9 @@ title: Finance Ministry
 subtitle: The Finance Ministry controls the government budget and taxes.
 unavailable-subtitle: We do not have enough leverage.
 tags: mins_1928
-choose-if: leverage >= 10 
+choose-if: leverage >= 0
 view-if: finance_minister_party != "Razem"
-on-arrival: leverage -= 10; finance_minister_party = "Razem"; finance_minister = "Jura-Czarnecki"
+on-arrival: leverage -= 0; finance_minister_party = "Razem"; finance_minister = "Jura-Czarnecki"
 go-to: ministries
 
 Adam Jura-Czarnecki of Razem has been appointed Finance Minister.
@@ -1373,9 +1373,9 @@ title: Digitalization Ministry
 subtitle: Digitalization Ministry conrols the technological aspect of state functioning.
 unavailable-subtitle: We do not have enough leverage.
 tags: mins_1928
-choose-if: leverage >= 10 
+choose-if: leverage >= 0
 view-if: digitalization_minister_party != "Razem"
-on-arrival: leverage -= 10; digitalization_minister_party = "Razem"; digitalization_minister = "Stożek"
+on-arrival: leverage -= 0; digitalization_minister_party = "Razem"; digitalization_minister = "Stożek"
 go-to: ministries
 
 Marta Stożek of Razem has been appointed Digitalization Minister.
@@ -1385,9 +1385,9 @@ title: Justice Ministry and Prosecutor General
 subtitle: The Justice Ministry controls the courts. Along with the office of Justice Minister, the office of Prosecutor General is passed.
 unavailable-subtitle: We do not have enough leverage.
 tags: mins_1928
-choose-if: leverage >= 10 
+choose-if: leverage >= 0
 view-if: justice_minister_party != "Razem"
-on-arrival: leverage -= 10; justice_minister_party = "Razem"; justice_minister = "Paulina Matysiak"
+on-arrival: leverage -= 0; justice_minister_party = "Razem"; justice_minister = "Paulina Matysiak"
 go-to: ministries
 
 Paulina Matysiak of Razem has been appointed Justice Minister and Prosecutor General.
@@ -1397,9 +1397,9 @@ title: Foreign Affairs Ministry
 subtitle: Foreign Affairs Ministry controls the international relations.
 unavailable-subtitle: We do not have enough leverage.
 tags: mins_1928
-choose-if: leverage >= 10 
+choose-if: leverage >= 0 
 view-if: foreign_minister_party != "Razem"
-on-arrival: leverage -= 10; foreign_minister_party = "Razem"; foreign_minister = "Malisz"
+on-arrival: leverage -= 0; foreign_minister_party = "Razem"; foreign_minister = "Malisz"
 go-to: ministries
 
 Zofia Malisz of Razem has been appointed Foreign Affairs Minister.
@@ -1409,9 +1409,9 @@ Zofia Malisz of Razem has been appointed Foreign Affairs Minister.
 title: Environment Ministry
 subtitle: Environment Ministry controls the issues related to environment protection.
 unavailable-subtitle: We do not have enough leverage.
-choose-if: leverage >= 10 
+choose-if: leverage >= 0
 view-if: environment_minister_party != "Razem"
-on-arrival: leverage -= 10; environment_minister_party = "Razem"; environment_minister = "Szymon Furmaniak"
+on-arrival: leverage -= 0; environment_minister_party = "Razem"; environment_minister = "Szymon Furmaniak"
 go-to: ministries
 tags: mins_1928
 
@@ -1422,9 +1422,9 @@ title: Defence Ministry
 subtitle: Defence Ministry is responsible for armed forces.
 unavailable-subtitle: We do not have enough leverage.
 tags: mins_1928
-choose-if: leverage >= 15 
+choose-if: leverage >= 0
 view-if: reichswehr_minister_party != "Razem"
-on-arrival: leverage -= 15; reichswehr_minister_party = "Razem"; reichswehr_minister = "Kasia Babis"
+on-arrival: leverage -= 0; reichswehr_minister_party = "Razem"; reichswehr_minister = "Kasia Babis"
 go-to: ministries
 
 Kasia Babis of Razem has been appointed the Defence Minister
@@ -1434,9 +1434,9 @@ title: Health Ministry
 subtitle: Health Ministry is responsible for conduct of public health services and security.
 unavailable-subtitle: We do not have enough leverage.
 tags: mins_1928
-choose-if: leverage >= 5
-view-if: reichswehr_minister_party != "Razem"
-on-arrival: leverage -= 5; health_minister_party = "Razem"; health_minister = "Zawisza"
+choose-if: leverage >= 0
+view-if: health_minister_party != "Razem"
+on-arrival: leverage -= 0; health_minister_party = "Razem"; health_minister = "Zawisza"
 go-to: ministries
 
 Marcelina Zawisza of Razem has been appointed Health Minister.
