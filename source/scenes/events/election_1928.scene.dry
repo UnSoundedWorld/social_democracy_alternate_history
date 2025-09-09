@@ -344,13 +344,12 @@ title: The October 15th Coalition
 subtitle: Razem + New Left  + PO + PSL ([+ october_coalition +]%)
 unavailable-subtitle: Razem + New Left + PO + PSL ([+ october_coalition +]%) - [? if ((lew_relation < 60 and kpd_party_leader == "Czarzasty") or (lew_relation < 45 and kpd_party_leader != "Czarzasty")): We do not have good enough relations with the New Left. ?][? if (po_relation < 65 and po_party_leader == "Budka") or (po_relation < 70 and po_party_leader == "Tusk") or (po_relation < 55 and po_party_leader == "Nowacka"): We do not have good enough relations with the PO ?][? if (psl_relation < 60 and psl_party_leader == "Kosiniak-Kamysz") or (psl_relation < 40 and psl_party_leader == "Baszszar-al-Kamysz"): We have too low relations with PSL. ?]
 choose-if: (((lew_relation >= 60 and lew_party_leader == "Czarzasty") or (lew_relation >= 45 and lew_party_leader != "Czarzasty")) and ((po_relation >= 55 and z_party_leader == "Nowacka") or (po_relation >= 65 and po_party_leader == "Budka") or (po_relation >= 70 and po_party_leader == "Tusk")) and ((psl_relation >= 60 and psl_party_leader == "Kosiniak-Kamysz") or (psl_relation >= 40 and psl_party_leader == "Baszszar-al-Kamysz")))
+console.log("Q.leverage:", Q.leverage);
+console.log("Q.raz_r:", Q.raz_r);
 
 PiS is defeated at last, therefore we can form a wide-front coalition to reform the justice system and clean up the constitutional mess left by the previous government. But do we really want to burden ourselves with cooperating with liberals and conservatives? This might be unpopular in our socialist-wing.
 
 - @october_coalition2: Form the October 15th Coalition!
-
-console.log("Q.leverage:", Q.leverage);
-console.log("Q.raz_r:", Q.raz_r);
 
 @october_coalition2
 on-arrival: leverage += 5; leverage += 5 if po_party_leader == "Nowacka"; in_october_coalition = 1; raz_in_government = 1; foreign_minister_party = "PO"; interior_minister_party = "PO"; justice_minister_party = "PO"; labor_minister_party = "New Left"; defence_minister_party = "PSL"; digitalization_minister_party = "New Left"; finance_minister_party = "PO"; environment_minister_party = "New Left"; health_minister_party = "PO"; foreign_minister = "Sikorski"; interior_minister = "Kierwiński"; justice_minister = "Bodnar"; labor_minister = "Dziemianowicz-Bąk"; defence_minister = "Kosiniak-Kamysz"; digitalization_minister = "Gawkowski"; finance_minister = "Domański"; environment_minister = "Sowińska"; health_minister = "Arłukowicz"; pro_republic += 5; socialist_dissent += 15; zandbergist_dissent += 10; soclib_dissent -= 10;
@@ -366,10 +365,6 @@ Who should be the Prime Minister?
 - @czarzasty
 - @dziemianowicz_bak
 - @zandberg
-
-console.log("Q.leverage:", Q.leverage);
-console.log("Q.raz_r:", Q.raz_r);
-
 
 @tusk
 title: Donald Tusk for Prime Minister
@@ -413,7 +408,6 @@ title: Adrian Zandberg for Prime Minister
 subtitle: As we have a considerable vote share, our most prominent politician, Adrian Zandberg will be presented to our partners as Chancellor, this however will cost us leverage.
 on-arrival: raz_in_government = 1; prime_minister = "Zandberg"; leverage -= 15; chancellor_party = "Razem"; in_october_coalition = 1;
 go-to: ministries
-
 console.log("Q.leverage:", Q.leverage);
 console.log("Q.raz_r:", Q.raz_r);
 
