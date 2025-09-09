@@ -404,7 +404,7 @@ Agnieszka Dziemianowicz-Bąk has been accepted as the Prime Minister.
 @zandberg
 title: Adrian Zandberg for Prime Minister
 subtitle: As we have a considerable vote share, our most prominent politician, Adrian Zandberg will be presented to our partners as Chancellor, this however will cost us leverage.
-on-arrival: raz_in_government = 1; prime_minister = "Zandberg"; leverage -= 0; chancellor_party = "Razem"; in_october_coalition = 1;
+on-arrival: raz_in_government = 1; chancellor = "Zandberg"; leverage -= 0; chancellor_party = "Razem"; in_october_coalition = 1;
 go-to: ministries
 
 
@@ -1354,7 +1354,7 @@ view-if: interior_minister_party != "Razem"
 on-arrival: leverage -= 0; interior_minister_party = "Razem"; interior_minister = "Zandberg"
 go-to: ministries
 
-Carl Severing of the SPD has been appointed Interior Minister.
+Adrian Zandberg of Razem has been appointed Interior Minister.
 
 @finance
 title: Finance Ministry
