@@ -144,10 +144,6 @@ if (Q.kpd_relation >= 30) {
     Q.weimar_coalition += Q.sapd_r;
 }
 
-Q.leverage = Q.raz_r;
-console.log("Q.leverage:", Q.leverage);
-console.log("Q.raz_r:", Q.raz_r);
-
 
 Q.grand_coalition_failed = 0;
 // Reset government and ministers... Based on Brüning's 1930 govt
@@ -285,6 +281,10 @@ if (window && d3) {
     d3.select("#reichstag").datum(data).call(parliament);
 }
 !}
+Q.leverage = Q.raz_r;
+console.log("Q.leverage:", Q.leverage);
+console.log("Q.raz_r:", Q.raz_r);
+
 go-to: coalition_menu
 
 = Election results
