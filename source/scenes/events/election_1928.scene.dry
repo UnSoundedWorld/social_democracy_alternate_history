@@ -96,16 +96,6 @@ for (var party of Q.parties) {
     console.log("Party: " + key + ", Change: " + Q['str_change_' + key]);
 }
 
-// 3. Calculate change based on old and new values
-for (var party of Q.parties) {
-    Q['change_' + party + '_r'] = Q[party + '_r'] - Q['old_' + party + '_r'];
-    var sign = Q['change_' + party + '_r'] > 0 ? '+' : '';
-    Q['str_change_' + party] = sign + Q['change_' + party + '_r'];
-    
-    console.log("Party: " + party + ", Change: " + Q['str_change_' + party]);
-}
-
-// get change arrows and signs
 
 
 // The largest party can only be the NSDAP or the SPD.
