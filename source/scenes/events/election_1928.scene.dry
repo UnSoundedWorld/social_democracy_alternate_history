@@ -344,8 +344,7 @@ title: The October 15th Coalition
 subtitle: Razem + New Left  + PO + PSL ([+ october_coalition +]%)
 unavailable-subtitle: Razem + New Left + PO + PSL ([+ october_coalition +]%) - [? if ((lew_relation < 60 and kpd_party_leader == "Czarzasty") or (lew_relation < 45 and kpd_party_leader != "Czarzasty")): We do not have good enough relations with the New Left. ?][? if (po_relation < 65 and po_party_leader == "Budka") or (po_relation < 70 and po_party_leader == "Tusk") or (po_relation < 55 and po_party_leader == "Nowacka"): We do not have good enough relations with the PO ?][? if (psl_relation < 60 and psl_party_leader == "Kosiniak-Kamysz") or (psl_relation < 40 and psl_party_leader == "Baszszar-al-Kamysz"): We have too low relations with PSL. ?]
 choose-if: (((lew_relation >= 60 and lew_party_leader == "Czarzasty") or (lew_relation >= 45 and lew_party_leader != "Czarzasty")) and ((po_relation >= 55 and z_party_leader == "Nowacka") or (po_relation >= 65 and po_party_leader == "Budka") or (po_relation >= 70 and po_party_leader == "Tusk")) and ((psl_relation >= 60 and psl_party_leader == "Kosiniak-Kamysz") or (psl_relation >= 40 and psl_party_leader == "Baszszar-al-Kamysz")))
-console.log("Q.leverage:", Q.leverage);
-console.log("Q.raz_r:", Q.raz_r);
+debug: "Q.leverage = ([+ Q.leverage +]), Q.raz_r = ([+ Q.raz_r +])"
 
 PiS is defeated at last, therefore we can form a wide-front coalition to reform the justice system and clean up the constitutional mess left by the previous government. But do we really want to burden ourselves with cooperating with liberals and conservatives? This might be unpopular in our socialist-wing.
 
@@ -408,8 +407,7 @@ title: Adrian Zandberg for Prime Minister
 subtitle: As we have a considerable vote share, our most prominent politician, Adrian Zandberg will be presented to our partners as Chancellor, this however will cost us leverage.
 on-arrival: raz_in_government = 1; prime_minister = "Zandberg"; leverage -= 15; chancellor_party = "Razem"; in_october_coalition = 1;
 go-to: ministries
-console.log("Q.leverage:", Q.leverage);
-console.log("Q.raz_r:", Q.raz_r);
+debug: "Q.leverage = ([+ Q.leverage +]), Q.raz_r = ([+ Q.raz_r +])"
 
 
 We managed to push Zandberg as a Prime Minister in coalition negotiations, a huge success for our party!
