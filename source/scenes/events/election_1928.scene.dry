@@ -139,9 +139,6 @@ Q.querfront_coalition = Q.kpd_r + Q.nsdap_r + Q.dnvp_r;
 Q.po_right_coalition = Q.po_r + Q.konf_r;
 // Progressive coalition isn't going to be implemented as a distinct coalition but it's the coalition that lets you pass improved women's rights/gay rights
 Q.progressive_coalition = Q.raz_r + Q.lew_r + Q.po_r;
-console.log("raz_r:", Q.raz_r);
-Q.leverage = Q.raz_r;
-console.log("leverage:", Q.leverage);
 if (Q.kpd_relation >= 30) {
     Q.weimar_coalition += Q.sapd_r;
 }
@@ -285,6 +282,12 @@ if (window && d3) {
     d3.select("#reichstag").datum(data).call(parliament);
 }
 !}
+if (Q.leverage == "undefined") {
+    Q.leverage == Q.raz_r;
+    console.log("raz_r:", Q.raz_r);
+    console.log("leverage:", Q.leverage);
+}
+
 
 go-to: coalition_menu
 
